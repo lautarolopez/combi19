@@ -1,28 +1,39 @@
-<div class="authform">
-  <%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => { :role => 'form'}) do |f| %>
-    <h3>Sign in</h3>
-    <%= devise_error_messages! %>
-    <div class="form-group">
-      <%- if devise_mapping.registerable? %>
-        <%= link_to 'Sign up', new_registration_path(resource_name), class: 'right'  %>
-      <% end -%>
-      <%= f.label :email %>
-      <%= f.email_field :email, :autofocus => true, class: 'form-control' %>
-    </div>
-    <div class="form-group">
-      <%- if devise_mapping.recoverable? %>
-        <%= link_to "Forgot password?", new_password_path(resource_name), class: 'right' %>
-      <% end -%>
-      <%= f.label :password %>
-      <%= f.password_field :password, class: 'form-control' %>
-    </div>
-      <%= f.submit 'Sign in', :class => 'button right' %>
-      <% if devise_mapping.rememberable? -%>
-        <div class="checkbox" style="width:150px">
-          <label>
-            <%= f.check_box :remember_me %> Remember me
-          </label>
+<div class="container">
+    <div class="authform row">
+        <%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => {class: 'd-flex flex-column justify-content-center col-lg-6 mx-auto card p-5', :role => 'form'}) do |f| %>
+        <h3>Sign in</h3>
+
+        <div class="form-group">
+            <%= f.label :email %>
+            <%= f.email_field :email, :autofocus => true, class: 'form-control' %>
         </div>
-      <% end -%>
-  <% end %>
+        <div class="form-group">
+            <%= f.label :password %>
+            <%= f.password_field :password, class: 'form-control' %>
+        </div>
+        <% if flash[:alert] %>
+        <div class="alert alert-danger" role="alert">
+            <p class="my-0"><%= flash[:alert] %></p>
+        </div>
+        <% end %>
+        <%= f.submit 'Sign in', :class => 'btn btn-primary' %>
+        <div class="d-flex justify-content-between my-2">
+            <% if devise_mapping.rememberable? -%>
+            <div class="form-check" style="width:150px">
+                <label class="form-check-label">
+                    <%= f.check_box :remember_me, class: "form-check-input"%> Remember me
+                </label>
+            </div>
+            <% end -%>
+            <span class="d-flex flex-column align-items-end">
+                <%- if devise_mapping.recoverable? %>
+                <%= link_to "Forgot password?", new_password_path(resource_name), class: 'right' %>
+                <% end -%>
+                <%- if devise_mapping.registerable? %>
+                <%= link_to 'Sign up', new_registration_path(resource_name), class: 'right'  %>
+                <% end -%>
+            </span>
+            <% end %>
+        </div>
+    </div>
 </div>

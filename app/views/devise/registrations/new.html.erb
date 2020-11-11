@@ -1,7 +1,6 @@
 <div class="container">
     <div class="authform row">
-        <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :validate => true, :html => {class: 'd-flex flex-column justify-content-center col-lg-6 mx-auto', :role => 'form'}) do |f| %>
-        <% debug @resource %>
+        <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :validate => true, :html => {class: 'd-flex flex-column justify-content-center col-lg-6 mx-auto card p-5', :role => 'form'}) do |f| %>
         <h3>Sign up</h3>
 
         <div class="form-row">
@@ -35,7 +34,7 @@
             <%= f.label :password_confirmation %>
             <%= f.password_field :password_confirmation, class: 'form-control' %>
         </div>
-        <%= devise_error_messages! %>
+        <%= render "devise/shared/error_messages", resource: resource %>
         <%= f.submit 'Sign up', :class => 'btn btn-primary' %>
         <% end %>
     </div>

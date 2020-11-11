@@ -20,12 +20,12 @@ ActiveRecord::Schema.define(version: 2020_11_10_205507) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "name"
-    t.string "last_name"
-    t.integer "dni"
-    t.date "birth_date"
-    t.string "role"
-    t.boolean "suscribed"
+    t.string "name", default: "", null: false
+    t.string "last_name", default: "", null: false
+    t.integer "dni", default: 0, null: false
+    t.date "birth_date", default: "2020-11-11", null: false
+    t.string "role", default: "user", null: false
+    t.boolean "suscribed", default: false, null: false
     t.index ["dni"], name: "index_users_on_dni", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users, skip: [:sessions, :registrations]
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  
   as :user do
     get 'ingresar', to: 'devise/sessions#new', as: :new_user_session
     post 'ingresar', to: 'devise/sessions#create', as: :user_session
@@ -13,6 +14,8 @@ Rails.application.routes.draw do
     delete 'registrarse', to: 'devise/registrations#destroy'
     post 'registrarse', to: 'devise/registrations#create'
   end
+
+  resources :extras
 
   root to: "home#index"
 end

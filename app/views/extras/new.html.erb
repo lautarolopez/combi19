@@ -1,0 +1,26 @@
+<div class="container">
+    <div class="authform row">
+        <%= form_for(@extra, :html => {class: 'd-flex flex-column justify-content-center col-lg-6 mx-auto card p-5'}) do |f| %>
+        <h3>New extra</h3>
+
+        <div class="form-group">
+            <%= f.label :name %>
+            <%= f.text_field :name, :autofocus => true, class: 'form-control' %>
+        </div>
+        <div class="form-group">
+            <%= f.label :description %>
+            <%= f.text_field :description, class: 'form-control' %>
+        </div>
+        <div class="form-group">
+            <%= f.label :price %>
+            <%= f.number_field :price, step: 0.01, class: 'form-control' %>
+        </div>
+        <% if flash[:error] %>
+        <div class="alert alert-danger" role="alert">
+            <p class="my-0"><%= flash[:error] %></p>
+        </div>
+        <% end %>
+        <%= f.submit 'Create', :class => 'btn btn-primary' %>
+        <% end %>
+    </div>
+</div>

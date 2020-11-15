@@ -39,5 +39,22 @@ class ExtrasController < ApplicationController
             render 'edit'
         end
     end
+
+    def index
+        @extras = Extra.all
+    end
+
+    def destroy
+        @extra = Extra.find(params[:id])
+        if @extra.destroy
+            flash[:success] = 'Object was successfully deleted.'
+            redirect_to extras_url
+        else
+            flash[:error] = 'Something went wrong'
+            redirect_to extras_url
+        end
+    end
+    
+    
     
 end

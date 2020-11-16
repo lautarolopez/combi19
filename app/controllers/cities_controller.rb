@@ -10,14 +10,14 @@ class CitiesController < ApplicationController
     def create
         @city = City.create(params.require(:city).permit(:name, :state));
         if @city.save
-            flash[:success] = "City " + @city.name + ", " + @city.state + " successfully created"
-            redirect_to cities_path#, notice: "City" + @city.name + ", " + @city.state + "successfully created"
+            flash[:success] = @city.name.capitalize + ", " + @city.state.capitalize + " ha sido creada con éxito!"
+            redirect_to cities_path
           else
             @aux = City.find_by(name: @city.name, state: @city.state)
             if @aux != nil
-                flash[:error] = "The city " + @city.name + " already exists in the state " + @city.state
+                flash[:error] = "La ciudad " + @city.name.capitalize + " ya existe en la provincia " + @city.state.capitalize
             else 
-                flash[:error] = "Something went wrong"
+                flash[:error] = "Algo salió mal."
             end
             render 'new'
           end
@@ -30,30 +30,26 @@ class CitiesController < ApplicationController
     def update
         @city = City.find(params[:id])
         if @city.update(params.require(:city).permit(:name, :state))
-          flash[:success] = "City " + @city.name + ", " + @city.state + " successfully updated"
+          flash[:success] = @city.name.capitalize + ", " + @city.state.capitalize + " ha sido actualizada con éxito!"
           redirect_to cities_path
         else
-            @aux = City.find_by name: @city.name, state: @city.state
+            @aux = City.find_by(name: @city.name, state: @city.state)
             if @aux != nil
-               flash[:error] = "The city already exists in the state"
+                flash[:error] = "La ciudad " + @city.name.capitalize + " ya existe en la provincia " + @city.state.capitalize
             else 
-                flash[:error] = "Something went wrong"
+                flash[:error] = "Algo salió mal"
             end
             render 'edit'
         end
     end
 
-    def index
-        @cities = City.all
-    end
-
     def destroy
         @city = City.find(params[:id])
         if @city.destroy
-            flash[:success] = "City" + @city.name + ", " + @city.state + "successfully deleted."
+            flash[:success] = @city.name.capitalize + ", " + @city.state.capitalize + " ha sido borrada con éxito."
             redirect_to cities_path
         else
-            flash[:error] = "Something went wrong"
+            flash[:error] = "Algo salió mal"
             redirect_to cities_path
         end
     end

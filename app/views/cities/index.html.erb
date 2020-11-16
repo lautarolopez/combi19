@@ -1,21 +1,24 @@
 <ul class="list-group pt-5">
-    
-     <div class='row'>
-        <div class="col-md-10">
-             <h1>Cities </h1>
-        </div>
-        <div class="col-md" class="pull-right">
-            <h1> <%= link_to "Add city", new_city_path, class: 'btn btn-primary btn-md' %> </h1>
-        </div>
+    <% if flash[:success] %>
+    <div class="alert alert-success" role="alert">
+        <p class="my-0"><%= flash[:success] %></p>
     </div>
-
+    <% end %>
+    <div class="d-flex justify-content-between w-100">
+        <h1> Cities </h1>
+        <%= link_to "Agregar ciudad", new_city_path, class: 'btn btn-primary btn-md h-75' %>
+    </div>
+     
     <% @cities.each do |city| %>
     <li class="list-group-item d-flex justify-content-between align-items-center">
         <span>
-            <h4 class="m-0"><%= city.name %> </h4>
-            <p class="m-0"><%= city.state %> </p>
+            <h4 class="m-0"><%= city.name.capitalize %> </h4>
+            <p class="m-0"><%= city.state.capitalize %> </p>
         </span>
-        <%= link_to 'Eliminar', city, method: :delete, class: "btn btn-danger" %>
+        <span>
+            <%= link_to 'Editar', edit_city_path(city), class: "btn btn-warning" %>
+            <%= link_to 'Eliminar', city, method: :delete, class: "btn btn-danger" %>
+        </span>
     </li>
     <% end %>
 </ul>

@@ -17,6 +17,7 @@ Rails.application.routes.draw do
 
   resources :extras
   resources :cities
+  resources :routes
 
   root to: "home#index"
 end

@@ -1,5 +1,4 @@
 class Combi < ApplicationRecord
-<<<<<<< HEAD
 	# Scopes
 	default_scope -> { order(licence_plate: :asc)}
 

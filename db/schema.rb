@@ -22,13 +22,6 @@ ActiveRecord::Schema.define(version: 2020_11_18_010856) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "combis", force: :cascade do |t|
-    t.string "category"
-    t.string "licence_plate"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "extras", force: :cascade do |t|
     t.string "name", default: "", null: false
     t.text "description"

@@ -1,12 +1,28 @@
 <ul class="list-group pt-5">
-    <h1>Extras</h1>
+    <% if flash[:success] %>
+    <div class="alert alert-success" role="alert">
+        <p class="my-0"><%= flash[:success] %></p>
+    </div>
+    <% end %>
+    <% if flash[:error] %>
+    <div class="alert alert-danger" role="alert">
+        <p class="my-0"><%= flash[:error] %></p>
+    </div>
+    <% end %>
+    <div class="d-flex justify-content-between w-100">
+        <h1> Insumos </h1>
+        <%= link_to "Agregar insumo", new_extra_path, class: 'btn btn-primary btn-md h-75' %>
+    </div>
     <% @extras.each do |extra| %>
     <li class="list-group-item d-flex justify-content-between align-items-center">
         <span>
             <p class="m-0 font-weight-bold text-uppercase"><%= extra.name %> </p>
             <small class="m-0"><%= extra.description %> </small>
         </span>
-        <%= link_to 'Eliminar', extra, method: :delete, class: "btn btn-danger" %>
+        <span>
+            <%= link_to 'Editar', edit_extra_path(extra), class: "btn btn-warning" %>
+            <%= link_to 'Eliminar', extra, method: :delete, class: "btn btn-danger" %>
+        </span>
     </li>
     <% end %>
 </ul>

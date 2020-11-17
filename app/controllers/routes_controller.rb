@@ -45,12 +45,16 @@ class RoutesController < ApplicationController
 
     def destroy
     	@route = Route.find(params[:id])
-        if @route.destroy
-            flash[:success] = "La ruta " + @route.origin.name.titleize + ", " + @route.origin.state.titleize + "-" + @route.destination.name.titleize + ", " + @route.destination.state.titleize + " ha sido borrada con éxito."
+        if (@route.travels.count > 0)
+            flash[:error] = "La ruta " + @route.origin.name.titleize + ", " + @route.origin.state.titleize + "-" + @route.destination.name.titleize + ", " + @route.destination.state.titleize + " no se puede borrar porque tiene viajes asociados"
         else
-        	if (!flash[:error])
-            	flash[:error] = "Algo salió mal"
-        	end
+            if @route.destroy
+                flash[:success] = "La ruta " + @route.origin.name.titleize + ", " + @route.origin.state.titleize + "-" + @route.destination.name.titleize + ", " + @route.destination.state.titleize + " ha sido borrada con éxito."
+            else
+            	if (!flash[:error])
+                	flash[:error] = "Algo salió mal"
+            	end
+            end
         end
         redirect_to routes_path
     end

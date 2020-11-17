@@ -41,13 +41,21 @@ class CitiesController < ApplicationController
     end
     def destroy
         @city = City.find(params[:id])
-        if @city.destroy
-            flash[:success] = @city.name.titleize + ", " + @city.state.titleize + " ha sido borrada con éxito."
-            redirect_to cities_path
-        else
-            flash[:error] = "Algo salió mal"
-            redirect_to cities_path
+        @routes = @city.routes_from + @city.routes_to
+        @routes.each do |r|
+            #if (r.travels.count > 0) 
+            #    flash[:error] = @city.name.titleize + ", " + @city.state.titleize + "no se puede borrar porque existen viajes asociados"
+            #    break
+            #end
         end
+        if (flash[:error] == nil)
+            if @city.destroy
+                flash[:success] = @city.name.titleize + ", " + @city.state.titleize + " ha sido borrada con éxito."
+            else
+                flash[:error] = "Algo salió mal"
+            end
+        end
+        redirect_to cities_path
     end
 end
 

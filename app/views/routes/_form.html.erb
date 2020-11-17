@@ -16,7 +16,7 @@
 
     <div class="form-group">
         <%= f.label :extra_ids, 'Insumos' %>
-        <%= collection_select(:route, :extra_ids, Extra.all, :id, :name_extra, {prompt: "Seleccione los insumos disponibles en la ruta"}, {multiple: true, class: 'selectpicker', id: "extras"}) %>
+        <%= collection_select(:route, :extra_ids, Extra.all, :id, :name, {prompt: "Seleccione los insumos disponibles en la ruta"}, {multiple: true, class: 'selectpicker', id: "extras"}) %>
     </div>
 
     <% if flash[:error] %>
@@ -28,13 +28,14 @@
 <% end %>
 
 <script>
-    if( window.localStorage )
-  {
-    if (!localStorage.getItem('firstLoad')) {
-        localStorage['firstLoad'] = true;
-        window.location.reload();
-    } else
-        localStorage.removeItem('firstLoad');
+    if (window.location.href.includes("edit") || window.location.href.includes("new")) {
+        if ( window.localStorage ) {
+            if (!localStorage.getItem('firstLoad')) {
+                localStorage['firstLoad'] = true;
+                window.location.reload();
+            } else
+                localStorage.removeItem('firstLoad');
+        }
     }
 
     let origin = document.querySelector("#origin");
@@ -44,7 +45,6 @@
     let destinationOptions = destination.querySelectorAll("option");
     let extrasOptions = extras.querySelectorAll("option");
 
-    $('.selectpicker').selectpicker('refresh');
     document.querySelector(".selectpicker").setAttribute("data-live-search",true);
 
     if (origin.selectedIndex !== 0)

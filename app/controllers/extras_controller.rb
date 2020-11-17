@@ -8,7 +8,7 @@ class ExtrasController < ApplicationController
         @extra = Extra.create(params.require(:extra).permit(:name, :description, :price));
         if @extra.save
             flash[:success] = "Object successfully created"
-            redirect_to root_path
+            redirect_to extras_path
           else
             @aux = Extra.find_by name: @extra.name
             if @aux != nil
@@ -28,7 +28,7 @@ class ExtrasController < ApplicationController
         @extra = Extra.find(params[:id])
         if @extra.update_attributes(params.require(:extra).permit(:name, :description, :price))
           flash[:success] = "Extra was successfully updated"
-          redirect_to root_path
+          redirect_to extras_path
         else
             @aux = Extra.find_by name: @extra.name
             if @aux != nil

@@ -11,11 +11,6 @@ class City < ApplicationRecord
 	has_many :routes_to, class_name: 'Route', foreign_key: "destination_id", dependent: :destroy
 
 	# Methods
-	def downcase
-		name.downcase!
-		state.downcase!
-	end
-
     def check_travels
     	#self.routes_from.each do |r|
     		#if (r.travels.count > 0)
@@ -27,5 +22,13 @@ class City < ApplicationRecord
     		#	throw :abort
     		#end
     	#end
+
+	def downcase
+		name.downcase!
+		state.downcase!
+	end
+
+	def name_state
+		"#{name.titleize}, #{state.titleize}"
 	end
 end

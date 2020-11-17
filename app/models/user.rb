@@ -13,7 +13,7 @@ class User < ApplicationRecord
   validate :validate_age
 
   # Relations
-  has_and_belong_to_many :travels
+  has_and_belongs_to_many :travels
 
   # Methods
   def validate_age 

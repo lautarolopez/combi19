@@ -1,7 +1,4 @@
 Rails.application.routes.draw do
-  get 'combis/new'
-  get 'combis/index'
-  get 'combis/edit'
   devise_for :users, skip: [:sessions, :registrations]
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   
@@ -21,7 +18,10 @@ Rails.application.routes.draw do
   resources :extras
   resources :cities
   resources :routes
+<<<<<<< HEAD
   resources :combis
+=======
+>>>>>>> parent of 6bb9458 (Feature add and modify combi)
 
   root to: "home#index"
 end

@@ -40,4 +40,8 @@ class City < ApplicationRecord
 		"#{name.titleize}, #{state.titleize}"
 	end
 
+<<<<<<< HEAD
 end
+=======
+end
+>>>>>>> parent of 6bb9458 (Feature add and modify combi)

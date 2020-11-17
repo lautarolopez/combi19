@@ -46,4 +46,16 @@ class CombisController < ApplicationController
 			render 'edit'
 		end
 	end
+
+	def destroy
+    	@combi = Combi.find(params[:id])
+        if @combi.destroy
+            flash[:success] = "Combi " + @combi.licence_plate + ", " + @combi.category + " ha sido borrada con éxito!"
+        else
+        	if (!flash[:error])
+            	flash[:error] = "Algo salió mal"
+        	end
+        end
+        redirect_to combis_path
+    end
 end

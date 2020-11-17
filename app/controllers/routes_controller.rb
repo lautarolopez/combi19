@@ -10,9 +10,9 @@ class RoutesController < ApplicationController
     def create
         @route = Route.create(params.require(:route).permit(:origin, :destination, :extras));
         if @route.save
-            flash[:success] = "La ruta " @route.origin.name + "-" + @route.destination.name + " ha sido creada con éxito!"
+            flash[:success] = "La ruta " + @route.origin.name + "-" + @route.destination.name + " ha sido creada con éxito!"
             redirect_to routes_path
-          else
+        else
             @aux = Route.find_by(origin: @route.origin, destination: @route.destination)
             if @aux != nil
                 flash[:error] = "La ruta " + @route.origin.name + "-" + @route.destination.name + " ya existe"
@@ -20,7 +20,7 @@ class RoutesController < ApplicationController
                 flash[:error] = "Algo salió mal."
             end
             render 'new'
-          end
+        end
     end
 
     def edit
@@ -32,7 +32,7 @@ class RoutesController < ApplicationController
     def destroy
         @route = Route.find(params[:id])
         if @route.destroy
-            flash[:success] = "La ruta " @route.origin.name + "-" + @route.destination.name + " ha sido borrada con éxito."
+            flash[:success] = "La ruta " + @route.origin.name + "-" + @route.destination.name + " ha sido borrada con éxito."
             redirect_to routes_path
         else
             flash[:error] = "Algo salió mal"

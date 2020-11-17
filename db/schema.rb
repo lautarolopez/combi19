@@ -10,11 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_16_021029) do
+ActiveRecord::Schema.define(version: 2020_11_16_234033) do
 
   create_table "cities", force: :cascade do |t|
     t.string "name", default: "", null: false
     t.string "state", default: "", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "combis", force: :cascade do |t|
+    t.string "category"
+    t.string "licence_plate"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -28,20 +35,6 @@ ActiveRecord::Schema.define(version: 2020_11_16_021029) do
     t.index ["name"], name: "index_extras_on_name", unique: true
   end
 
-  create_table "extras_routes", id: false, force: :cascade do |t|
-    t.integer "extra_id"
-    t.integer "route_id"
-    t.index ["extra_id"], name: "index_extras_routes_on_extra_id"
-    t.index ["route_id"], name: "index_extras_routes_on_route_id"
-  end
-
-  create_table "routes", force: :cascade do |t|
-    t.integer "origin_id"
-    t.integer "destination_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -53,7 +46,7 @@ ActiveRecord::Schema.define(version: 2020_11_16_021029) do
     t.string "name", default: "", null: false
     t.string "last_name", default: "", null: false
     t.integer "dni", default: 0, null: false
-    t.date "birth_date", default: "2020-11-14", null: false
+    t.date "birth_date", default: "2020-11-15", null: false
     t.string "role", default: "user", null: false
     t.boolean "suscribed", default: false, null: false
     t.index ["dni"], name: "index_users_on_dni", unique: true

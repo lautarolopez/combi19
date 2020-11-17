@@ -10,11 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
-ActiveRecord::Schema.define(version: 2020_11_17_080316) do
-=======
-ActiveRecord::Schema.define(version: 2020_11_16_021029) do
->>>>>>> parent of 6bb9458 (Feature add and modify combi)
+ActiveRecord::Schema.define(version: 2020_11_17_082520) do
 
   create_table "cities", force: :cascade do |t|
     t.string "name", default: "", null: false
@@ -39,6 +35,13 @@ ActiveRecord::Schema.define(version: 2020_11_16_021029) do
     t.index ["route_id"], name: "index_extras_routes_on_route_id"
   end
 
+  create_table "passengers_travels", id: false, force: :cascade do |t|
+    t.integer "passenger_id"
+    t.integer "travel_id"
+    t.index ["passenger_id"], name: "index_passengers_travels_on_passenger_id"
+    t.index ["travel_id"], name: "index_passengers_travels_on_travel_id"
+  end
+
   create_table "routes", force: :cascade do |t|
     t.integer "origin_id"
     t.integer "destination_id"
@@ -46,21 +49,18 @@ ActiveRecord::Schema.define(version: 2020_11_16_021029) do
     t.datetime "updated_at", null: false
   end
 
-<<<<<<< HEAD
   create_table "travels", force: :cascade do |t|
     t.integer "driver_id"
     t.integer "route_id"
-    t.integer "occupied"
-    t.integer "capacity"
+    t.integer "occupied", default: 0
+    t.integer "capacity", default: 0
     t.datetime "date_departure"
     t.datetime "date_arrival"
-    t.float "price"
+    t.float "price", default: 0.0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-=======
->>>>>>> parent of 6bb9458 (Feature add and modify combi)
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false

@@ -16,7 +16,7 @@
 
     <div class="form-group">
         <%= f.label :extra_ids, 'Insumos' %>
-        <%= collection_select(:route, :extra_ids, Extra.all, :id, :name_extra, {prompt: "Seleccione los insumos para la ruta"}, {multiple: true, class: 'selectpicker', id: "extras"}) %>
+        <%= collection_select(:route, :extra_ids, Extra.all, :id, :name_extra, {prompt: "Seleccione los insumos disponibles en la ruta"}, {multiple: true, class: 'selectpicker', id: "extras"}) %>
     </div>
 
     <% if flash[:error] %>
@@ -51,7 +51,7 @@
         destinationOptions[origin.selectedIndex].setAttribute("disabled", true);
     if (destination.selectedIndex !== 0)
         originOptions[destination.selectedIndex].setAttribute("disabled", true);
-    if (save == 'Crear') extrasOptions[0].setAttribute("disabled", true);
+    if (extras.selectedIndex == -1) extrasOptions[0].setAttribute("disabled", true);
 
     origin.addEventListener("change", () => {
         destinationOptions.forEach(opt => opt.removeAttribute("disabled"));

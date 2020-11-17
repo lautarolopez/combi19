@@ -12,8 +12,8 @@
     <% @cities.each do |city| %>
     <li class="list-group-item d-flex justify-content-between align-items-center">
         <span>
-            <h4 class="m-0"><%= city.name.capitalize %> </h4>
-            <p class="m-0"><%= city.state.capitalize %> </p>
+            <h4 class="m-0"><%= city.name.titleize %> </h4>
+            <p class="m-0"><%= city.state.titleize %> </p>
         </span>
         <span>
             <%= link_to 'Editar', edit_city_path(city), class: "btn btn-warning" %>

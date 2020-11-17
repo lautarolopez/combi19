@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_16_234033) do
+ActiveRecord::Schema.define(version: 2020_11_17_080316) do
 
   create_table "cities", force: :cascade do |t|
     t.string "name", default: "", null: false
@@ -33,6 +33,32 @@ ActiveRecord::Schema.define(version: 2020_11_16_234033) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_extras_on_name", unique: true
+  end
+
+  create_table "extras_routes", id: false, force: :cascade do |t|
+    t.integer "extra_id"
+    t.integer "route_id"
+    t.index ["extra_id"], name: "index_extras_routes_on_extra_id"
+    t.index ["route_id"], name: "index_extras_routes_on_route_id"
+  end
+
+  create_table "routes", force: :cascade do |t|
+    t.integer "origin_id"
+    t.integer "destination_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "travels", force: :cascade do |t|
+    t.integer "driver_id"
+    t.integer "route_id"
+    t.integer "occupied"
+    t.integer "capacity"
+    t.datetime "date_departure"
+    t.datetime "date_arrival"
+    t.float "price"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|

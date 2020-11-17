@@ -46,6 +46,9 @@ class CombisController < ApplicationController
 			flash[:success] = "Combi " + @combi.licence_plate + ", " + @combi.category + " ha sido actualizada con éxito!"
 			redirect_to combis_path
 		else
+          flash[:success] = "Combi " + @combi.licence_plate + ", " + @combi.category + " ha sido actualizada con éxito!"
+          redirect_to combis_path
+        else
 			@aux = Combi.find_by(licence_plate: @combi.licence_plate)
 			if @aux != nil
 				flash[:error] = "La combi " + @combi.licence_plate + " ya existe."

@@ -1,4 +1,7 @@
 class City < ApplicationRecord
+	# Scopes
+	default_scope -> { order(state: :asc, name: :asc)}
+
 	# Validations
 	validates :name, presence: :true, uniqueness: { scope: :state, case_sensitive: false }
 	validates :state, presence: :true
@@ -14,14 +17,19 @@ class City < ApplicationRecord
     def check_travels
     	#self.routes_from.each do |r|
     		#if (r.travels.count > 0)
-    		#	throw :abort
+				#errors[:base] << "Esta ciudad no se puede borrar porque tiene viajes asociados"
+    			#errors.add(:routes_from, "Esta ciudad no se puede borrar porque tiene viajes asociados")
+    			#throw :abort    		
     		#end
     	#end
     	#self.routes_to.each do |r|
     		#if (r.travels.count > 0)
+    			#errors[:base] << "Esta ciudad no se puede borrar porque tiene viajes asociados"
+    			#errors.add(:routes_to, "Esta ciudad no se puede borrar porque tiene viajes asociados")
     		#	throw :abort
     		#end
     	#end
+    end
 
 	def downcase
 		name.downcase!
@@ -31,4 +39,5 @@ class City < ApplicationRecord
 	def name_state
 		"#{name.titleize}, #{state.titleize}"
 	end
+
 end

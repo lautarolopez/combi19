@@ -13,4 +13,8 @@ class Extra < ApplicationRecord
     		r.extras.delete(self)
     	end
 	end
+
+	def name_extra
+		"#{name.titleize}"
+	end
 end

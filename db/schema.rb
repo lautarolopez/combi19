@@ -19,6 +19,13 @@ ActiveRecord::Schema.define(version: 2020_11_17_082520) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "combis", force: :cascade do |t|
+    t.string "category"
+    t.string "licence_plate"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "extras", force: :cascade do |t|
     t.string "name", default: "", null: false
     t.text "description"
@@ -72,7 +79,7 @@ ActiveRecord::Schema.define(version: 2020_11_17_082520) do
     t.string "name", default: "", null: false
     t.string "last_name", default: "", null: false
     t.integer "dni", default: 0, null: false
-    t.date "birth_date", default: "2020-11-14", null: false
+    t.date "birth_date", default: "2020-11-17", null: false
     t.string "role", default: "user", null: false
     t.boolean "suscribed", default: false, null: false
     t.index ["dni"], name: "index_users_on_dni", unique: true

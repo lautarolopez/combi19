@@ -20,6 +20,7 @@ Rails.application.routes.draw do
 
   resources :extras
   resources :cities
+  resources :routes
   resources :combis
 
   root to: "home#index"

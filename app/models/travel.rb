@@ -1,4 +1,7 @@
 class Travel < ApplicationRecord
+	# Scopes
+	default_scope -> { order(date_departure: :asc, date_arrival: :asc)}
+
 	# Validations
 	validates :driver_id, presence: :true
 	validates :combi_id, presence: :true

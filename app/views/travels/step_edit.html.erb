@@ -1,8 +1,8 @@
 <div class="authform row">
 
-    <%= form_for(@travel, url: new_travel_path, :method => :get, :html => {class: 'd-flex flex-column justify-content-center col-lg-6 mx-auto card p-5 my-5'}) do |f| %>
+    <%= form_for(@travel, url: edit_travel_path(@travel), :method => :get, :html => {class: 'd-flex flex-column justify-content-center col-lg-6 mx-auto card p-5 my-5'}) do |f| %>
     
-	    <h3> Agregar viaje </h3>
+	    <h3> Editar viaje </h3>
 
 	    <div class="form-group">
 	        <%= f.label :route_id, 'Ruta *' %>

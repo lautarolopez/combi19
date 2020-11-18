@@ -13,7 +13,7 @@ class User < ApplicationRecord
   validate :validate_age
 
   # Relations
-  has_many :driving_travels, class_name: "User", foreign_key: "driver_id"
+  has_many :driving_travels, class_name: "Travel", foreign_key: "driver_id" #, dependent: :restrict_with_exception
   has_and_belongs_to_many :travels
 
   # Methods
@@ -25,7 +25,5 @@ class User < ApplicationRecord
 
   def name_last_name
         "#{name.capitalize} #{last_name.capitalize}"
-  end
-  
-   
+  end   
 end

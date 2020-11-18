@@ -16,9 +16,15 @@
      
     <% @combis.each do |combi| %>
     <li class="list-group-item d-flex justify-content-between align-items-center">
-        <span>
-            <h4 class="m-0"><%= combi.licence_plate %> </h4>
-            <p class="m-0"><%= combi.category %> </p>
+        <span class="row w-75">
+            <span class="col-6">
+                <h6 class="m-0"> Patente </h6>
+                <h4 class="m-0"> <%= combi.licence_plate %> </h4>
+            </span>
+            <span class="col-6">
+                <h6 class="m-0"> Categoría </h6>
+                <h4 class="m-0"><%= combi.category %></h4>
+            </span>
         </span>
         <span>
             <%= link_to 'Editar', edit_combi_path(combi), class: "btn btn-warning" %>

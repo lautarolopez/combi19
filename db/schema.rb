@@ -87,7 +87,7 @@ ActiveRecord::Schema.define(version: 2020_11_18_010856) do
     t.string "name", default: "", null: false
     t.string "last_name", default: "", null: false
     t.integer "dni", default: 0, null: false
-    t.date "birth_date", default: "2020-11-14", null: false
+    t.date "birth_date", default: "2020-11-18", null: false
     t.string "role", default: "user", null: false
     t.boolean "suscribed", default: false, null: false
     t.index ["dni"], name: "index_users_on_dni", unique: true

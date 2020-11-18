@@ -5,7 +5,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
  
   # Validations
-  validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, message: "is not valid"
+  validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, message: " no es válido."
   validates :name, presence: true
   validates :last_name, presence: true
   validates :dni, presence: true, uniqueness: true
@@ -19,7 +19,7 @@ class User < ApplicationRecord
   # Methods
   def validate_age 
     if birth_date.present? && birth_date > 18.year.ago.to_date
-      errors.add(:birth_date, 'should make at least 18 years old')
+      errors.add("Sólo podés registrarte teniendo más de 18 años.")
     end
   end
 

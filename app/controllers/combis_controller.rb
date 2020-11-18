@@ -58,7 +58,7 @@ class CombisController < ApplicationController
 
 	def destroy
 		@combi = Combi.find(params[:id])
-		if (@combi.travel.count > 0)
+		if (@combi.travels.count > 0)
 			flash[:error] = "Combi " + @combi.licence_plate + ", " + @combi.category + " no se puede borrar porque tiene viajes asociados"
 		else
 			if @combi.destroy

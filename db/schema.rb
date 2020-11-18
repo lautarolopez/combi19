@@ -42,13 +42,6 @@ ActiveRecord::Schema.define(version: 2020_11_18_010856) do
     t.index ["route_id"], name: "index_extras_routes_on_route_id"
   end
 
-  create_table "passengers_travels", id: false, force: :cascade do |t|
-    t.integer "passenger_id"
-    t.integer "travel_id"
-    t.index ["passenger_id"], name: "index_passengers_travels_on_passenger_id"
-    t.index ["travel_id"], name: "index_passengers_travels_on_travel_id"
-  end
-
   create_table "routes", force: :cascade do |t|
     t.integer "origin_id"
     t.integer "destination_id"

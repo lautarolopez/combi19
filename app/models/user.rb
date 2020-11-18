@@ -19,7 +19,7 @@ class User < ApplicationRecord
   # Methods
   def validate_age 
     if birth_date.present? && birth_date > 18.year.ago.to_date
-      errors.add("Sólo podés registrarte teniendo más de 18 años.")
+      errors.add(:birth_date, "Sólo podés registrarte teniendo más de 18 años.")
     end
   end
 

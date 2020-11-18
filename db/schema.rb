@@ -42,13 +42,6 @@ ActiveRecord::Schema.define(version: 2020_11_18_010856) do
     t.index ["route_id"], name: "index_extras_routes_on_route_id"
   end
 
-  create_table "passengers_travels", id: false, force: :cascade do |t|
-    t.integer "passenger_id"
-    t.integer "travel_id"
-    t.index ["passenger_id"], name: "index_passengers_travels_on_passenger_id"
-    t.index ["travel_id"], name: "index_passengers_travels_on_travel_id"
-  end
-
   create_table "routes", force: :cascade do |t|
     t.integer "origin_id"
     t.integer "destination_id"
@@ -87,7 +80,7 @@ ActiveRecord::Schema.define(version: 2020_11_18_010856) do
     t.string "name", default: "", null: false
     t.string "last_name", default: "", null: false
     t.integer "dni", default: 0, null: false
-    t.date "birth_date", default: "2020-11-14", null: false
+    t.date "birth_date", default: "2020-11-18", null: false
     t.string "role", default: "user", null: false
     t.boolean "suscribed", default: false, null: false
     t.index ["dni"], name: "index_users_on_dni", unique: true

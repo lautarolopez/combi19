@@ -4,6 +4,11 @@
         <p class="my-0"><%= flash[:success] %></p>
     </div>
     <% end %>
+    <% if flash[:error] %>
+    <div class="alert alert-danger" role="alert">
+        <p class="my-0"><%= flash[:error] %></p>
+    </div>
+    <% end %>
     <div class="d-flex justify-content-between w-100">
         <h1> Viajes </h1>
         <%= link_to "Agregar viaje", step_new_travel_path, class: 'btn btn-primary btn-md h-75' %>
@@ -22,6 +27,7 @@
             </span>
         </span>
         <span>
+            <%= link_to 'Editar', travels_path, class: "btn btn-warning" %>
             <%= link_to 'Eliminar', travel, method: :delete, class: "btn btn-danger" %>
         </span>
     </li>

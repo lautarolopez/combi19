@@ -10,6 +10,5 @@ class Extra < ApplicationRecord
     # Methods
 	def downcase
 		name.downcase!
-		state.downcase!
 	end
 end

@@ -4,6 +4,11 @@
         <p class="my-0"><%= flash[:success] %></p>
     </div>
     <% end %>
+    <% if flash[:error] %>
+    <div class="alert alert-danger" role="alert">
+        <p class="my-0"><%= flash[:error] %></p>
+    </div>
+    <% end %>
     <div class="d-flex justify-content-between w-100">
         <h1> Combis </h1>
         <%= link_to "Agregar combi", new_combi_path, class: 'btn btn-primary btn-md h-75' %>

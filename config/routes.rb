@@ -17,8 +17,13 @@ Rails.application.routes.draw do
 
   resources :extras
   resources :cities
+  resources :routes
+  resources :combis
+  as :travel do
+    get 'travels/step_new', to: 'travels#step_new', as: :step_new_travel
+    get 'travels/:id/step_edit/', to: 'travels#step_edit', as: :step_edit_travel
+  end
+  resources :travels
 
   root to: "home#index"
 end
-
-

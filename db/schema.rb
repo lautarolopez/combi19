@@ -10,11 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_15_055738) do
+ActiveRecord::Schema.define(version: 2020_11_18_010856) do
 
   create_table "cities", force: :cascade do |t|
     t.string "name", default: "", null: false
     t.string "state", default: "", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "combis", force: :cascade do |t|
+    t.string "category"
+    t.string "licence_plate"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -28,6 +35,40 @@ ActiveRecord::Schema.define(version: 2020_11_15_055738) do
     t.index ["name"], name: "index_extras_on_name", unique: true
   end
 
+  create_table "extras_routes", id: false, force: :cascade do |t|
+    t.integer "extra_id"
+    t.integer "route_id"
+    t.index ["extra_id"], name: "index_extras_routes_on_extra_id"
+    t.index ["route_id"], name: "index_extras_routes_on_route_id"
+  end
+
+  create_table "routes", force: :cascade do |t|
+    t.integer "origin_id"
+    t.integer "destination_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "travels", force: :cascade do |t|
+    t.integer "driver_id"
+    t.integer "route_id"
+    t.integer "occupied", default: 0
+    t.integer "capacity", default: 0
+    t.datetime "date_departure"
+    t.datetime "date_arrival"
+    t.float "price", default: 0.0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "combi_id"
+  end
+
+  create_table "travels_users", id: false, force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "travel_id"
+    t.index ["travel_id"], name: "index_travels_users_on_travel_id"
+    t.index ["user_id"], name: "index_travels_users_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -39,7 +80,7 @@ ActiveRecord::Schema.define(version: 2020_11_15_055738) do
     t.string "name", default: "", null: false
     t.string "last_name", default: "", null: false
     t.integer "dni", default: 0, null: false
-    t.date "birth_date", default: "2020-11-11", null: false
+    t.date "birth_date", default: "2020-11-18", null: false
     t.string "role", default: "user", null: false
     t.boolean "suscribed", default: false, null: false
     t.index ["dni"], name: "index_users_on_dni", unique: true

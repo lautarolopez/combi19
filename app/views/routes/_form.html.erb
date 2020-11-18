@@ -1,0 +1,68 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+
+<%= form_for(@route, :html => {class: 'd-flex flex-column justify-content-center col-lg-6 mx-auto card p-5 my-5'}) do |f| %>
+    
+    <h3> <%= title %> </h3>
+    
+    <div class="form-group">
+        <%= f.label :origin_id, 'Origen *' %>
+        <%= collection_select(:route, :origin_id, City.all, :id, :name_state, {prompt: "Seleccione un origen"}, { class: 'form-control', required: true,  id: "origin"}) %>
+    </div>
+
+    <div class="form-group">
+        <%= f.label :destination_id, 'Destino *' %>
+        <%= collection_select(:route, :destination_id, City.all, :id, :name_state, {prompt: "Seleccione un destino"}, { class: 'form-control', required: true, id: "destination"}) %>
+    </div>
+
+    <div class="form-group">
+        <%= f.label :extra_ids, 'Insumos' %>
+        <%= collection_select(:route, :extra_ids, Extra.all, :id, :name, {prompt: "Seleccione los insumos disponibles en la ruta"}, {multiple: true, class: 'selectpicker', id: "extras"}) %>
+    </div>
+
+    <% if flash[:error] %>
+    <div class="alert alert-danger" role="alert">
+        <p class="my-0"><%= flash[:error] %></p>
+    </div>
+    <% end %>
+    <%= f.submit save, :class => 'btn btn-primary' %> 
+<% end %>
+
+<script>
+    if (window.location.href.includes("edit") || window.location.href.includes("new")) {
+        if ( window.localStorage ) {
+            if (!localStorage.getItem('firstLoad')) {
+                localStorage['firstLoad'] = true;
+                window.location.reload();
+            } else
+                localStorage.removeItem('firstLoad');
+        }
+    }
+
+    let origin = document.querySelector("#origin");
+    let destination = document.querySelector("#destination");
+    let extras = document.querySelector("#extras");
+    let originOptions = origin.querySelectorAll("option");
+    let destinationOptions = destination.querySelectorAll("option");
+    let extrasOptions = extras.querySelectorAll("option");
+
+    document.querySelector(".selectpicker").setAttribute("data-live-search",true);
+
+    if (origin.selectedIndex !== 0)
+        destinationOptions[origin.selectedIndex].setAttribute("disabled", true);
+    if (destination.selectedIndex !== 0)
+        originOptions[destination.selectedIndex].setAttribute("disabled", true);
+    if (extras.selectedIndex == -1) extrasOptions[0].setAttribute("disabled", true);
+
+    origin.addEventListener("change", () => {
+        destinationOptions.forEach(opt => opt.removeAttribute("disabled"));
+        if (origin.selectedIndex !== 0)
+            destinationOptions[origin.selectedIndex].setAttribute("disabled", true);
+    })
+
+    destination.addEventListener("change", () => {
+        originOptions.forEach(opt => opt.removeAttribute("disabled"));        
+        if (destination.selectedIndex !== 0)
+            originOptions[destination.selectedIndex].setAttribute("disabled", true);
+    })
+
+</script>

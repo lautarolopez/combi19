@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  driver_id: 1
+  combi_id: 1
+  route_id: 1
+  occupied: 1
+  capacity: 1
+  date_departure: 2020-11-17 05:03:16
+  date_arrival: 2020-11-17 05:03:16
+  price: 1.5
+
+two:
+  driver_id: 1
+  combi_id: 1
+  route_id: 1
+  occupied: 1
+  capacity: 1
+  date_departure: 2020-11-17 05:03:16
+  date_arrival: 2020-11-17 05:03:16
+  price: 1.5

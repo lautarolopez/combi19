@@ -12,6 +12,9 @@
 
 ActiveRecord::Schema.define(version: 2020_11_18_010856) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "cities", force: :cascade do |t|
     t.string "name", default: "", null: false
     t.string "state", default: "", null: false
@@ -36,8 +39,8 @@ ActiveRecord::Schema.define(version: 2020_11_18_010856) do
   end
 
   create_table "extras_routes", id: false, force: :cascade do |t|
-    t.integer "extra_id"
-    t.integer "route_id"
+    t.bigint "extra_id"
+    t.bigint "route_id"
     t.index ["extra_id"], name: "index_extras_routes_on_extra_id"
     t.index ["route_id"], name: "index_extras_routes_on_route_id"
   end
@@ -63,8 +66,8 @@ ActiveRecord::Schema.define(version: 2020_11_18_010856) do
   end
 
   create_table "travels_users", id: false, force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "travel_id"
+    t.bigint "user_id"
+    t.bigint "travel_id"
     t.index ["travel_id"], name: "index_travels_users_on_travel_id"
     t.index ["user_id"], name: "index_travels_users_on_user_id"
   end
@@ -88,4 +91,8 @@ ActiveRecord::Schema.define(version: 2020_11_18_010856) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "extras_routes", "extras"
+  add_foreign_key "extras_routes", "routes"
+  add_foreign_key "travels_users", "travels"
+  add_foreign_key "travels_users", "users"
 end

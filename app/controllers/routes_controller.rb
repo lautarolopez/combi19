@@ -14,7 +14,7 @@ class RoutesController < ApplicationController
     end
 
     def create
-        @route = Route.create(params.require(:route).permit(:origin_id, :destination_id, extra_ids: []));
+        @route = Route.new(params.require(:route).permit(:origin_id, :destination_id, extra_ids: []));
         if @route.save
             flash[:success] = "La ruta " + @route.origin.name.titleize + ", " + @route.origin.state.titleize + " - " + @route.destination.name.titleize + ", " + @route.destination.state.titleize + " ha sido creada con éxito!"
             redirect_to routes_path
@@ -38,7 +38,8 @@ class RoutesController < ApplicationController
 
     def update
     	@route = Route.find(params[:id])
-        if @route.update(params.require(:route).permit(:origin_id, :destination_id, extra_ids: []));
+        @route.attributes = params.require(:route).permit(:origin_id, :destination_id, extra_ids: [])
+        if @route.save
           flash[:success] = "La ruta " + @route.origin.name.titleize + ", " + @route.origin.state.titleize + " - " + @route.destination.name.titleize + ", " + @route.destination.state.titleize + " ha sido actualizada con éxito!"
           redirect_to routes_path
         else

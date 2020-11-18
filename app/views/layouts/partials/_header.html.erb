@@ -17,6 +17,9 @@
                 <li class="nav-item">
                     <%= link_to 'Rutas', routes_path, class: "nav-link" %>
                 </li>
+                <li class="nav-item">
+                    <%= link_to 'Viajes', travels_path, class: "nav-link" %>
+                </li>
             </ul>
             <% if user_signed_in? %>
             <%= link_to 'Cerrar sesión', destroy_user_session_path, method: :delete, class: "btn btn-danger" %>

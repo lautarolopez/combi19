@@ -13,6 +13,7 @@ class User < ApplicationRecord
   validate :validate_age
 
   # Relations
+  has_many :driving_travels, class_name: "User", foreign_key: "driver_id"
   has_and_belongs_to_many :travels
 
   # Methods
@@ -20,6 +21,10 @@ class User < ApplicationRecord
     if birth_date.present? && birth_date > 18.year.ago.to_date
       errors.add(:birth_date, 'should make at least 18 years old')
     end
+  end
+
+  def name_last_name
+        "#{name.capitalize} #{last_name.capitalize}"
   end
   
    

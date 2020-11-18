@@ -43,10 +43,10 @@ class CitiesController < ApplicationController
         @city = City.find(params[:id])
         @routes = @city.routes_from + @city.routes_to
         @routes.each do |r|
-            #if (r.travels.count > 0) 
-            #    flash[:error] = @city.name.titleize + ", " + @city.state.titleize + "no se puede borrar porque existen viajes asociados"
-            #    break
-            #end
+            if (r.travels.count > 0) 
+                flash[:error] = @city.name.titleize + ", " + @city.state.titleize + " no se puede borrar porque existen viajes asociados"
+                break
+            end
         end
         if (flash[:error] == nil)
             if @city.destroy

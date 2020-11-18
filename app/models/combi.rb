@@ -6,7 +6,7 @@ class Combi < ApplicationRecord
 	before_save :upcase
 
 	#Relations
-	belongs_to :travel
+	has_many :travel
 
 	#Methods
 	def upcase

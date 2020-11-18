@@ -1,9 +1,15 @@
 class CitiesController < ApplicationController
     def new
+		if current_user == nil || current_user.role != "admin"
+			redirect_to root_path
+		end
         @city = City.new
     end
     
     def index
+		if current_user == nil || current_user.role != "admin"
+			redirect_to root_path
+		end
         @cities = City.all
     end
     def create
@@ -22,6 +28,9 @@ class CitiesController < ApplicationController
           end
     end
     def edit
+		if current_user == nil || current_user.role != "admin"
+			redirect_to root_path
+		end
         @city = City.find(params[:id])
     end
     def update

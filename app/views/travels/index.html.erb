@@ -11,9 +11,11 @@
     <% end %>
     <div class="d-flex justify-content-between w-100">
         <h1> Viajes </h1>
+        <% if current_user != nil && current_user.role == "admin" %>
         <%= link_to "Agregar viaje", step_new_travel_path, class: 'btn btn-primary btn-md h-75' %>
+        <% end %>
     </div>
-     
+
     <% @travels.each do |travel| %>
     <li class="list-group-item d-flex justify-content-between align-items-center">
         <span class="row w-75">
@@ -34,10 +36,19 @@
                 <h5 class="m-0"><%= I18n.l(travel.date_arrival, format: :long) %> </h5>
             </span>
         </span>
+        <% if current_user != nil && current_user.role == "admin" %>
         <span>
             <%= link_to 'Editar', step_edit_travel_path(travel), class: "btn btn-warning" %>
             <%= link_to 'Eliminar', travel, method: :delete, class: "btn btn-danger" %>
         </span>
+        <% else %>
+        <span class="col-2">
+            <p class="m-0"> Categoría </p>
+            <h5 class="mb-3"><%= travel.combi.category %> </h5>
+            <p class="m-0"> Precio </p>
+            <h5 class="m-0"><%= sprintf('%.2f', travel.price) %>$</h5>
+        </span>
+        <% end %>
     </li>
     <% end %>
 </ul>

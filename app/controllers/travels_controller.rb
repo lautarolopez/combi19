@@ -4,10 +4,16 @@ class TravelsController < ApplicationController
     end
 
     def step_new
-    	@travel = Travel.new
+		if current_user == nil || current_user.role != "admin"
+			redirect_to root_path
+		end
+		@travel = Travel.new
     end
 
-    def new
+	def new
+		if current_user == nil || current_user.role != "admin"
+			redirect_to root_path
+		end
     	@travel = Travel.new(params.require(:travel).permit(:route_id, :capacity, :price, :date_departure, :date_arrival))
 
     	@drivers = User.where(role: "driver")
@@ -60,11 +66,17 @@ class TravelsController < ApplicationController
         end
     end
 
-    def step_edit
+	def step_edit
+		if current_user == nil || current_user.role != "admin"
+			redirect_to root_path
+		end
     	@travel = Travel.find(params[:id])
     end
 
-    def edit
+	def edit
+		if current_user == nil || current_user.role != "admin"
+			redirect_to root_path
+		end
     	@travel = Travel.find(params[:id])
        	@travel.attributes = params.require(:travel).permit(:route_id, :capacity, :price, :date_departure, :date_arrival, :combi_id, :driver_id)
     	@drivers = User.where(role: "driver")

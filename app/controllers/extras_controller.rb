@@ -1,6 +1,9 @@
 class ExtrasController < ApplicationController
 
     def new
+		if current_user == nil || current_user.role != "admin"
+			redirect_to root_path
+		end
         @extra = Extra.new
     end
     
@@ -21,6 +24,9 @@ class ExtrasController < ApplicationController
     end
 
     def edit
+		if current_user == nil || current_user.role != "admin"
+			redirect_to root_path
+		end
         @extra = Extra.find(params[:id])
     end
 
@@ -41,6 +47,9 @@ class ExtrasController < ApplicationController
     end
 
     def index
+		if current_user == nil || current_user.role != "admin"
+			redirect_to root_path
+		end
         @extras = Extra.all
     end
 

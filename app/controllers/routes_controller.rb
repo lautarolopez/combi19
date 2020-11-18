@@ -1,9 +1,15 @@
 class RoutesController < ApplicationController
-	def new
+    def new
+		if current_user == nil || current_user.role != "admin"
+			redirect_to root_path
+		end
         @route = Route.new
     end
     
     def index
+		if current_user == nil || current_user.role != "admin"
+			redirect_to root_path
+		end
         @routes = Route.all
     end
 
@@ -24,6 +30,9 @@ class RoutesController < ApplicationController
     end
 
     def edit
+		if current_user == nil || current_user.role != "admin"
+			redirect_to root_path
+		end
     	@route = Route.find(params[:id])
     end
 

@@ -8,6 +8,7 @@
             <img style=" width: 40px; height: 40px;" src="/images/logo.png">
             <% end %>
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <% if current_user != nil && current_user.role == "admin" %>
                 <li class="nav-item">
                     <%= link_to 'Ciudades', cities_path, class: "nav-link" %>
                 </li>
@@ -20,6 +21,7 @@
                 <li class="nav-item">
                     <%= link_to 'Rutas', routes_path, class: "nav-link" %>
                 </li>
+                <% end %>
                 <li class="nav-item">
                     <%= link_to 'Viajes', travels_path, class: "nav-link" %>
                 </li>

@@ -1,5 +1,8 @@
 class CombisController < ApplicationController
 	def new
+		if current_user == nil || current_user.role != "admin"
+			redirect_to root_path
+		end
 		@combi = Combi.new
 	end
 
@@ -21,10 +24,16 @@ class CombisController < ApplicationController
 	end
 
 	def index
+		if current_user == nil || current_user.role != "admin"
+			redirect_to root_path
+		end
 		@combis = Combi.all
 	end
 
 	def edit
+		if current_user == nil || current_user.role != "admin"
+			redirect_to root_path
+		end
 		@combi = Combi.find(params[:id])
 	end
 

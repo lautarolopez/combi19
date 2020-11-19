@@ -13,9 +13,9 @@ class ExtrasController < ApplicationController
             flash[:success] = "El insumo " + @extra.name + " ha sido creado con éxito!"
             redirect_to extras_path
           else
-            @aux = Extra.find_by name: @extra.name
+            @aux = Extra.find_by name: @extra.name.downcase
             if @aux != nil
-               flash[:error] = "El insumo " + @extra.name + "ya existe"
+               flash[:error] = "El insumo " + @extra.name.downcase + " ya existe"
             else 
                 flash[:error] = "Algo salió mal"
             end
@@ -32,13 +32,14 @@ class ExtrasController < ApplicationController
 
     def update
         @extra = Extra.find(params[:id])
-        if @extra.update_attributes(params.require(:extra).permit(:name, :description, :price))
+        @extra.attributes = params.require(:extra).permit(:name, :description, :price)
+        if @extra.save
             flash[:success] = "El insumo " + @extra.name + " ha sido actualizado con éxito!"
           redirect_to extras_path
         else
-            @aux = Extra.find_by name: @extra.name
+            @aux = Extra.find_by name: @extra.name.downcase
             if @aux != nil
-               flash[:error] = "El insumo " + @extra.name + "ya existe"
+               flash[:error] = "El insumo " + @extra.name.downcase + " ya existe"
             else 
                 flash[:error] = "Algo salió mal"
             end
@@ -56,7 +57,7 @@ class ExtrasController < ApplicationController
     def destroy
         @extra = Extra.find(params[:id])
         if @extra.destroy
-               flash[:error] = "El insumo " + @extra.name + " ha sido borrado con éxito"
+               flash[:success] = "El insumo " + @extra.name + " ha sido borrado con éxito"
             redirect_to extras_url
         else
                 flash[:error] = "Algo salió mal"

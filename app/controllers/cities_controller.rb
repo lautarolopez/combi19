@@ -14,7 +14,7 @@ class CitiesController < ApplicationController
     end
 
     def create
-        @city = City.new(params.require(:city).permit(:name, :state))
+        @city = City.create(params.require(:city).permit(:name, :state))
         if @city.save
             flash[:success] = @city.name.titleize + ", " + @city.state.titleize + " ha sido creada con éxito!"
             redirect_to cities_path

@@ -1,5 +1,4 @@
 <ul class="list-group pt-5">
-<<<<<<< Updated upstream
     <% if flash[:success] %>
     <div class="alert alert-success" role="alert">
         <p class="my-0"><%= flash[:success] %></p>
@@ -29,61 +28,26 @@
         </span>
         <span>
             <%= link_to 'Editar', edit_combi_path(combi), class: "btn btn-light" %>
-            <%= link_to 'Eliminar', combi, method: :delete, class: "btn btn-danger" %>
+            <%= link_to 'Eliminar', '#', "data-toggle"=>"modal", "data-target" => "#delete-#{combi.id}", class: "btn btn-danger" %>
+            <div class="modal fade" id="delete-<%= combi.id %>" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">Eliminación de ruta</button>
+                        </div>
+                        <div class="modal-body">
+                            <p> ¿Confirma que desea eliminar la combi <%= combi.licence_plate %>, <%= combi.category %>? </p>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="modal-footer">
+                                <%= link_to 'Eliminar', combi, method: :delete, class: "btn btn-danger" %>
+                                <a href="#" data-dismiss="modal" class="btn btn-secondary">Cancelar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </span>
     </li>
     <% end %>
-=======
-	<% if flash[:success] %>
-	<div class="alert alert-success" role="alert">
-		<p class="my-0"><%= flash[:success] %></p>
-	</div>
-	<% end %>
-	<% if flash[:error] %>
-	<div class="alert alert-danger" role="alert">
-		<p class="my-0"><%= flash[:error] %></p>
-	</div>
-	<% end %>
-	<div class="d-flex justify-content-between w-100">
-		<h1> Combis </h1>
-		<%= link_to "Agregar combi", new_combi_path, class: 'btn btn-primary btn-md h-75' %>
-	</div>
-
-	<% @combis.each do |combi| %>
-	<li class="list-group-item d-flex justify-content-between align-items-center">
-		<span class="row w-75">
-			<span class="col-6">
-				<h6 class="m-0"> Patente </h6>
-				<h4 class="m-0"> <%= combi.licence_plate %> </h4>
-			</span>
-			<span class="col-6">
-				<h6 class="m-0"> Categoría </h6>
-				<h4 class="m-0"><%= combi.category %></h4>
-			</span>
-		</span>
-		<span>
-			<%= link_to 'Editar', edit_combi_path(combi), class: "btn btn-warning" %>
-			<%= link_to 'Eliminar', '#', "data-toggle"=>"modal", "data-target" => "#delete-#{combi.id}", class: "btn btn-danger" %>
-			<div class="modal fade" id="delete-<%= combi.id %>" role="dialog">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal">Eliminación de ruta</button>
-						</div>
-						<div class="modal-body">
-							<p> ¿Confirma que desea eliminar la combi <%= combi.licence_plate %>, <%= combi.category %>? </p>
-						</div>
-						<div class="modal-footer">
-							<div class="modal-footer">
-								<%= link_to 'Eliminar', combi, method: :delete, class: "btn btn-danger" %>
-								<a href="#" data-dismiss="modal" class="btn btn-secondary">Cancelar</a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</span>
-	</li>
-	<% end %>
->>>>>>> Stashed changes
 </ul>

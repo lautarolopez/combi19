@@ -14,7 +14,7 @@
         <h1> Combis </h1>
         <%= link_to "Agregar combi", new_combi_path, class: 'btn btn-primary btn-md h-75' %>
     </div>
-     
+
     <% @combis.each do |combi| %>
     <li class="list-group-item d-flex justify-content-between align-items-center">
         <span class="row w-75">
@@ -28,7 +28,7 @@
             </span>
         </span>
         <span>
-            <%= link_to 'Editar', edit_combi_path(combi), class: "btn btn-warning" %>
+            <%= link_to 'Editar', edit_combi_path(combi), class: "btn btn-light" %>
             <%= link_to 'Eliminar', combi, method: :delete, class: "btn btn-danger" %>
         </span>
     </li>

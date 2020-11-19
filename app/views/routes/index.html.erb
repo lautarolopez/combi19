@@ -13,7 +13,7 @@
         <h1> Rutas </h1>
         <%= link_to "Agregar ruta", new_route_path, class: 'btn btn-primary btn-md h-75' %>
     </div>
-     
+
     <% @routes.each do |route| %>
     <li class="list-group-item d-flex justify-content-between align-items-center">
         <span class="row w-75">
@@ -27,26 +27,26 @@
             </span>
         </span>
         <span>
-            <%= link_to 'Editar', edit_route_path(route), class: "btn btn-warning" %>
+            <%= link_to 'Editar', edit_route_path(route), class: "btn btn-light" %>
             <%= link_to 'Eliminar', '#', "data-toggle"=>"modal", "data-target" => "#delete-#{route.id}", class: "btn btn-danger" %>
             <div class="modal fade" id="delete-<%= route.id %>" role="dialog">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">Eliminación de ruta</button>
-                  </div>
-                  <div class="modal-body">
-                    <p> ¿Confirma que desea eliminar la ruta <%= route.origin.name.titleize %>, <%= route.origin.state.titleize %> - <%= route.destination.name.titleize %>, <%= route.destination.state.titleize %>? </p>
-                  </div>
-                  <div class="modal-footer">
-                    <div class="modal-footer">
-                        <%= link_to 'Eliminar', route, method: :delete, class: "btn btn-danger" %>
-                        <a href="#" data-dismiss="modal" class="btn btn-secondary">Cancelar</a>
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">Eliminación de ruta</button>
+                        </div>
+                        <div class="modal-body">
+                            <p> ¿Confirma que desea eliminar la ruta <%= route.origin.name.titleize %>, <%= route.origin.state.titleize %> - <%= route.destination.name.titleize %>, <%= route.destination.state.titleize %>? </p>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="modal-footer">
+                                <%= link_to 'Eliminar', route, method: :delete, class: "btn btn-danger" %>
+                                <a href="#" data-dismiss="modal" class="btn btn-secondary">Cancelar</a>
+                            </div>
+                        </div>
                     </div>
-                  </div>
                 </div>
-              </div>
-           </div>
+            </div>
         </span>
     </li>
     <% end %>

@@ -38,26 +38,26 @@
         </span>
         <% if current_user != nil && current_user.role == "admin" %>
         <span>
-            <%= link_to 'Editar', step_edit_travel_path(travel), class: "btn btn-warning" %>
+            <%= link_to 'Editar', step_edit_travel_path(travel), class: "btn btn-light" %>
             <%= link_to 'Eliminar', '#', "data-toggle"=>"modal", "data-target" => "#delete-#{travel.id}", class: "btn btn-danger" %>
             <div class="modal fade" id="delete-<%= travel.id %>" role="dialog">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">Eliminación de viaje</button>
-                  </div>
-                  <div class="modal-body">
-                    <p> ¿Confirma que desea eliminar el viaje <%= travel.route.origin.name.titleize %>, <%= travel.route.origin.state.titleize %> - <%= travel.route.destination.name.titleize %>, <%= travel.route.destination.state.titleize %> del día <%= travel.date_departure.strftime('%m/%d/%Y') %> a las <%= travel.date_departure.strftime('%H:%M') %> hs? </p>
-                  </div>
-                  <div class="modal-footer">
-                    <div class="modal-footer">
-                        <%= link_to 'Eliminar', travel, method: :delete, class: "btn btn-danger" %>
-                        <a href="#" data-dismiss="modal" class="btn btn-secondary">Cancelar</a>
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">Eliminación de viaje</button>
+                        </div>
+                        <div class="modal-body">
+                            <p> ¿Confirma que desea eliminar el viaje <%= travel.route.origin.name.titleize %>, <%= travel.route.origin.state.titleize %> - <%= travel.route.destination.name.titleize %>, <%= travel.route.destination.state.titleize %> del día <%= travel.date_departure.strftime('%m/%d/%Y') %> a las <%= travel.date_departure.strftime('%H:%M') %> hs? </p>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="modal-footer">
+                                <%= link_to 'Eliminar', travel, method: :delete, class: "btn btn-danger" %>
+                                <a href="#" data-dismiss="modal" class="btn btn-secondary">Cancelar</a>
+                            </div>
+                        </div>
                     </div>
-                  </div>
                 </div>
-              </div>
-           </div>
+            </div>
         </span>
         <% else %>
         <span class="col-2">

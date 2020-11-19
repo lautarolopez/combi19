@@ -6,6 +6,14 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+# Delete database before create seeds
+#User.destroy_all
+#Extra.destroy_all
+#Combi.destroy_all
+#City.destroy_all
+#Route.destroy_all
+#Travel.destroy_all
+
 #Create first admin user
 user = User.new
 user.email = "admin@combi19.com"

@@ -4,9 +4,10 @@ class City < ApplicationRecord
 
 	# Validations
 	validates :name, presence: :true, uniqueness: { scope: :state, case_sensitive: false }
-	validates :state, presence: :true
+	validates :state, presence: :true, uniqueness: { scope: :name, case_sensitive: false }
 
 	before_save :downcase
+	before_update :downcase
 
 	# Relations
 	has_many :routes_from, class_name: 'Route', foreign_key: "origin_id", dependent: :destroy

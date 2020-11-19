@@ -1,10 +1,10 @@
  <%= form_for(@city, :html => {class: 'd-flex flex-column justify-content-center col-lg-6 mx-auto card p-5 my-5'}) do |f| %>
-    
+   
     <h3> <%= title %> </h3>
 
     <div class="form-group">
         <%= f.label :name, "Nombre *" %>
-        <%= f.text_field :name, :autofocus => true, class: 'form-control text-capitalize', requeired: true %>
+        <%= f.text_field :name, :autofocus => true, class: 'form-control text-capitalize', required: true %>
     </div>
 
     <div class="form-group">
@@ -13,9 +13,9 @@
     </div>
 
     <% if flash[:error] %>
-    <div class="alert alert-danger" role="alert">
-        <p class="my-0"><%= flash[:error] %></p>
-    </div>
+        <div class="alert alert-danger" role="alert">
+            <p class="my-0"><%= flash[:error] %></p>
+        </div>
     <% end %>
     <%= f.submit save, :class => 'btn btn-primary' %> 
 <% end %>

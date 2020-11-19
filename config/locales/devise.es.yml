@@ -1,4 +1,4 @@
-en:
+es:
   activerecord:
     attributes:
       user:
@@ -25,6 +25,10 @@ en:
         unconfirmed_email: Email no confirmado
         unlock_token: Código de desbloqueo
         updated_at: Actualizado en
+        name: Nombre
+        last_name: Apellido
+        birth_date: Fecha de Nacimiento
+        dni: Número de documento
     models:
       user:
         one: Usuario

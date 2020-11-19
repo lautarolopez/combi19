@@ -21,8 +21,29 @@
             <p class="m-0"><%= city.state.titleize %> </p>
         </span>
         <span>
-            <%= link_to 'Editar', edit_city_path(city), class: "btn btn-warning" %>
-            <%= link_to 'Eliminar', city, method: :delete, class: "btn btn-danger" %>
+            <%= link_to 'Editar', edit_city_path(city), class: "btn btn-light" %>
+            <%= link_to 'Eliminar', '#', "data-toggle"=>"modal", "data-target" => "#delete-#{city.id}", class: "btn btn-danger" %>
+            <div class="modal fade" id="delete-<%= city.id %>" role="dialog">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">Eliminación de ciudad</button>
+                  </div>
+                  <div class="modal-body">
+                    <% if (city.routes_from.count > 0 || city.routes_to.count > 0) %>
+                        <p> La ciudad que desea borrar tiene rutas asociadas, si elimina la ciudad se borrarán también las rutas. </p>
+                    <% end %>
+                    <p> ¿Confirma que desea eliminar la ciudad <%= city.name.titleize %>, <%= city.state.titleize %>? </p>
+                  </div>
+                  <div class="modal-footer">
+                    <div class="modal-footer">
+                      <%= link_to 'Eliminar', city, method: :delete, :class => 'btn btn-danger' %>
+                        <a href="#" data-dismiss="modal" class="btn btn-secondary">Cancelar</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+           </div>
         </span>
     </li>
     <% end %>

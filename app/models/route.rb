@@ -1,7 +1,7 @@
 class Route < ApplicationRecord
 	# Validations
 	validates :origin, presence: :true, uniqueness: { scope: :destination, case_sensitive: false }
-	validates :destination, presence: :true
+	validates :destination, presence: :true, uniqueness: { scope: :origin, case_sensitive: false }
 
 	# Relations
 	has_and_belongs_to_many :extras

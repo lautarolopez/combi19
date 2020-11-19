@@ -21,7 +21,25 @@
         </span>
         <span>
             <%= link_to 'Editar', edit_extra_path(extra), class: "btn btn-warning" %>
-            <%= link_to 'Eliminar', extra, method: :delete, class: "btn btn-danger" %>
+            <%= link_to 'Eliminar', '#', "data-toggle"=>"modal", "data-target" => "#delete-#{extra.id}", class: "btn btn-danger" %>
+            <div class="modal fade" id="delete-<%= extra.id %>" role="dialog">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">Eliminación de insumo</button>
+                  </div>
+                  <div class="modal-body">
+                    <p> ¿Confirma que desea eliminar el insumo <%= extra.name %>? </p>
+                  </div>
+                  <div class="modal-footer">
+                    <div class="modal-footer">
+                        <%= link_to 'Eliminar', extra, method: :delete, class: "btn btn-danger" %>
+                        <a href="#" data-dismiss="modal" class="btn btn-secondary">Cancelar</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+           </div>
         </span>
     </li>
     <% end %>

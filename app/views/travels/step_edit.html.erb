@@ -11,12 +11,12 @@
 
     <div class="form-group">
         <%= f.label :date_departure, 'Fecha y hora de salida *' %>
-        <%= f.datetime_local_field :date_departure, class: 'form-control' %>
+        <%= f.datetime_local_field :date_departure, class: 'form-control', required: true %>
     </div>
 
     <div class="form-group">
         <%= f.label :date_arrival, 'Fecha y hora de llegada *' %>
-        <%= f.datetime_local_field :date_arrival, class: 'form-control' %>
+        <%= f.datetime_local_field :date_arrival, class: 'form-control', required: true %>
     </div>
 
     <div class="form-group">

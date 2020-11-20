@@ -37,32 +37,34 @@
                 localStorage.removeItem('firstLoad');
         }
     }
+    
+    $(document).ready(function() {
+        let origin = document.querySelector("#origin");
+        let destination = document.querySelector("#destination");
+        let extras = document.querySelector("#extras");
+        let originOptions = origin.querySelectorAll("option");
+        let destinationOptions = destination.querySelectorAll("option");
+        let extrasOptions = extras.querySelectorAll("option");    
 
-    let origin = document.querySelector("#origin");
-    let destination = document.querySelector("#destination");
-    let extras = document.querySelector("#extras");
-    let originOptions = origin.querySelectorAll("option");
-    let destinationOptions = destination.querySelectorAll("option");
-    let extrasOptions = extras.querySelectorAll("option");
+        document.querySelector(".selectpicker").setAttribute("data-live-search",true);
 
-    document.querySelector(".selectpicker").setAttribute("data-live-search",true);
-
-    if (origin.selectedIndex !== 0)
-        destinationOptions[origin.selectedIndex].setAttribute("disabled", true);
-    if (destination.selectedIndex !== 0)
-        originOptions[destination.selectedIndex].setAttribute("disabled", true);
-    if (extras.selectedIndex == -1) extrasOptions[0].setAttribute("disabled", true);
-
-    origin.addEventListener("change", () => {
-        destinationOptions.forEach(opt => opt.removeAttribute("disabled"));
-        if (origin.selectedIndex !== 0)
+        if (!window.location.href.includes("new") || origin.selectedIndex !== 0)
             destinationOptions[origin.selectedIndex].setAttribute("disabled", true);
-    })
-
-    destination.addEventListener("change", () => {
-        originOptions.forEach(opt => opt.removeAttribute("disabled"));        
-        if (destination.selectedIndex !== 0)
+        if (!window.location.href.includes("new")  || destination.selectedIndex !== 0)
             originOptions[destination.selectedIndex].setAttribute("disabled", true);
-    })
+        if (extras.selectedIndex == -1) extrasOptions[0].setAttribute("disabled", true);
+
+        origin.addEventListener("change", () => {
+            destinationOptions.forEach(opt => opt.removeAttribute("disabled"));
+            if (!window.location.href.includes("new") || origin.selectedIndex !== 0)
+                destinationOptions[origin.selectedIndex].setAttribute("disabled", true);
+        })
+
+        destination.addEventListener("change", () => {
+            originOptions.forEach(opt => opt.removeAttribute("disabled"));        
+            if (!window.location.href.includes("new") ||destination.selectedIndex !== 0)
+                originOptions[destination.selectedIndex].setAttribute("disabled", true);
+        })
+    });
 
 </script>

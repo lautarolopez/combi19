@@ -13,11 +13,15 @@ class ExtrasController < ApplicationController
             flash[:success] = "El insumo " + @extra.name + " ha sido creado con éxito!"
             redirect_to extras_path
           else
-            @aux = Extra.find_by name: @extra.name.downcase
-            if @aux != nil
-               flash[:error] = "El insumo " + @extra.name.downcase + " ya existe"
-            else 
-                flash[:error] = "Algo salió mal"
+            if @extra.errors[:price]
+                    flash[:error] = "El precio debe ser un valor positivo"
+            else
+                @aux = Extra.find_by name: @extra.name.downcase
+                if @aux != nil
+                    flash[:error] = "El insumo " + @extra.name.downcase + " ya existe"                
+                else
+                    flash[:error] = "Algo salió mal"
+                end
             end
             render 'new'
           end
@@ -37,11 +41,15 @@ class ExtrasController < ApplicationController
             flash[:success] = "El insumo " + @extra.name + " ha sido actualizado con éxito!"
           redirect_to extras_path
         else
-            @aux = Extra.find_by name: @extra.name.downcase
-            if @aux != nil
-               flash[:error] = "El insumo " + @extra.name.downcase + " ya existe"
-            else 
-                flash[:error] = "Algo salió mal"
+            if @extra.errors[:price]
+                    flash[:error] = "El precio debe ser un valor positivo"
+            else
+                @aux = Extra.find_by name: @extra.name.downcase
+                if @aux != nil
+                    flash[:error] = "El insumo " + @extra.name.downcase + " ya existe"                
+                else
+                    flash[:error] = "Algo salió mal"
+                end
             end
             render 'edit'
         end

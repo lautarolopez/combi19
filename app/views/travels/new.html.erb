@@ -33,7 +33,7 @@
         <%= f.label :driver_id, 'Chofer *' %>
         <%= collection_select(:travel, :driver_id, @validDrivers, :id, :name_last_name, {prompt: "Seleccione un conductor"}, { class: 'form-control', required: true }) %>
         <% if (@validDrivers.count == 0) %>
-        <p class='font-weight-bold font-italic text-danger'> No hay choferes disponibles </p>
+            <p class='font-weight-bold font-italic text-danger'> No hay choferes disponibles </p>
         <% end %>
     </div>
 
@@ -41,7 +41,7 @@
         <%= f.label :combi_id, 'Combi *' %>
         <%= collection_select(:travel, :combi_id, @validCombis, :id, :licence_plate, {prompt: "Seleccione una combi"}, { class: 'form-control', required: true }) %>
         <% if (@validCombis.count == 0) %>
-        <small class='text-danger'> No hay combis disponibles </small>
+            <small class='text-danger'> No hay combis disponibles </small>
         <% end %>
     </div>
 

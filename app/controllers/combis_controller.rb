@@ -15,12 +15,12 @@
 			else
 				@aux = Combi.find_by(licence_plate: @combi.licence_plate)
 				if @aux != nil
-					flash[:error] = "La combi " + @combi.licence_plate + " ya existe."
+					flash[:form_error] = "La combi " + @combi.licence_plate + " ya existe."
 				else 
 					if @combi.licence_plate == ""
-						flash[:error] = "Falta definir la patente."
+						flash[:form_error] = "Falta definir la patente."
 					else
-						flash[:error] = "Algo salió mal."
+						flash[:form_error] = "Algo salió mal."
 					end
 				end
 				render 'new'
@@ -51,13 +51,13 @@
 				redirect_to combis_path
 			else				
 				if @combi.licence_plate == ""
-					flash[:error] = "Falta definir la patente."
+					flash[:form_error] = "Falta definir la patente."
 				else 
 					@aux = Combi.find_by(licence_plate: @combi.licence_plate)
 					if @aux != nil
-						flash[:error] = "La combi " + @combi.licence_plate + " ya existe."
+						flash[:form_error] = "La combi " + @combi.licence_plate + " ya existe."
 					else
-						flash[:error] = "Algo salió mal."
+						flash[:form_error] = "Algo salió mal."
 					end
 				end
 				render 'edit'
@@ -67,14 +67,12 @@
 		def destroy
 			@combi = Combi.find(params[:id])
 			if (@combi.travels.count > 0)
-				flash[:error] = "Combi " + @combi.licence_plate + ", " + @combi.category + " no se puede borrar porque tiene viajes asociados"
+				flash[:index_error] = "Combi " + @combi.licence_plate + ", " + @combi.category + " no se puede borrar porque tiene viajes asociados"
 			else
 				if @combi.destroy
 					flash[:success] = "La combi " + @combi.licence_plate + ", " + @combi.category + " ha sido borrada con éxito!"
 				else
-					if (!flash[:error])
-						flash[:error] = "Algo salió mal"
-					end
+					flash[:index_error] = "Algo salió mal"
 				end
 			end
 			redirect_to combis_path

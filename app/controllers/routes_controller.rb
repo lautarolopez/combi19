@@ -21,9 +21,9 @@ class RoutesController < ApplicationController
         else
             @aux = Route.find_by(origin: @route.origin, destination: @route.destination)
             if @aux != nil
-                flash[:error] = "La ruta " + @route.origin.name.titleize + ", " + @route.origin.state.titleize + " - " + @route.destination.name.titleize + ", " + @route.destination.state.titleize + " ya existe"
+                flash[:form_error] = "La ruta " + @route.origin.name.titleize + ", " + @route.origin.state.titleize + " - " + @route.destination.name.titleize + ", " + @route.destination.state.titleize + " ya existe"
             else 
-                flash[:error] = "Algo salió mal."
+                flash[:form_error] = "Algo salió mal."
             end
             render 'new'
         end
@@ -45,9 +45,9 @@ class RoutesController < ApplicationController
         else
             @aux = Route.find_by(origin: @route.origin, destination: @route.destination)
             if @aux != nil
-                flash[:error] = "La ruta " + @route.origin.name.titleize + ", " + @route.origin.state.titleize + " - " + @route.destination.name.titleize + ", " + @route.destination.state.titleize + " ya existe"
+                flash[:form_error] = "La ruta " + @route.origin.name.titleize + ", " + @route.origin.state.titleize + " - " + @route.destination.name.titleize + ", " + @route.destination.state.titleize + " ya existe"
             else 
-                flash[:error] = "Algo salió mal"
+                flash[:form_error] = "Algo salió mal"
             end
             render 'edit'
         end
@@ -56,14 +56,12 @@ class RoutesController < ApplicationController
     def destroy
     	@route = Route.find(params[:id])
         if (@route.travels.count > 0)
-            flash[:error] = "La ruta " + @route.origin.name.titleize + ", " + @route.origin.state.titleize + " - " + @route.destination.name.titleize + ", " + @route.destination.state.titleize + " no se puede borrar porque tiene viajes asociados"
+            flash[:index_error] = "La ruta " + @route.origin.name.titleize + ", " + @route.origin.state.titleize + " - " + @route.destination.name.titleize + ", " + @route.destination.state.titleize + " no se puede borrar porque tiene viajes asociados"
         else
             if @route.destroy
                 flash[:success] = "La ruta " + @route.origin.name.titleize + ", " + @route.origin.state.titleize + " - " + @route.destination.name.titleize + ", " + @route.destination.state.titleize + " ha sido borrada con éxito."
             else
-            	if (!flash[:error])
-                	flash[:error] = "Algo salió mal"
-            	end
+                flash[:index_error] = "Algo salió mal"
             end
         end
         redirect_to routes_path

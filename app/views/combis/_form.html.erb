@@ -1,27 +1,35 @@
  <%= form_for(@combi, :html => {class: 'd-flex flex-column justify-content-center col-lg-6 mx-auto card p-5 my-5'}) do |f| %>
 
- <h3> <%= title %> </h3>
+	<h3> <%= title %> </h3>
 
- <div class="form-group">
-     <%= f.label :licence_plate, "Patente" %>
-     <%= f.text_field :licence_plate, :autofocus => true, class: 'form-control text-uppercase' %>
- </div>
+	<div class="form-group">
+	    <%= f.label :licence_plate, "Patente" %>
+	    <%= f.text_field :licence_plate, :autofocus => true, class: 'form-control text-uppercase' %>
+	</div>
 
+	<%= f.label :category, "Categoría:", class: "form-group-label" %>
+	<div class="form-check">
+	    <%= f.radio_button :category, "Comodo",checked: true, class: "form-check-input" %>
+	    <%= f.label :category, "Comodo", class: "form-check-label" %>
+	</div>
+	<div class="form-check mb-3">
+	    <%= f.radio_button :category, "Super Comodo", class: "form-check-input" %>
+	    <%= f.label :category, "Super Comodo", class: "form-check-label" %>
+	</div>
 
- <%= f.label :category, "Categoría:", class: "form-group-label" %>
- <div class="form-check">
-     <%= f.radio_button :category, "Comodo",checked: true, class: "form-check-input" %>
-     <%= f.label :category, "Comodo", class: "form-check-label" %>
- </div>
- <div class="form-check mb-3">
-     <%= f.radio_button :category, "Super Comodo", class: "form-check-input" %>
-     <%= f.label :category, "Super Comodo", class: "form-check-label" %>
- </div>
+	<% if flash[:form_error] %>
+		<div class="alert alert-danger" role="alert">
+	    	<p class="my-0"><%= flash[:form_error] %></p>
+		</div>
+	<% end %>
 
- <% if flash[:error] %>
- <div class="alert alert-danger" role="alert">
-     <p class="my-0"><%= flash[:error] %></p>
- </div>
- <% end %>
- <%= f.submit save, :class => 'btn btn-primary' %>
- <% end %>
+	<span class='row'>
+        <span class="col-6 text-center">
+            <%= button_tag "Cancelar", :type => 'button', :class => "btn-lg btn-block btn-secondary", :onclick => "location.href = '#{combis_path()}'" %>
+        </span>
+        <span class="col-6 text-center">
+            <%= f.submit save, :class => 'btn-lg btn-block btn-primary' %> 
+        </span>
+    </span>
+
+<% end %>

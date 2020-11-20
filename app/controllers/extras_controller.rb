@@ -14,13 +14,13 @@ class ExtrasController < ApplicationController
             redirect_to extras_path
           else
             if @extra.errors[:price]
-                    flash[:error] = "El precio debe ser un valor positivo"
+                    flash[:form_error] = "El precio debe ser un valor positivo"
             else
                 @aux = Extra.find_by name: @extra.name.downcase
                 if @aux != nil
-                    flash[:error] = "El insumo " + @extra.name.downcase + " ya existe"                
+                    flash[:form_error] = "El insumo " + @extra.name.downcase + " ya existe"                
                 else
-                    flash[:error] = "Algo salió mal"
+                    flash[:form_error] = "Algo salió mal"
                 end
             end
             render 'new'
@@ -42,13 +42,13 @@ class ExtrasController < ApplicationController
           redirect_to extras_path
         else
             if @extra.errors[:price]
-                    flash[:error] = "El precio debe ser un valor positivo"
+                    flash[:form_error] = "El precio debe ser un valor positivo"
             else
                 @aux = Extra.find_by name: @extra.name.downcase
                 if @aux != nil
-                    flash[:error] = "El insumo " + @extra.name.downcase + " ya existe"                
+                    flash[:form_error] = "El insumo " + @extra.name.downcase + " ya existe"                
                 else
-                    flash[:error] = "Algo salió mal"
+                    flash[:form_error] = "Algo salió mal"
                 end
             end
             render 'edit'
@@ -68,7 +68,7 @@ class ExtrasController < ApplicationController
                flash[:success] = "El insumo " + @extra.name + " ha sido borrado con éxito"
             redirect_to extras_url
         else
-                flash[:error] = "Algo salió mal"
+                flash[:index_error] = "Algo salió mal"
             redirect_to extras_url
         end
     end

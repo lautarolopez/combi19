@@ -62,19 +62,7 @@ class TravelsController < ApplicationController
             flash[:success] = "El viaje " + @travel.route.origin.name.titleize + ", " + @travel.route.origin.state.titleize + " - " + @travel.route.destination.name.titleize + ", " + @travel.route.destination.state.titleize + " el día " + @travel.date_departure.strftime('%m/%d/%Y') + " a las " + @travel.date_departure.strftime('%H:%M') + " hs. ha sido creado con éxito!"
             redirect_to travels_path
         else
-            # from here
-            if (@travel.errors.messages != nil)
-                flash[:error] = @travel.errors[:date_departure]
-                if @travel.errors[:capacity]
-                    flash[:error] << "La capacidad debe ser mayor a 0. "
-                end
-                if @travel.errors[:price]
-                    flash[:error] << "El precio debe ser un valor positivo. "
-                end
-            else 
-            # to here: I think it's unnecessary code
-                flash[:error] = "Algo salió mal."
-            end
+            flash[:form_error] = "Algo salió mal."
             render 'step_new'
         end
     end
@@ -143,19 +131,7 @@ class TravelsController < ApplicationController
             flash[:success] = "El viaje " + @travel.route.origin.name.titleize + ", " + @travel.route.origin.state.titleize + " - " + @travel.route.destination.name.titleize + ", " + @travel.route.destination.state.titleize + " el día " + @travel.date_departure.strftime('%m/%d/%Y') + " a las " + @travel.date_departure.strftime('%H:%M') + " hs. ha sido actualizado con éxito!"
             redirect_to travels_path
         else
-            # from here
-            if (@travel.errors.messages != nil)
-                flash[:error] = @travel.errors[:date_departure]
-                if @travel.errors[:capacity]
-                    flash[:error] << "La capacidad debe ser mayor a 0. "
-                end
-                if @travel.errors[:price]
-                    flash[:error] << "El precio debe ser un valor positivo. "
-                end
-            else 
-            # to here: I think it's unnecessary code
-                flash[:error] = "Algo salió mal."
-            end
+            flash[:form_error] = "Algo salió mal."
             render 'step_edit'
         end
     end
@@ -166,7 +142,7 @@ class TravelsController < ApplicationController
             flash[:success] = "El viaje " + @travel.route.origin.name.titleize + ", " + @travel.route.origin.state.titleize + " - " + @travel.route.destination.name.titleize + ", " + @travel.route.destination.state.titleize + " del día " + @travel.date_departure.strftime('%m/%d/%Y') + " a las " + @travel.date_departure.strftime('%H:%M') + " hs. ha sido borrado con éxito"
             redirect_to travels_path
         else
-            flash[:error] = 'Algo salió mal'
+            flash[:index_error] = 'Algo salió mal'
             redirect_to travels_path
         end
 	end
@@ -183,10 +159,7 @@ class TravelsController < ApplicationController
             errors << "El precio debe ser un valor positivo."
         end
         if errors != []
-            flash[:error] = ""
-            errors.each do |e|
-                flash[:error] << e
-            end
+            flash[:form_error] = errors
             return false
         else
             return true

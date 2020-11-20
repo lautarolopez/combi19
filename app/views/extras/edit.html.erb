@@ -1,24 +1,33 @@
 <div class="authform row">
     <%= form_for(@extra, :html => {class: 'd-flex flex-column justify-content-center col-lg-6 mx-auto card p-5 my-5'}) do |f| %>
-    <h3>Actualizar <%= @extra.name.upcase %></h3>
+        <h3>Actualizar <%= @extra.name.upcase %></h3>
 
-    <div class="form-group">
-        <%= f.label :name, "Nombre *" %>
-        <%= f.text_field :name, :autofocus => true, class: 'form-control', required: true %>
-    </div>
-    <div class="form-group">
-        <%= f.label :description, "Descripción" %>
-        <%= f.text_field :description, class: 'form-control' %>
-    </div>
-    <div class="form-group">
-        <%= f.label :price, "Precio *" %>
-        <%= f.number_field :price, step: 0.01, class: 'form-control', required: true %>
-    </div>
-    <% if flash[:error] %>
-    <div class="alert alert-danger" role="alert">
-        <p class="my-0"><%= flash[:error] %></p>
-    </div>
-    <% end %>
-    <%= f.submit 'Actualizar', :class => 'btn btn-primary' %>
+        <div class="form-group">
+            <%= f.label :name, "Nombre *" %>
+            <%= f.text_field :name, :autofocus => true, class: 'form-control', required: true %>
+        </div>
+        <div class="form-group">
+            <%= f.label :description, "Descripción" %>
+            <%= f.text_field :description, class: 'form-control' %>
+        </div>
+        <div class="form-group">
+            <%= f.label :price, "Precio *" %>
+            <%= f.number_field :price, step: 0.01, class: 'form-control', required: true %>
+        </div>
+        <% if flash[:form_error] %>
+            <div class="alert alert-danger" role="alert">
+                <p class="my-0"><%= flash[:form_error] %></p>
+            </div>
+        <% end %>
+
+        <span class='row'>
+            <span class="col-6 text-center">
+                <%= button_tag "Cancelar", :type => 'button', :class => "btn-lg btn-block btn-secondary", :onclick => "location.href = '#{extras_path()}'" %>
+            </span>
+            <span class="col-6 text-center">
+                <%= f.submit 'Actualizar', :class => 'btn-lg btn-block btn-primary' %>
+            </span>
+        </span>
+
     <% end %>
 </div>

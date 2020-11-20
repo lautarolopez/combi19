@@ -12,10 +12,19 @@
         <%= f.text_field :state, class: 'form-control text-capitalize', required: true %>
     </div>
 
-    <% if flash[:error] %>
+    <% if flash[:form_error] %>
         <div class="alert alert-danger" role="alert">
-            <p class="my-0"><%= flash[:error] %></p>
+            <p class="my-0"><%= flash[:form_error] %></p>
         </div>
     <% end %>
-    <%= f.submit save, :class => 'btn btn-primary' %> 
+
+    <span class='row'>
+        <span class="col-6 text-center">
+            <%= button_tag "Cancelar", :type => 'button', :class => "btn-lg btn-block btn-secondary", :onclick => "location.href = '#{cities_path()}'" %>
+        </span>
+        <span class="col-6 text-center">
+            <%= f.submit save, :class => 'btn-lg btn-block btn-primary' %> 
+        </span>
+    </span>
+
 <% end %>

@@ -21,9 +21,9 @@ class CitiesController < ApplicationController
           else
             @aux = City.find_by(name: @city.name.downcase, state: @city.state.downcase)
             if @aux != nil
-                flash[:error] = "La ciudad " + @city.name.titleize + " ya existe en la provincia " + @city.state.titleize
+                flash[:form_error] = "La ciudad " + @city.name.titleize + " ya existe en la provincia " + @city.state.titleize
             else 
-                flash[:error] = "Algo salió mal."
+                flash[:form_error] = "Algo salió mal."
             end
             render 'new'
           end
@@ -52,9 +52,9 @@ class CitiesController < ApplicationController
         else
             @aux = City.find_by(name: @city.name.downcase, state: @city.state.downcase)
             if @aux != nil
-                flash[:error] = "La ciudad " + @city.name.titleize + " ya existe en la provincia " + @city.state.titleize
+                flash[:form_error] = "La ciudad " + @city.name.titleize + " ya existe en la provincia " + @city.state.titleize
             else 
-                flash[:error] = "Algo salió mal"
+                flash[:form_error] = "Algo salió mal"
             end
             render 'edit'
         end
@@ -65,15 +65,15 @@ class CitiesController < ApplicationController
         @routes = @city.routes_from + @city.routes_to
         @routes.each do |r|
             if (r.travels.count > 0) 
-                flash[:error] = @city.name.titleize + ", " + @city.state.titleize + " no se puede borrar porque existen viajes asociados"
+                flash[:index_error] = @city.name.titleize + ", " + @city.state.titleize + " no se puede borrar porque existen viajes asociados"
                 break
             end
         end
-        if (flash[:error] == nil)
+        if (flash[:index_error] == nil)
             if @city.destroy
                 flash[:success] = @city.name.titleize + ", " + @city.state.titleize + " ha sido borrada con éxito."
             else
-                flash[:error] = "Algo salió mal"
+                flash[:index_error] = "Algo salió mal"
             end
         end
         redirect_to cities_path

@@ -6,10 +6,10 @@ class Travel < ApplicationRecord
 	validates :driver_id, presence: :true
 	validates :combi_id, presence: :true
 	validates :route_id, presence: :true
-	validates :capacity, presence: :true
+	validates :capacity, presence: :true, numericality: { greater_than: 0 }
 	validates :date_departure, presence: :true
 	validates :date_arrival, presence: :true
-	validates :price, presence: :true
+	validates :price, presence: :true, numericality: { greater_than_or_equal_to: 0 }
 	validate :validate_dates
 
 	# Relations

@@ -30,9 +30,9 @@
     </div>
 
     <% if flash[:error] %>
-    <div class="alert alert-danger" role="alert">
-        <p class="my-0"><%= flash[:error] %></p>
-    </div>
+        <div class="alert alert-danger" role="alert">
+            <p class="my-0"><%= flash[:error] %></p>
+        </div>
     <% end %>
     <%= f.submit "Continuar", :class => 'btn btn-primary' %>
     <% end %>

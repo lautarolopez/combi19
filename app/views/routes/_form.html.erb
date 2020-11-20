@@ -37,6 +37,7 @@
                 localStorage.removeItem('firstLoad');
         }
     }
+    
     $(document).ready(function() {
         let origin = document.querySelector("#origin");
         let destination = document.querySelector("#destination");
@@ -64,6 +65,6 @@
             if (!window.location.href.includes("new") ||destination.selectedIndex !== 0)
                 originOptions[destination.selectedIndex].setAttribute("disabled", true);
         })
-});
+    });
 
 </script>

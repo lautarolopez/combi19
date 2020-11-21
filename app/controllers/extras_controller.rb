@@ -14,7 +14,7 @@ class ExtrasController < ApplicationController
             redirect_to extras_path
           else
             if @extra.errors[:price]
-                    flash[:form_error] = "El precio debe ser un valor positivo"
+                flash[:form_error] = "El precio " + @extra.errors[:price][0]
             else
                 @aux = Extra.find_by name: @extra.name.downcase
                 if @aux != nil
@@ -42,7 +42,7 @@ class ExtrasController < ApplicationController
           redirect_to extras_path
         else
             if @extra.errors[:price]
-                    flash[:form_error] = "El precio debe ser un valor positivo"
+                flash[:form_error] = "El precio " + @extra.errors[:price][0]
             else
                 @aux = Extra.find_by name: @extra.name.downcase
                 if @aux != nil

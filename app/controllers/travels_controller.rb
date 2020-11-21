@@ -16,7 +16,7 @@ class TravelsController < ApplicationController
 		end
 		
     	@travel = Travel.new(params.require(:travel).permit(:route_id, :capacity, :price, :date_departure, :date_arrival))
-		if validate_fields(@travel.capacity, @travel.price, @travel.date_departure, @travel.date_arrival)
+		if validate_fields(@travel.price, @travel.date_departure, @travel.date_arrival)
         	@drivers = User.where(role: "driver")
         	@validDrivers = []
         	@drivers.each do |driver|
@@ -82,7 +82,7 @@ class TravelsController < ApplicationController
 		end
     	@travel = Travel.find(params[:id])
        	@travel.attributes = params.require(:travel).permit(:route_id, :capacity, :price, :date_departure, :date_arrival, :combi_id, :driver_id)
-		if validate_fields(@travel.capacity, @travel.price, @travel.date_departure, @travel.date_arrival)
+		if validate_fields(@travel.price, @travel.date_departure, @travel.date_arrival)
             @selectedRoute = Route.where(id: @travel.route.id)
     	    @drivers = User.where(role: "driver")
         	@validDrivers = []
@@ -147,16 +147,13 @@ class TravelsController < ApplicationController
         end
 	end
 	
-	def validate_fields(capacity, price, date_departure, date_arrival)
+	def validate_fields(price, date_departure, date_arrival)
         errors = []
         if date_departure == nil || date_arrival == nil || date_departure > date_arrival || date_departure < DateTime.current.beginning_of_day || date_arrival < DateTime.current.beginning_of_day
             errors << "Las fechas ingresadas son inválidas. "
         end
-        if capacity <= 0
-            errors << "La capacidad debe ser mayor a 0. "
-        end
         if price < 0
-            errors << "El precio debe ser un valor positivo."
+            errors << "El precio debe ser mayor o igual a 0."
         end
         if errors != []
             flash[:form_error] = errors

@@ -64,7 +64,7 @@
             <p class="m-0"> Categoría </p>
             <h5 class="mb-3"><%= travel.combi.category.capitalize %> </h5>
             <p class="m-0"> Precio </p>
-            <h5 class="m-0"><%= sprintf('%.2f', travel.price) %>$</h5>
+            <h5 class="m-0">$<%= sprintf('%.2f', travel.price) %></h5>
         </span>
         <% end %>
     </li>

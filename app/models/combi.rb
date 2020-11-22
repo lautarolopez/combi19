@@ -7,14 +7,15 @@ class Combi < ApplicationRecord
 	validates :category, presence:true, length:{minimun:0, maximum:50}
 	validates :capacity, presence: :true, numericality: { greater_than: 0 }
 
-	before_save :upcase
+	before_save :up_and_downcase
 
 	#Relations
 	has_many :travels, dependent: :restrict_with_exception
 
 	#Methods
-	def upcase
+	def up_and_downcase
 		licence_plate.upcase!
+		category.downcase!
 	end
 
 end

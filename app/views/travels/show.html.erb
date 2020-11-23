@@ -1,0 +1,62 @@
+<div class="card my-5">
+    <div class="card-body">
+        <span class="badge badge-pill badge-primary"><%= @travel.combi.category.titleize %></span>
+        <div class="d-flex justify-content-around align-items-center">
+            <span class="text-center">
+                <p class="m-0 text-primary text-uppercase font-weight-bold"> Salida </p>
+                <p class="m-0 font-weight-bold"><%= @travel.route.origin.name.titleize %>, <%= @travel.route.origin.state.titleize %> </p>
+                <p class="m-0"><%= I18n.l(@travel.date_departure, format: "%A, %d de %b de %Y").capitalize %> </p>
+                <p class="m-0 hour-text"><%= I18n.l(@travel.date_departure, format: "%H:%M") %> </p>
+            </span>
+            <span class="text-center d-flex flex-column">
+                <small class="font-weight-bold m-0">Duración</small>
+                <small class="hour-text-small text-secondary"><%= @duration[0] %> h <%= @duration[1] %> m</small>
+                <i class="fas fa-long-arrow-alt-right"></i>
+            </span>
+            <span class="text-center">
+                <p class="m-0 text-primary text-uppercase font-weight-bold"> Llegada </p>
+                <p class="m-0 font-weight-bold"><%= @travel.route.destination.name.titleize %>, <%= @travel.route.destination.state.titleize %> </p>
+                <p class="m-0"><%= I18n.l(@travel.date_arrival, format: "%A, %d de %B de %Y").capitalize %> </p>
+                <p class="m-0 hour-text"><%= I18n.l(@travel.date_arrival, format: "%H:%M") %> </p>
+            </span>
+        </div>
+        <div class="d-flex justify-content-between align-items-end mt-3">
+            <ul class="list-group w-50">
+                <h6>Podés elegir cualquiera de estos insumos:</h6>
+                <% @travel.route.extras.each do |extra| %>
+                <li class="list-group-item d-flex flex-row justify-content-between">
+                    <span>
+                        <small class="font-weight-bold d-block"><%=extra.name.upcase %></small>
+                        <small class="text-secondary"><%=extra.description.capitalize %></small>
+                    </span>
+                    <% if extra.price != 0 %>
+                    <span class="badge badge-pill badge-primary h-25 mt-2"> $<%= sprintf('%.2f', extra.price) %> </span>
+                    <% else %>
+                    <span class="badge badge-pill badge-primary h-25 mt-2"> Gratis </span>
+                    <% end %>
+                </li>
+                <% end %>
+            </ul>
+            <div class="w-50 text-right d-flex flex-column align-items-end h-100">
+                <% if @travel.discount != 0 && current_user != nil && current_user.suscribed %>
+                <span class="badge badge-primary mt-5">-<%= @travel.discount %>%</span>
+                <s class="text-secondary">$<%= sprintf('%.2f', @travel.price) %></s>
+                <p class="price-text-large h2">$<%= sprintf('%.0f', @travel.price - (@travel.price * @travel.discount / 100))%><small class="small-text">.<%=sprintf('%.2f', @travel.price - (@travel.price * @travel.discount / 100)).split(".").last%> </small>
+                </p>
+                <% else %>
+                <p class="m-0 price-text-large">$<%= sprintf('%.0f', @travel.price)%><small class="small-text">.<%=sprintf('%.2f', @travel.price).split(".").last%> </small>
+                </p>
+                <% end %>
+                <% if current_user != nil %>
+                <span class="d-flex align-items-end">
+                    <%= link_to "Cancelar", travels_path, class: 'btn btn-sm btn-secondary mr-1' %>
+                    <%= link_to "Comprar", step_new_travel_path, class: 'btn btn-lg btn-primary' %>
+                </span>
+                <small class="text-secondary mt-2">Apurate, ¡solo quedan <%= @travel.combi.capacity - @travel.occupied %> lugares!</small>
+                <% else %>
+                <p class="m-0"> <%= link_to "Ingresá", new_user_session_path %> o <%= link_to "registrate", new_user_registration_path %> para poder comprar.</p>
+                <% end %>
+            </div>
+        </div>
+    </div>
+</div>

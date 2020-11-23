@@ -8,7 +8,7 @@ class User < ApplicationRecord
   validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, message: " no es válido."
   validates :name, presence: true
   validates :last_name, presence: true
-  validates :dni, presence: true, uniqueness: true, numericality: { greater_than_or_equal_to: 0 }
+  validates :dni, presence: true, uniqueness: true, numericality: { greater_than_or_equal_to: 0, less_than: 999999999 }
   validates :birth_date, presence: true
   validate :validate_age
 

@@ -18,11 +18,11 @@
         <span class="badge badge-pill badge-primary mb-1"><%= travel.combi.category.titleize %></span>
         <div class="d-flex flex-row justify-content-between align-items-center">
             <span class="row w-75">
-                <span class="col-4">
+                <span class="col-5">
                     <strong class="m-0 text-primary text-uppercase"> Salida </strong>
                     <p class="m-0 font-weight-bold"><%= travel.route.origin.name.titleize %>, <%= travel.route.origin.state.titleize %> </p>
                     <p class="m-0"><%= I18n.l(travel.date_departure, format: "%A, %d de %b de %Y").capitalize %> </p>
-                    <p class="m-0 hour-text"><%= I18n.l(travel.date_arrival, format: "%H:%M") %> </p>
+                    <p class="m-0 hour-text"><%= I18n.l(travel.date_departure, format: "%H:%M") %> </p>
                 </span>
                 <span class="col-5">
                     <strong class="m-0 text-primary text-uppercase"> Llegada </strong>
@@ -41,7 +41,7 @@
                 </p>
                 <% end %>
                 <%= link_to "Comprar", step_new_travel_path, class: 'btn btn-block btn-primary mb-2' %>
-                <%= link_to "Detalles", step_new_travel_path, class: 'btn btn-block btn-light' %>
+                <%= link_to "Detalles", travel_path(travel), class: 'btn btn-block btn-light' %>
             </span>
         </div>
     </li>

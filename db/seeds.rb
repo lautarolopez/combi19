@@ -36,6 +36,11 @@ driver3 = User.find_by(email: "driver3@combi19.com")
 driver4 = User.find_by(email: "driver4@combi19.com")
 driver5 = User.find_by(email: "driver5@combi19.com")
 driver6 = User.find_by(email: "driver6@combi19.com")
+driver7 = User.find_by(email: "driver7@combi19.com")
+driver8 = User.find_by(email: "driver8@combi19.com")
+driver9 = User.find_by(email: "driver9@combi19.com")
+
+
 
 
 # Create extras
@@ -65,6 +70,9 @@ combi3 = Combi.find_or_create_by(licence_plate: "CDE456", category: "cómoda", c
 combi4 = Combi.find_or_create_by(licence_plate: "BFS123", category: "súper cómoda", capacity: 100)
 combi5 = Combi.find_or_create_by(licence_plate: "QWE123", category: "cómoda", capacity: 100)
 combi6 = Combi.find_or_create_by(licence_plate: "QWE124", category: "súper cómoda", capacity: 100)
+combi7 = Combi.find_or_create_by(licence_plate: "QWE125", category: "súper cómoda", capacity: 100)
+combi8 = Combi.find_or_create_by(licence_plate: "QWE126", category: "súper cómoda", capacity: 100)
+combi9 = Combi.find_or_create_by(licence_plate: "QWE127", category: "súper cómoda", capacity: 100)
 
 
 # Create routes
@@ -117,12 +125,12 @@ villalaangostura_tandil.extras = villalaangostura_tandil.extras.uniq
 
 
 # Create travels
-Travel.find_or_create_by(route: rauch_laplata, date_departure: DateTime.new(2021, 11, 19, 13, 27), date_arrival: DateTime.new(2021, 11, 19, 17, 27), discount: 0, price: 900, driver: driver1, combi: combi1)
-Travel.find_or_create_by(route: rauch_laplata, date_departure: DateTime.new(2020, 12, 07, 10), date_arrival: DateTime.new(2020, 12, 07, 14), discount: 0, price: 900, driver: driver1, combi: combi1)
-Travel.find_or_create_by(route: laplata_tandil, date_departure: DateTime.new(2020, 12, 10, 18), date_arrival: DateTime.new(2020, 12, 10, 22), discount: 0, price: 900, driver: driver1, combi: combi1)
-Travel.find_or_create_by(route: laplata_villalaangostura, date_departure: DateTime.new(2021, 11, 19, 13, 27), date_arrival: DateTime.new(2021, 11, 20, 13, 27), discount: 50, price: 4000, driver: driver2, combi: combi2)
-Travel.find_or_create_by(route: villalaangostura_tandil, date_departure: DateTime.new(2021, 11, 19, 13, 27), date_arrival: DateTime.new(2021, 11, 20, 13, 27), discount: 0, price: 4000, driver: driver3, combi: combi3)
-Travel.find_or_create_by(route: rauch_laplata, date_departure: DateTime.new(2021, 12, 07, 10), date_arrival: DateTime.new(2021, 12, 07, 14), discount: 30, price: 900, driver: driver1, combi: combi1)
-Travel.find_or_create_by(route: chascomus_posadas, date_departure: DateTime.new(2021, 11, 22, 13, 27), date_arrival: DateTime.new(2021, 11, 23, 10, 27), discount: 0, price: 900, driver: driver4, combi: combi4)
-Travel.find_or_create_by(route: chascomus_posadas, date_departure: DateTime.new(2021, 07, 11, 13, 27), date_arrival: DateTime.new(2021, 07, 12, 10, 27), discount: 15, price: 900, driver: driver5, combi: combi5)
-Travel.find_or_create_by(route: posadas_laplata, date_departure: DateTime.new(2021, 07, 11, 13, 27), date_arrival: DateTime.new(2021, 07, 12, 10, 27), discount: 0, price: 900, driver: driver5, combi: combi5)
+Travel.find_or_create_by(route: rauch_laplata, date_departure: DateTime.new(2021, 1, 19, 13, 27), date_arrival: DateTime.new(2021, 2, 17, 17, 27), discount: 0, price: 900, driver: driver9, combi: combi1)
+Travel.find_or_create_by(route: rauch_laplata, date_departure: DateTime.new(2021, 2, 18, 14), date_arrival: DateTime.new(2021, 3, 18, 14), discount: 0, price: 900, driver: driver8, combi: combi2)
+Travel.find_or_create_by(route: laplata_tandil, date_departure: DateTime.new(2021, 3, 19, 15), date_arrival: DateTime.new(2021, 4, 19, 22), discount: 0, price: 900, driver: driver7, combi: combi3)
+Travel.find_or_create_by(route: laplata_villalaangostura, date_departure: DateTime.new(2021, 4, 20, 16, 27), date_arrival: DateTime.new(2021, 5, 20, 13, 27), discount: 50, price: 4000, driver: driver6, combi: combi4)
+Travel.find_or_create_by(route: villalaangostura_tandil, date_departure: DateTime.new(2021, 5, 21, 17, 27), date_arrival: DateTime.new(2021, 6, 21, 13, 27), discount: 0, price: 4000, driver: driver5, combi: combi5)
+Travel.find_or_create_by(route: rauch_laplata, date_departure: DateTime.new(2021, 6, 22, 18), date_arrival: DateTime.new(2021, 7, 22, 14), discount: 30, price: 900, driver: driver4, combi: combi6)
+Travel.find_or_create_by(route: chascomus_posadas, date_departure: DateTime.new(2021, 7, 23, 19, 27), date_arrival: DateTime.new(2021, 8, 23, 10, 27), discount: 0, price: 900, driver: driver3, combi: combi7)
+Travel.find_or_create_by(route: chascomus_posadas, date_departure: DateTime.new(2021, 8, 24, 20, 27), date_arrival: DateTime.new(2021, 9, 24, 10, 27), discount: 15, price: 900, driver: driver2, combi: combi8)
+Travel.find_or_create_by(route: posadas_laplata, date_departure: DateTime.new(2021, 9, 25, 21, 27), date_arrival: DateTime.new(2021, 10, 25, 10, 27), discount: 0, price: 900, driver: driver1, combi: combi9)

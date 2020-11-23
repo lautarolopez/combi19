@@ -26,6 +26,9 @@
                     <%= link_to 'Viajes', travels_path, class: "nav-link" %>
                 </li>
             </ul>
+            <% if current_user != nil %>
+            <strong class="mr-3">Bienvenido <%= current_user.name + " " + current_user.last_name %></strong>
+            <% end %>
             <% if user_signed_in? %>
             <%= link_to 'Cerrar sesión', destroy_user_session_path, method: :delete, class: "btn btn-danger" %>
             <% else %>

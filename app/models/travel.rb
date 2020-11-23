@@ -9,6 +9,7 @@ class Travel < ApplicationRecord
 	validates :date_departure, presence: :true
 	validates :date_arrival, presence: :true
 	validates :price, presence: :true, numericality: { greater_than_or_equal_to: 0 }
+	validates :discount, :inclusion => 1..100
 	validate :validate_dates
 
 	# Relations

@@ -1,0 +1,49 @@
+<ul class="list-group pt-5">
+    <% if flash[:success] %>
+    <div class="alert alert-success" role="alert">
+        <p class="my-0"><%= flash[:success] %></p>
+    </div>
+    <% end %>
+    <% if flash[:index_error] %>
+    <div class="alert alert-danger" role="alert">
+        <p class="my-0"><%= flash[:index_error] %></p>
+    </div>
+    <% end %>
+    <div class="d-flex justify-content-between w-100">
+        <h1> Viajes </h1>
+    </div>
+
+    <% @travels.each do |travel| %>
+    <li class="list-group-item card mb-2">
+        <span class="badge badge-pill badge-primary mb-1"><%= travel.combi.category.titleize %></span>
+        <div class="d-flex flex-row justify-content-between align-items-center">
+            <span class="row w-75">
+                <span class="col-4">
+                    <strong class="m-0 text-primary text-uppercase"> Salida </strong>
+                    <p class="m-0 font-weight-bold"><%= travel.route.origin.name.titleize %>, <%= travel.route.origin.state.titleize %> </p>
+                    <p class="m-0"><%= I18n.l(travel.date_departure, format: "%A, %d de %b de %Y").capitalize %> </p>
+                    <p class="m-0 hour-text"><%= I18n.l(travel.date_arrival, format: "%H:%M") %> </p>
+                </span>
+                <span class="col-5">
+                    <strong class="m-0 text-primary text-uppercase"> Llegada </strong>
+                    <p class="m-0 font-weight-bold"><%= travel.route.destination.name.titleize %>, <%= travel.route.destination.state.titleize %> </p>
+                    <p class="m-0"><%= I18n.l(travel.date_arrival, format: "%A, %d de %B de %Y").capitalize %> </p>
+                    <p class="m-0 hour-text"><%= I18n.l(travel.date_arrival, format: "%H:%M") %> </p>
+                </span>
+            </span>
+            <span class="col-2 d-flex flex-column align-items-center">
+                <% if travel.discount != 0 && current_user != nil && current_user.suscribed %>
+                <small class="text-secondary"><s>$<%= sprintf('%.2f', travel.price) %></s></small>
+                <p class="mb-4 mt-1 price-text h2">$<%= sprintf('%.0f', travel.price - (travel.price * travel.discount / 100))%><small class="small-text">.<%=sprintf('%.2f', travel.price - (travel.price * travel.discount / 100)).split(".").last%> </small>
+                </p>
+                <% else %>
+                <p class="mb-4 mt-1 price-text h2">$<%= sprintf('%.0f', travel.price)%><small class="small-text">.<%=sprintf('%.2f', travel.price).split(".").last%> </small>
+                </p>
+                <% end %>
+                <%= link_to "Comprar", step_new_travel_path, class: 'btn btn-block btn-primary mb-2' %>
+                <%= link_to "Detalles", step_new_travel_path, class: 'btn btn-block btn-light' %>
+            </span>
+        </div>
+    </li>
+    <% end %>
+</ul>

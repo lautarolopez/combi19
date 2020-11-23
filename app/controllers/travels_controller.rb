@@ -1,6 +1,9 @@
 class TravelsController < ApplicationController
 	def index
-        @travels = Travel.all
+		@travels = Travel.all
+		if current_user == nil || current_user.role == "user"
+			render 'clients_index'
+		end
     end
 
     def step_new
@@ -15,8 +18,8 @@ class TravelsController < ApplicationController
 			redirect_to root_path
 		end
 		
-    	@travel = Travel.new(params.require(:travel).permit(:route_id, :capacity, :price, :date_departure, :date_arrival))
-		if validate_fields(@travel.price, @travel.date_departure, @travel.date_arrival)
+    	@travel = Travel.new(params.require(:travel).permit(:route_id, :capacity, :price, :discount, :date_departure, :date_arrival))
+		if validate_fields(@travel.price, @travel.discount, @travel.date_departure, @travel.date_arrival)
         	@drivers = User.where(role: "driver")
         	@validDrivers = []
         	@drivers.each do |driver|
@@ -57,7 +60,7 @@ class TravelsController < ApplicationController
     end
 
     def create
-		@travel = Travel.create(params.require(:travel).permit(:route_id, :capacity, :price, :date_departure, :date_arrival, :combi_id, :driver_id))
+		@travel = Travel.create(params.require(:travel).permit(:route_id, :capacity, :price, :discount,:date_departure, :date_arrival, :combi_id, :driver_id))
         if @travel.save
             flash[:success] = "El viaje " + @travel.route.origin.name.titleize + ", " + @travel.route.origin.state.titleize + " - " + @travel.route.destination.name.titleize + ", " + @travel.route.destination.state.titleize + " el día " + @travel.date_departure.strftime('%m/%d/%Y') + " a las " + @travel.date_departure.strftime('%H:%M') + " hs. ha sido creado con éxito!"
             redirect_to travels_path
@@ -81,8 +84,8 @@ class TravelsController < ApplicationController
 			redirect_to root_path
 		end
     	@travel = Travel.find(params[:id])
-       	@travel.attributes = params.require(:travel).permit(:route_id, :capacity, :price, :date_departure, :date_arrival, :combi_id, :driver_id)
-		if validate_fields(@travel.price, @travel.date_departure, @travel.date_arrival)
+       	@travel.attributes = params.require(:travel).permit(:route_id, :capacity, :price, :discount, :date_departure, :date_arrival, :combi_id, :driver_id)
+		if validate_fields(@travel.price, @travel.discount ,@travel.date_departure, @travel.date_arrival)
             @selectedRoute = Route.where(id: @travel.route.id)
     	    @drivers = User.where(role: "driver")
         	@validDrivers = []
@@ -126,7 +129,7 @@ class TravelsController < ApplicationController
 
     def update
     	@travel = Travel.find(params[:id])
-        @travel.attributes = params.require(:travel).permit(:route_id, :capacity, :price, :date_departure, :date_arrival, :combi_id, :driver_id)
+        @travel.attributes = params.require(:travel).permit(:route_id, :capacity, :price, :discount, :date_departure, :date_arrival, :combi_id, :driver_id)
         if @travel.save
             flash[:success] = "El viaje " + @travel.route.origin.name.titleize + ", " + @travel.route.origin.state.titleize + " - " + @travel.route.destination.name.titleize + ", " + @travel.route.destination.state.titleize + " el día " + @travel.date_departure.strftime('%m/%d/%Y') + " a las " + @travel.date_departure.strftime('%H:%M') + " hs. ha sido actualizado con éxito!"
             redirect_to travels_path
@@ -147,14 +150,17 @@ class TravelsController < ApplicationController
         end
 	end
 	
-	def validate_fields(price, date_departure, date_arrival)
+	def validate_fields(price, discount, date_departure, date_arrival)
         errors = []
         if date_departure == nil || date_arrival == nil || date_departure > date_arrival || date_departure < DateTime.current.beginning_of_day || date_arrival < DateTime.current.beginning_of_day
             errors << "Las fechas ingresadas son inválidas. "
         end
         if price < 0
             errors << "El precio debe ser mayor o igual a 0."
-        end
+		end
+		if discount < 0 || discount > 100
+			errors << "El porcentaje de descuento debe estar entre 0 y 100."
+		end
         if errors != []
             flash[:form_error] = errors
             return false

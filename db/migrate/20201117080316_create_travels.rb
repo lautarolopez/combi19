@@ -8,7 +8,6 @@ class CreateTravels < ActiveRecord::Migration[5.2]
       t.datetime :date_departure
       t.datetime :date_arrival
       t.float :price, default: 0
-
       t.timestamps
     end
   end

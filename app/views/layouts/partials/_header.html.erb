@@ -5,26 +5,31 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
             <%= link_to root_path, class:"navbar-brand" do %>
-            <img style=" width: 40px; height: 40px;" src="/images/logo.png">
+                <img style=" width: 40px; height: 40px;" src="/images/logo.png">
             <% end %>
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                 <% if current_user != nil && current_user.role == "admin" %>
-                <li class="nav-item">
-                    <%= link_to 'Ciudades', cities_path, class: "nav-link" %>
-                </li>
-                <li class="nav-item">
-                    <%= link_to 'Insumos', extras_path , class: "nav-link" %>
-                </li>
-                <li class="nav-item">
-                    <%= link_to 'Combis', combis_path , class: "nav-link" %>
-                </li>
-                <li class="nav-item">
-                    <%= link_to 'Rutas', routes_path, class: "nav-link" %>
-                </li>
+                    <li class="nav-item">
+                        <%= link_to 'Ciudades', cities_path, class: "nav-link" %>
+                    </li>
+                    <li class="nav-item">
+                        <%= link_to 'Insumos', extras_path , class: "nav-link" %>
+                    </li>
+                    <li class="nav-item">
+                        <%= link_to 'Combis', combis_path , class: "nav-link" %>
+                    </li>
+                    <li class="nav-item">
+                        <%= link_to 'Rutas', routes_path, class: "nav-link" %>
+                    </li>
                 <% end %>
                 <li class="nav-item">
                     <%= link_to 'Viajes', travels_path, class: "nav-link" %>
                 </li>
+                <% if current_user != nil && current_user.role != "admin" %>
+                    <li class="nav-item">
+                        <%= link_to 'Historial de viajes', travels_history_path, class: "nav-link" %>
+                    </li>
+                <% end %>
             </ul>
             <% if current_user != nil %>
             <strong class="mr-3">Bienvenido <%= current_user.name + " " + current_user.last_name %></strong>

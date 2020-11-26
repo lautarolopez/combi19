@@ -25,6 +25,7 @@ Rails.application.routes.draw do
   as :travel do
     get 'travels/step_new', to: 'travels#step_new', as: :step_new_travel
     get 'travels/:id/step_edit/', to: 'travels#step_edit', as: :step_edit_travel
+    get 'travels/index_history', to: 'travels#index_history', as: :travels_history
   end
   resources :travels
 

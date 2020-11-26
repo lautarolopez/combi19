@@ -6,6 +6,19 @@ class TravelsController < ApplicationController
 		end
 	end
 
+    def index_history
+        if current_user == nil
+            redirect_to root_path
+        else
+            @travels = []
+            Travel.all.each do |travel|
+                if (travel.passengers.include?current_user) && (travel.date_arrival < DateTime.now)
+                    @travels << travel
+                end
+            end
+        end
+    end
+
 	def show
 		@travel = Travel.find(params[:id])
 		@duration = calculate_duration(@travel.date_departure, @travel.date_arrival)

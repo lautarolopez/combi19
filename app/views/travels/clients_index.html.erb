@@ -45,7 +45,7 @@
                     <p class="mb-4 mt-1 price-text h2">$<%= sprintf('%.0f', travel.price)%><small class="small-text">.<%=sprintf('%.2f', travel.price).split(".").last%> </small>
                     </p>
                 <% end %>
-                <% if travel.date_departure > DateTime.now %>
+                <% if current_user != nil && travel.date_departure > DateTime.now %>
                     <%= link_to 'Comprar', '#', "data-toggle"=>"modal", "data-target" => "#pay-#{travel.id}", class: "btn btn-block btn-primary mb-2" %>
                     <div class="modal fade" id="pay-<%= travel.id %>" role="dialog">
                         <div class="modal-dialog">

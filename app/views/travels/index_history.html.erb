@@ -1,45 +1,49 @@
 <ul class="list-group pt-5">
     <% if flash[:success] %>
-        <div class="alert alert-success" role="alert">
-            <p class="my-0"><%= flash[:success] %></p>
-        </div>
+    <div class="alert alert-success" role="alert">
+        <p class="my-0"><%= flash[:success] %></p>
+    </div>
     <% end %>
     <% if flash[:index_error] %>
-        <div class="alert alert-danger" role="alert">
-            <p class="my-0"><%= flash[:index_error] %></p>
-        </div>
+    <div class="alert alert-danger" role="alert">
+        <p class="my-0"><%= flash[:index_error] %></p>
+    </div>
     <% end %>
+
+    <% if @travels.size == 0 %>
+    <div class="d-flex flex-column align-items-center w-100">
+        <%= image_tag  "Travels_history_empty.svg", size: '500' %>
+        <p>No tenés viajes realizados, <%= link_to  "¡empezá a viajar ahora!", travels_path %></p>
+    </div>
+    <% else %>
     <div class="d-flex justify-content-between w-100">
         <h1> Viajes realizados </h1>
     </div>
 
     <% @travels.each do |travel| %>
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-            <span class="row w-75">
-                <span class="col-4">
-                    <p class="m-0"> Origen </p>
-                    <h4 class="m-0"><%= travel.route.origin.name.titleize %>, <%= travel.route.origin.state.titleize %> </h4>
-                </span>
-                <span class="col-4">
-                    <p class="m-0"> Destino </p>
-                    <h4 class="m-0"><%= travel.route.destination.name.titleize %>, <%= travel.route.destination.state.titleize %> </h4>
-                </span>
-                <span class="col-2">
-                    <p class="m-0"> Salida </p>
-                    <h5 class="m-0"><%= I18n.l(travel.date_departure, format: :long) %> </h5>
-                </span>
-                <span class="col-2">
-                    <p class="m-0"> Llegada </p>
-                    <h5 class="m-0"><%= I18n.l(travel.date_arrival, format: :long) %> </h5>
-                </span>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        <span class="row w-75">
+            <span class="col-4">
+                <p class="m-0"> Origen </p>
+                <h4 class="m-0"><%= travel.route.origin.name.titleize %>, <%= travel.route.origin.state.titleize %> </h4>
             </span>
-            <span>
-                <%= link_to 'Comentar', travel_path(travel), class: "btn btn-primary" %>
+            <span class="col-4">
+                <p class="m-0"> Destino </p>
+                <h4 class="m-0"><%= travel.route.destination.name.titleize %>, <%= travel.route.destination.state.titleize %> </h4>
             </span>
-        </li>
+            <span class="col-2">
+                <p class="m-0"> Salida </p>
+                <h5 class="m-0"><%= I18n.l(travel.date_departure, format: :long) %> </h5>
+            </span>
+            <span class="col-2">
+                <p class="m-0"> Llegada </p>
+                <h5 class="m-0"><%= I18n.l(travel.date_arrival, format: :long) %> </h5>
+            </span>
+        </span>
+        <span>
+            <%= link_to 'Comentar', travel_path(travel), class: "btn btn-primary" %>
+        </span>
+    </li>
     <% end %>
-
-    <% if @travels.size == 0 %>
-        <p class="m-0"> No tiene viajes realizados </p>
     <% end %>
 </ul>

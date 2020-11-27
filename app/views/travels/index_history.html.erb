@@ -11,39 +11,38 @@
     <% end %>
 
     <% if @travels.size == 0 %>
-    <div class="d-flex flex-column align-items-center w-100">
-        <%= image_tag  "Travels_history_empty.svg", size: '500' %>
-        <p>No tenés viajes realizados, <%= link_to  "¡empezá a viajar ahora!", travels_path %></p>
-    </div>
+        <div class="d-flex flex-column align-items-center w-100">
+            <%= image_tag  "Travels_history_empty.svg", size: '500' %>
+            <h4>No tenés viajes realizados, <%= link_to  "¡empezá a viajar ahora!", travels_path %></h4>
+        </div>
     <% else %>
-    <div class="d-flex justify-content-between w-100">
-        <h1> Viajes realizados </h1>
-    </div>
+        <div class="d-flex justify-content-between w-100">
+            <h1> Viajes realizados </h1>
+        </div>
+    <% end %>
 
     <% @travels.each do |travel| %>
-    <li class="list-group-item d-flex justify-content-between align-items-center">
-        <span class="row w-75">
-            <span class="col-4">
-                <p class="m-0"> Origen </p>
-                <h4 class="m-0"><%= travel.route.origin.name.titleize %>, <%= travel.route.origin.state.titleize %> </h4>
+    <li class="list-group-item card mb-2">
+        <span class="badge badge-pill badge-primary mb-1"><%= travel.combi.category.titleize %></span>
+        <div class="d-flex flex-row justify-content-between align-items-center">
+            <span class="row w-75">
+                <span class="col-6">
+                    <strong class="m-0 text-primary text-uppercase"> Salida </strong>
+                    <p class="m-0 font-weight-bold"><%= travel.route.origin.name.titleize %>, <%= travel.route.origin.state.titleize %> </p>
+                    <p class="m-0"><%= I18n.l(travel.date_departure, format: "%A, %d de %b de %Y").capitalize %> </p>
+                    <p class="m-0 hour-text"><%= I18n.l(travel.date_departure, format: "%H:%M") %> </p>
+                </span>
+                <span class="col-6">
+                    <strong class="m-0 text-primary text-uppercase"> Llegada </strong>
+                    <p class="m-0 font-weight-bold"><%= travel.route.destination.name.titleize %>, <%= travel.route.destination.state.titleize %> </p>
+                    <p class="m-0"><%= I18n.l(travel.date_arrival, format: "%A, %d de %B de %Y").capitalize %> </p>
+                    <p class="m-0 hour-text"><%= I18n.l(travel.date_arrival, format: "%H:%M") %> </p>
+                </span>
             </span>
-            <span class="col-4">
-                <p class="m-0"> Destino </p>
-                <h4 class="m-0"><%= travel.route.destination.name.titleize %>, <%= travel.route.destination.state.titleize %> </h4>
+            <span>
+                <%= link_to 'Comentar', travel_path(travel), class: "btn btn-primary mr-5 mb-4" %>
             </span>
-            <span class="col-2">
-                <p class="m-0"> Salida </p>
-                <h5 class="m-0"><%= I18n.l(travel.date_departure, format: :long) %> </h5>
-            </span>
-            <span class="col-2">
-                <p class="m-0"> Llegada </p>
-                <h5 class="m-0"><%= I18n.l(travel.date_arrival, format: :long) %> </h5>
-            </span>
-        </span>
-        <span>
-            <%= link_to 'Comentar', travel_path(travel), class: "btn btn-primary" %>
-        </span>
+        </div>
     </li>
-    <% end %>
     <% end %>
 </ul>

@@ -24,14 +24,15 @@ class TravelsController < ApplicationController
 		@duration = calculate_duration(@travel.date_departure, @travel.date_arrival)
 	end
 
-	def calculate_duration(departure, arrival)
-		duration_hours = ((arrival.to_time - departure.to_time) / 1.hour).floor
-		duration_minutes = (((arrival.to_time - departure.to_time) / 1.minute).round) - (duration_hours * 60)
-		duration = [duration_hours, duration_minutes]
-		return duration
-	end
+    def book
+        if current_user == nil
+            flash[:warning] = "Debe estar registrado para comprar pasajes"
+            redirect_to travels_path
+        end
+        @travel = Travel.find(params[:id])
+        @duration = calculate_duration(@travel.date_departure, @travel.date_arrival)
+    end
 	
-
     def step_new
 		if current_user == nil || current_user.role != "admin"
 			redirect_to root_path
@@ -193,5 +194,12 @@ class TravelsController < ApplicationController
         else
             return true
         end
+    end
+
+    def calculate_duration(departure, arrival)
+        duration_hours = ((arrival.to_time - departure.to_time) / 1.hour).floor
+        duration_minutes = (((arrival.to_time - departure.to_time) / 1.minute).round) - (duration_hours * 60)
+        duration = [duration_hours, duration_minutes]
+        return duration
     end
 end

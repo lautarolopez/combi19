@@ -14,6 +14,19 @@ Rails.application.configure do
 
   #Devise mailer configuration
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.default :charset => "utf-8"
+  ActionMailer::Base.smtp_settings = {
+    :address              => "smtp.sendgrid.net",
+    :port                 => 25,
+    :domain               => "gmail.com",
+    :user_name            => "apikey",
+    :password             => Rails.application.credentials.sendgrid_api_key,
+    :authentication       => "plain",
+    :enable_starttls_auto => true
+  }
 
   # Enable/disable caching. By default caching is disabled.
   # Run rails dev:cache to toggle caching.

@@ -1,0 +1,7 @@
+<p>Hola <%= @resource.name + " " + @resource.last_name %>!</p>
+
+<p>Tu cuenta fue bloqueada a causa de una excesiva cantidad de intentos de iniciar sesión.</p>
+
+<p>Hacé click en el link de abajo para desbloquearla:</p>
+
+<p><%= link_to 'Desbloquear mi cuenta', unlock_url(@resource, unlock_token: @token) %></p>

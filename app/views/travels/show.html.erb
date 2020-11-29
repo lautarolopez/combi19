@@ -21,75 +21,80 @@
             </span>
         </div>
         <% if @travel.date_departure > DateTime.now %>
-            <div class="d-flex justify-content-between align-items-end mt-3">
-                <ul class="list-group w-50">
-                    <h6>Podés elegir cualquiera de estos insumos:</h6>
-                    <% @travel.route.extras.each do |extra| %>
-                    <li class="list-group-item d-flex flex-row justify-content-between">
-                        <span>
-                            <small class="font-weight-bold d-block"><%=extra.name.upcase %></small>
-                            <small class="text-secondary"><%=extra.description.capitalize %></small>
-                        </span>
-                        <% if extra.price != 0 %>
-                        <span class="badge badge-pill badge-primary h-25 mt-2"> $<%= sprintf('%.2f', extra.price) %> </span>
-                        <% else %>
-                        <span class="badge badge-pill badge-primary h-25 mt-2"> Gratis </span>
-                        <% end %>
-                    </li>
-                    <% end %>
-                </ul>
-                <div class="w-50 text-right d-flex flex-column align-items-end h-100">
-                    <% if @travel.discount != 0 && current_user != nil && current_user.suscribed %>
-                        <span class="badge badge-primary mt-5">-<%= @travel.discount %>%</span>
-                        <s class="text-secondary">$<%= sprintf('%.2f', @travel.price) %></s>
-                        <p class="price-text-large h2">$<%= sprintf('%.0f', @travel.price - (@travel.price * @travel.discount / 100))%><small class="small-text">.<%=sprintf('%.2f', @travel.price - (@travel.price * @travel.discount / 100)).split(".").last%> </small>
-                        </p>
+        <div class="d-flex justify-content-between align-items-end mt-3">
+            <ul class="list-group w-50">
+                <h6>Podés elegir cualquiera de estos insumos:</h6>
+                <% @travel.route.extras.each do |extra| %>
+                <li class="list-group-item d-flex flex-row justify-content-between">
+                    <span>
+                        <small class="font-weight-bold d-block"><%=extra.name.upcase %></small>
+                        <small class="text-secondary"><%=extra.description.capitalize %></small>
+                    </span>
+                    <% if extra.price != 0 %>
+                    <span class="badge badge-pill badge-primary h-25 mt-2"> $<%= sprintf('%.2f', extra.price) %> </span>
                     <% else %>
-                        <p class="m-0 price-text-large">$<%= sprintf('%.0f', @travel.price)%><small class="small-text">.<%=sprintf('%.2f', @travel.price).split(".").last%> </small>
-                        </p>
+                    <span class="badge badge-pill badge-primary h-25 mt-2"> Gratis </span>
                     <% end %>
-                    <span class="d-flex align-items-end">
-                        <%= link_to "Cancelar", travels_path, class: 'btn btn-sm btn-secondary mr-1' %>
-                        <% if current_user != nil %>
-                            <%= link_to 'Comprar', '#', "data-toggle"=>"modal", "data-target" => "#pay-#{@travel.id}", class: "btn btn-lg btn-primary" %>
-                    </span>
-                            <small class="text-secondary mt-2">Apurate, ¡solo quedan <%= @travel.combi.capacity - @travel.occupied %> lugares!</small>
-                        <% else %>
-                    </span>
-                    <p class="m-0"> <%= link_to "Ingresá", new_user_session_path %> o <%= link_to "registrate", new_user_registration_path %> para poder comprar.</p>
-                        <% end %>
-                    <div class="modal fade" id="pay-<%= @travel.id %>" role="dialog">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-body">
-                                    <ul class="list-group text-left">
-                                        <h6>Podés elegir cualquiera de estos insumos:</h6>
-                                        <% @travel.route.extras.each do |extra| %>
-                                        <li class="list-group-item d-flex flex-row justify-content-between">
-                                            <span>
-                                                <small class="font-weight-bold d-block p-0"><%=extra.name.upcase %></small>
-                                                <small class="text-secondary p-0"><%=extra.description.capitalize %></small>
-                                            </span>
-                                            <% if extra.price != 0 %>
-                                            <span class="badge badge-pill badge-primary h-25 mt-2"> $<%= sprintf('%.2f', extra.price) %> </span>
-                                            <% else %>
-                                            <span class="badge badge-pill badge-primary h-25 mt-2"> Gratis </span>
-                                            <% end %>
-                                        </li>
+                </li>
+                <% end %>
+            </ul>
+            <div class="w-50 text-right d-flex flex-column align-items-end h-100">
+                <% if @travel.discount != 0 && current_user != nil && current_user.suscribed %>
+                <span class="badge badge-primary mt-5">-<%= @travel.discount %>%</span>
+                <s class="text-secondary">$<%= sprintf('%.2f', @travel.price) %></s>
+                <p class="price-text-large h2">$<%= sprintf('%.0f', @travel.price - (@travel.price * @travel.discount / 100))%><small class="small-text">.<%=sprintf('%.2f', @travel.price - (@travel.price * @travel.discount / 100)).split(".").last%> </small>
+                </p>
+                <% else %>
+                <p class="m-0 price-text-large">$<%= sprintf('%.0f', @travel.price)%><small class="small-text">.<%=sprintf('%.2f', @travel.price).split(".").last%> </small>
+                </p>
+                <% end %>
+                <span class="d-flex align-items-end">
+                    <%= link_to "Cancelar", travels_path, class: 'btn btn-sm btn-secondary mr-1' %>
+                    <% if current_user != nil %>
+                    <% if @travel.occupied != @travel.combi.capacity %>
+                    <%= link_to 'Comprar', '#', "data-toggle"=>"modal", "data-target" => "#pay-#{@travel.id}", class: "btn btn-lg btn-primary" %>
+                    <% else %>
+                    <%= link_to 'Agotado', '#', class: "btn btn-lg btn-disabled" %>
+                    <% end %>
+                    <% end %>
+                </span>
+                <% if current_user != nil %>
+                <small class="text-secondary mt-2">Apurate, ¡solo quedan <%= @travel.combi.capacity - @travel.occupied %> lugares!</small>
+                <% else %>
+                <p class="m-0"> <%= link_to "Ingresá", new_user_session_path %> o <%= link_to "registrate", new_user_registration_path %> para poder comprar.</p>
+                <% end %>
+                <div class="modal fade" id="pay-<%= @travel.id %>" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <ul class="list-group text-left">
+                                    <h6>Podés elegir cualquiera de estos insumos:</h6>
+                                    <% @travel.route.extras.each do |extra| %>
+                                    <li class="list-group-item d-flex flex-row justify-content-between">
+                                        <span>
+                                            <small class="font-weight-bold d-block p-0"><%=extra.name.upcase %></small>
+                                            <small class="text-secondary p-0"><%=extra.description.capitalize %></small>
+                                        </span>
+                                        <% if extra.price != 0 %>
+                                        <span class="badge badge-pill badge-primary h-25 mt-2"> $<%= sprintf('%.2f', extra.price) %> </span>
+                                        <% else %>
+                                        <span class="badge badge-pill badge-primary h-25 mt-2"> Gratis </span>
                                         <% end %>
-                                    </ul>                                
-                                </div>
+                                    </li>
+                                    <% end %>
+                                </ul>
+                            </div>
+                            <div class="modal-footer">
                                 <div class="modal-footer">
-                                    <div class="modal-footer">
-                                        <a href="#" data-dismiss="modal" class="btn btn-secondary w-75">Cancelar</a>
-                                        <%= link_to "Continuar", book_travel_path(@travel), class: 'btn btn-primary w-100' %>
-                                    </div>
+                                    <a href="#" data-dismiss="modal" class="btn btn-secondary w-75">Cancelar</a>
+                                    <%= link_to "Continuar", book_travel_path(@travel), class: 'btn btn-primary w-100' %>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
         <% else %>
     </div>
 </div>
@@ -98,9 +103,9 @@
         <div class="d-flex justify-content-between align-items-end mt-3">
             <div class="w-100 text-right d-flex flex-column align-items-end h-100">
                 <% if current_user.travels.include?@travel %>
-                    <%= link_to "Cancelar", travels_history_path, class: 'btn btn-md btn-secondary' %>
+                <%= link_to "Cancelar", travels_history_path, class: 'btn btn-md btn-secondary' %>
                 <% else %>
-                    <%= link_to "Cancelar", travels_path, class: 'btn btn-md btn-secondary' %>
+                <%= link_to "Cancelar", travels_path, class: 'btn btn-md btn-secondary' %>
                 <% end %>
             </div>
         </div>

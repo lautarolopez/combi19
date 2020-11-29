@@ -31,6 +31,7 @@ Rails.application.routes.draw do
     get 'travels/:id/step_edit/', to: 'travels#step_edit', as: :step_edit_travel
     get 'travels/index_history', to: 'travels#index_history', as: :travels_history
     get 'travels/:id/book', to: 'travels#book', as: :book_travel
+    post 'travels/:id', to: 'travels#pay'
   end
   resources :travels
 

@@ -1,3 +1,106 @@
-<div class="pt-5">
-    Acá hay que implementar el form para seleccionar o cargar método de pago y pagar
-</div>
+<%= form_with(url: travel_path(@travel), :method => :post, :html => {class: 'd-flex flex-column justify-content-center col-lg-6 mx-auto card p-5 my-5'}) do %>
+	<%= number_field_tag(:travel_id, @travel.id, class: 'form-control', type: 'hidden') %>
+
+	<h3 class='ml-1'> ¿Cómo desea realizar el pago? </h3>
+
+	<div class="form-check">
+	    <%= radio_button_tag :method, "existing", class: "form-check-input" %>
+	    <%= label_tag :method, "Método de pago existente", class: "form-check-label" %>
+	</div>
+	<div class="form-check mb-3">
+	    <%= radio_button_tag :method, "new", checked: true, class: "form-check-input" %>
+	    <%= label_tag :method, "Nuevo método de pago", class: "form-check-label" %>
+	</div>
+
+    <div class="form-group">
+    	<%= label_tag :payment_method, 'Método de pago existente:', class: 'ml-1 h5' %>
+        <%= collection_select(:payment_method, :id, current_user.payment_methods, :id, :card, {prompt: "Seleccione un método de pago"}, {class: 'form-control'}) %>
+    </div>
+
+    <h5 class='ml-1'> Nuevo método de pago: </h5>
+    <div class="form-group">
+        <%= label_tag(:card_number, 'Número de tarjeta', class: 'ml-1') %>
+        <%= number_field_tag(:card_number,{}, class: 'form-control') %>
+    </div>
+    
+    <div class="form-group">
+        <%= label_tag(:name, 'Nombre completo (como figura en la tarjeta)', class: 'ml-1') %>
+        <%= text_field_tag :name, '', class: 'form-control' %>
+    </div>
+    <div class="d-flex row ml-1">
+        <ul class="list-group col-7">
+	        <li class="list-group-item flex-row justify-content-between">
+		    	<span class='row'>
+		    		<span class='col'>
+		    			<em>Fecha de expiración</em>
+		    		</span>
+		    	</span>
+		    	<span class='row'>
+		    		<span class='col-7'>
+		        		<%= label_tag(:expire_month, 'Mes', class: 'ml-1') %>
+		        		<%= select_month(Date.today, {}, class: 'form-control btn-sm') %>
+		        	</span>
+		    		<span class='col-5'> 
+				        <%= label_tag(:expire_year, 'Año', class: 'ml-1') %>
+				        <%= select_year(Date.today, {:start_year => Date.today.year, :end_year => 12.years.from_now.year}, class: 'form-control btn-sm') %>
+				    </span>
+				</span>
+			</li>
+		</ul>
+		<ul class="col-5">
+			<li class="list-group-item flex-row justify-content-between">
+				<div class="form-group">
+			        <%= label_tag(:verification_code, 'Código de verificación', class: 'ml-1') %>
+			        <%= number_field_tag(:verification_code, {}, step: 1, class: 'form-control') %>
+			    </div>
+			</li>
+		</ul>
+	</div>
+
+    <div class="form-group">
+        <%= label_tag(:company, 'Compañía', class: 'ml-1') %>
+        <%= select_tag :company, options_for_select(['Visa', 'Mastercard', 'American Express']), :include_blank => true, class: 'form-control' %>
+    </div>
+
+    <% if flash[:form_error] %>
+	    <div class="alert alert-danger" role="alert">
+	        <% flash[:form_error].each do |e| %>
+	       		<p class="my-0"><%= e %></p>
+	        <% end %>
+	    </div>
+    <% end %>
+
+    <span class='row mt-2'>
+        <span class="col-6 text-center">
+        	<%= link_to "Cancelar", travel_path(@travel), class: 'btn-lg btn-block btn-secondary mr-1' %>
+        </span>
+        <span class="col-6 text-center">
+        	<%= link_to 'Pagar', '#', "data-toggle"=>"modal", "data-target" => "#confirm-#{@travel.id}", class: "btn-lg btn-block btn-primary" %>
+        </span>
+            <div class="modal fade" id="confirm-<%= @travel.id %>" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">Testeo de COVID</button>
+                        </div>
+                        <div class="modal-body">
+                        	<div class="form-group">
+	                           	<%= label_tag :covid, "¿Confirma que no presenta síntomas de COVID ni estuvo en contacto con ninguna persona que diera positivo?", class: "form-group-label" %>
+	                            <div class="form-check">
+								    <%= check_box_tag :covid, "confirm", false, class: "form-check-input" %>
+								    <%= label_tag :covid, "Confirmar", class: "form-check-label" %>
+								</div>
+							</div>
+							<small class='text-danger mt-5'>Este formulario tiene carácter de declaración jurada, si presenta síntomas no podrá reservar viajes con ocurrencia dentro de los próximos 15 días</small>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="modal-footer">
+                            	<a href="#" data-dismiss="modal" class="btn btn-block btn-secondary">Cancelar</a>
+                            	<%= submit_tag "Pagar", :class => 'form_submit btn btn-block btn-primary mb-2', data: { disable_with: "Procesando..." } %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </span>
+<% end %>

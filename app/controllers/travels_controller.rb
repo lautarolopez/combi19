@@ -25,12 +25,59 @@ class TravelsController < ApplicationController
 	end
 
     def book
+        @travel = Travel.find(params[:id])
+        @duration = calculate_duration(@travel.date_departure, @travel.date_arrival)
         if current_user == nil
             flash[:warning] = "Debe estar registrado para comprar pasajes"
             redirect_to travels_path
+        else
+            if current_user.discharge_date != nil && current_user.discharge_date > @travel.date_departure
+                flash[:error] = 'No puede reservar este viaje porque presenta síntomas de covid'
+            end
         end
-        @travel = Travel.find(params[:id])
-        @duration = calculate_duration(@travel.date_departure, @travel.date_arrival)
+    end
+
+    def pay
+        @travel = Travel.find(params[:travel_id])
+        @method = params[:method]
+        if @method == 'existing'
+            @payment_method = PaymentMethod.find(params[:payment_method][:id])
+        else
+            @payment_method = PaymentMethod.create(card_number: params[:card_number], name: params[:name], expire_month: params[:date][:month], expire_year: params[:date][:year], verification_code: params[:verification_code], company: params[:company], user_id: current_user.id)
+            if !@payment_method.save
+                flash[:form_error] = @payment_method.errors.full_messages
+                render 'book'
+            end
+        end
+
+        if @payment_method.save
+            if validate_card(@payment_method, @method)
+                if @method == 'new'
+                    @payment_method.destroy
+                end
+                if !params[:covid]
+                    current_user.update(discharge_date: Date.today + 15.days)
+                    if current_user.discharge_date < @travel.date_departure
+                        @travel.passengers << current_user
+                        flash[:success] = 'Ha reservado el viaje ' + @travel.id.to_s + ' con éxito!'
+                        redirect_to travel_path(@travel)
+                    else
+                        flash[:error] = 'No puede reservar este viaje porque presenta síntomas de covid'
+                        redirect_to travel_path(@travel)
+                    end
+                else
+                    current_user.update(discharge_date: nil)
+                    @travel.passengers << current_user
+                    flash[:success] = 'Ha reservado el viaje ' + @travel.id.to_s + ' con éxito!'
+                    redirect_to travel_path(@travel)
+                end
+            else
+                if @method == 'new'
+                    @payment_method.destroy
+                end
+                render 'book'
+            end
+        end
     end
 	
     def step_new
@@ -202,4 +249,42 @@ class TravelsController < ApplicationController
         duration = [duration_hours, duration_minutes]
         return duration
     end
+
+    def validate_card(card, method)
+        #if card_number.to_s.match ^3[47][0-9]{13}$
+        valid = true
+        flash[:form_error] = []
+        number = card.card_number.to_s
+        if method == 'new'
+            if number.length < 14 || number.length > 19
+                flash[:form_error] << 'El número de la tarjeta es inválido:'
+                flash[:form_error] << 'Debe contener entre 14 y 19 dígitos'
+                valid = false
+            end
+            if number[0] < '3' || number[0] > '5'
+                if flash[:form_error] == []
+                    flash[:form_error] << 'El número de la tarjeta es inválido:'
+                end
+                flash[:form_error] << 'Debe comenzar en 3, 4 o 5'
+                valid = false
+            end
+        else
+            if card.expire_year < Date.today.year || (card.expire_year == Date.today.year && card.expire_month < Date.today.month)
+                flash[:form_error] << 'La fecha de expiración es inválida. Le aconsejamos corregir o eliminar el método de pago'
+                valid = false
+            end
+        end
+        if flash[:form_error] == []
+            if number[number.length-1] == '9'
+                flash[:form_error] << 'El método de pago no tiene fondos suficientes'
+                valid = false
+            end
+        end
+        if valid
+            return true
+        else
+            return false
+        end
+    end
+
 end

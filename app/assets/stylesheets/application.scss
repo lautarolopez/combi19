@@ -33,6 +33,24 @@
   font-size: 1rem;
 }
 
+.it {
+	font-style: italic !important;
+}
+
+.tooltip-wrapper {
+  display: inline-block; /* display: block works as well */
+}
+
+.tooltip-wrapper .btn[disabled] {
+  /* don't let button block mouse events from reaching wrapper */
+  pointer-events: none;
+}
+
+.tooltip-wrapper.disabled {
+  /* OPTIONAL pointer-events setting above blocks cursor setting, so set it here */
+  cursor: not-allowed;
+}
+
 $primary: #115571;
 $danger: #d92e4f;
 $warning: #f9f871;

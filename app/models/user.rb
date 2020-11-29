@@ -15,6 +15,7 @@ class User < ApplicationRecord
   # Relations
   has_many :driving_travels, class_name: "Travel", foreign_key: "driver_id" #, dependent: :restrict_with_exception
   has_and_belongs_to_many :travels
+  has_many :payment_methods, dependent: :destroy
 
   # Methods
   def validate_age 

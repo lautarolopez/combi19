@@ -31,7 +31,25 @@
 
 es:
   activerecord:
+    attributes:
+      payment_method:
+        card_number: Número de tarjeta
+        name: Nombre
+        expire_month: Mes de expiración
+        expire_year: Año de expiración
+        verification_code: Código de verificación
+        company: Compañía
+      combi:
+        licence_plate: Patente
+        category: Categoría
+        capacity: Capacidad
     errors:
+      models:
+        payment_method:
+          attributes:
+            verification_code:
+              less_than: " debe contener 3 o 4 dígitos"
+              greater_than: " debe contener 3 o 4 dígitos"
       messages:
         record_invalid: "La validación falló: %{errors}"
         restrict_dependent_destroy:

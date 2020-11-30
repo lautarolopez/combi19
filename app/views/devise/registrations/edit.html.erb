@@ -1,6 +1,6 @@
 <div class="authform row">
     <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :validate => true, :html => { :method => :put, :role => 'form', class: 'd-flex flex-column justify-content-center col-lg-6 mx-auto card p-5 my-5'}) do |f| %>
-    <h3>Perfil de <%= resource.name + " " + resource.last_name %></h3>
+    <h3>Perfil de <%= resource.name.titleize + " " + resource.last_name.titleize %></h3>
     <div class="form-row">
         <div class="form-group col">
             <%= f.label :name, "Nombre *" %>

@@ -91,8 +91,8 @@
                             </div>
                             <div class="modal-footer">
                                 <div class="modal-footer">
-                                    <a href="#" data-dismiss="modal" class="btn btn-secondary w-75">Cancelar</a>
                                     <%= link_to "Continuar", book_travel_path(travel), class: 'btn btn-primary w-100' %>
+                                    <a href="#" data-dismiss="modal" class="btn btn-secondary w-75">Cancelar</a>
                                 </div>
                             </div>
                         </div>
@@ -108,13 +108,13 @@
 
 
 <script>
-    if ( window.localStorage ) {
-        if (!localStorage.getItem('firstLoad')) {
-            localStorage['firstLoad'] = true;
-            window.location.reload();
-        } else
-            localStorage.removeItem('firstLoad');
-    }
+    //if ( window.localStorage ) {
+    //    if (!localStorage.getItem('firstLoad')) {
+    //        localStorage['firstLoad'] = true;
+    //        window.location.reload();
+    //    } else
+    //        localStorage.removeItem('firstLoad');
+    //}
     $(document).ready(function() {
         $('.tooltip-wrapper').tooltip({position: "top"});
     })

@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  get 'payment_methods/index'
+  get 'payment_methods/new'
+  get 'payment_methods/edit'
+  get 'payment_methods/create'
+  get 'payment_methods/update'
+  get 'payment_methods/destroy'
   get 'combis/new'
   get 'combis/index'
   get 'combis/edit'
@@ -34,6 +40,11 @@ Rails.application.routes.draw do
     post 'travels/:id', to: 'travels#pay'
   end
   resources :travels
+  as :payment_method do
+    #get 'mismetodosdepago', to: 'payment_methods#index', as: :payment_methods
+    #post 'mismetodosdepago', to: 'payment_method#create'
+  end
+  resources :payment_methods#, except: [:index, :create]
 
   root to: "home#index"
 end

@@ -40,51 +40,54 @@ class TravelsController < ApplicationController
     def pay
         @travel = Travel.find(params[:travel_id])
         @method = params[:method]
-        @payment_method = nil
+        @paymentMethod = nil
         if @method == 'existing'
-            if params[:payment_method]
-                @payment_method = PaymentMethod.find_by(id: params[:payment_method][:id])
-            end
-        else
-            @payment_method = PaymentMethod.create(card_number: params[:card_number], name: params[:name], expire_month: params[:date][:month], expire_year: params[:date][:year], verification_code: params[:verification_code], company: params[:company], user_id: current_user.id)
-            if !@payment_method.save
-                flash[:form_error] = @payment_method.errors.full_messages
+            if params[:payment_method][:id] != ''
+                @paymentMethod = PaymentMethod.find_by(id: params[:payment_method][:id])
+            else
+                flash[:form_error] = []
+                flash[:form_error] << 'Debe seleccionar un método de pago'
                 render 'book'
             end
+        else
+            @paymentMethod = PaymentMethod.new(card_number: params[:card_number], name: params[:name], expire_month: params[:date][:month], expire_year: params[:date][:year], verification_code: params[:verification_code], company: params[:company], user_id: current_user.id)
         end
 
-        if @payment_method == nil
-            flash[:form_error] = []
-            flash[:form_error] << 'Debe seleccionar un método de pago'
-            render 'book'
-        else
-            if @payment_method.save
-                if validate_card(@payment_method, @method, params[:verification_code])
-                    if @method == 'new'
-                        @payment_method.destroy
-                    end
-                    if !params[:covid]
+        if @paymentMethod != nil
+            if @method == 'existing' || (@method == 'new' && @paymentMethod.save)
+                if validate_card(@paymentMethod, @method, params[:verification_code])
+                    if params[:covid]
                         current_user.update(discharge_date: Date.today + 15.days)
-                        if current_user.discharge_date < @travel.date_departure
-                            @travel.passengers << current_user
-                            flash[:success] = 'Ha reservado el viaje ' + @travel.id.to_s + ' con éxito!'
-                            redirect_to travel_path(@travel)
-                        else
-                            flash[:error] = 'No puede reservar este viaje porque presenta síntomas de covid'
-                            redirect_to travel_path(@travel)
-                        end
                     else
                         current_user.update(discharge_date: nil)
+                    end
+                    if current_user.discharge_date != nil && current_user.discharge_date > @travel.date_departure
+                        flash[:error] = 'No puede reservar este viaje porque presenta síntomas de covid'
+                        redirect_to travel_path(@travel)
+                    else
+                        @travel.update(occupied: @travel.occupied + 1)
                         @travel.passengers << current_user
-                        flash[:success] = 'Ha reservado el viaje ' + @travel.id.to_s + ' con éxito!'
+                        flash[:success] = []
+                        flash[:success] << "Has reservado el viaje " + @travel.route.origin.name.titleize + ", " + @travel.route.origin.state.titleize + " - " + @travel.route.destination.name.titleize + ", " + @travel.route.destination.state.titleize + " el día " + @travel.date_departure.strftime('%m/%d/%Y') + " a las " + @travel.date_departure.strftime('%H:%M') + " hs. con éxito!"
+                        if @method == 'new' && params[:save_new]
+                            flash[:success] << 'El método de pago ' + @paymentMethod.card + ' se registró exitosamente en su cuenta'
+                        end
                         redirect_to travel_path(@travel)
                     end
                 else
-                    if @method == 'new'
-                        @payment_method.destroy
-                    end
                     render 'book'
                 end
+                if @method == 'new' && !params[:save_new]
+                    @paymentMethod.destroy
+                end
+            else
+                if @paymentMethod.errors
+                    flash[:form_error] = @paymentMethod.errors.full_messages
+                else
+                    flash[:form_error] = []
+                    flash[:form_error] << "Algo salió mal"
+                end
+                render 'book'
             end
         end
     end
@@ -264,33 +267,14 @@ class TravelsController < ApplicationController
         valid = true
         flash[:form_error] = []
         number = card.card_number.to_s
-        if method == 'new'
-            if number.length < 14 || number.length > 19
-                flash[:form_error] << 'El número de la tarjeta es inválido:'
-                flash[:form_error] << 'Debe contener entre 14 y 19 dígitos'
+        if method == 'existing'
+            if card.expire_year < Date.today.year || (card.expire_year == Date.today.year && card.expire_month < Date.today.month)
+                flash[:form_error] << 'La fecha de expiración es inválida. Le aconsejamos corregir o eliminar el método de pago'
                 valid = false
             end
-            if number[0] < '3' || number[0] > '5'
-                if flash[:form_error] == []
-                    flash[:form_error] << 'El número de la tarjeta es inválido:'
-                end
-                flash[:form_error] << 'Debe comenzar en 3, 4 o 5'
+            if card.verification_code != code
+                flash[:form_error] << 'El código de verificación es incorrecto'
                 valid = false
-            end
-        else
-            if card == nil 
-                flash[:form_error] << 'card nil'
-            else
-                flash[:form_error] << card.id
-                flash[:form_error] << card.card_number
-                if card.expire_year < Date.today.year || (card.expire_year == Date.today.year && card.expire_month < Date.today.month)
-                    flash[:form_error] << 'La fecha de expiración es inválida. Le aconsejamos corregir o eliminar el método de pago'
-                    valid = false
-                end
-                if card.verification_code != code
-                    flash[:form_error] << 'El código de verificacón es incorrecto'
-                    valid = false
-                end
             end
         end
         if flash[:form_error] == []

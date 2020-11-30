@@ -5,16 +5,20 @@
 
 	<h3 class='ml-1'> ¿Cómo desea realizar el pago? </h3>
 
+	<% noneMethod = true %>
+	<% if params[:method] %>
+		<% noneMethod = false %>
+	<% end %>
 	<div class="form-check">
-	    <%= radio_button_tag :method, "none", true, class: "form-check-input", :style => 'visibility: hidden', id: 'radio_none' %>
+	    <%= radio_button_tag :method, "none", noneMethod, class: "form-check-input", :style => 'visibility: hidden', id: 'radio_none' %>
 	</div>
 
 	<div class="form-check">
-	    <%= radio_button_tag :method, "existing", false, class: "form-check-input", id: 'radio_existing' %>
+	    <%= radio_button_tag :method, "existing", params[:method] == 'existing', class: "form-check-input", id: 'radio_existing' %>
 	    <%= label_tag :method, "Método de pago existente", class: "form-check-label" %>
 	</div>
 	<div class="form-check mb-3">
-	    <%= radio_button_tag :method, "new", false, class: "form-check-input", id: 'radio_new' %>
+	    <%= radio_button_tag :method, "new", params[:method] == 'new', class: "form-check-input", id: 'radio_new' %>
 	    <%= label_tag :method, "Nuevo método de pago", class: "form-check-label" %>
 	</div>
 
@@ -27,15 +31,22 @@
     </div>
 
     <div id='newMethod'>
+    	<% if params[:method] == 'new' %>
+    		<% card_number_field = params[:card_number] %>
+    		<% name_field = params[:name] %>
+    	<% else %>
+    		<% name_field = '' %>
+    	<% end %>
+
 	    <h5 class='ml-1'> Nuevo método de pago: </h5>
 	    <div class="form-group">
 	        <%= label_tag(:card_number, 'Número de tarjeta', class: 'ml-1') %>
-	        <%= number_field_tag(:card_number,nil, class: 'form-control', id: "number") %>
+	        <%= number_field_tag(:card_number, card_number_field, class: 'form-control', id: "number") %>
 	    </div>
 	    
 	    <div class="form-group">
 	        <%= label_tag(:name, 'Nombre completo (como figura en la tarjeta)', class: 'ml-1') %>
-	        <%= text_field_tag :name, '', class: 'form-control' %>
+	        <%= text_field_tag :name, name_field, class: 'form-control' %>
 	    </div>
 	   	<li class="list-group-item">
 		    <div class="form-group">
@@ -57,18 +68,24 @@
 			</div>
 		</li>
 
-	    <div class="form-group">
+	    <div class="form-group mt-2">
 	        <%= label_tag(:company, 'Compañía', class: 'ml-1') %>
-	        <%= select_tag :company, options_for_select(['Visa', 'Mastercard', 'American Express']), :include_blank => true, class: 'form-control', id: "company" %>
+	        <%= select_tag :company, options_for_select(['Visa', 'Mastercard', 'American Express'], params[:company] || 0), :include_blank => true, class: 'form-control', id: "company" %>
 	    </div>
 	</div>
 
-	<li class="list-group-item align-items-end" id='code_field'>
-		<div class= 'form-group'>
-	        <%= label_tag(:verification_code, 'Código de verificación', class: 'ml-1') %>
-	        <%= number_field_tag(:verification_code, nil, step: 1, class: 'form-control', id: "code", required: true) %>
-	    </div>
-	</li>
+	<div class= 'form-group' id='code_field'>
+        <%= label_tag(:verification_code, 'Código de verificación', class: 'ml-1') %>
+        <%= number_field_tag(:verification_code, nil, step: 1, class: 'form-control', id: "code", required: true) %>
+	</div>
+
+	<div class='mb-2 ml-1' id='saveNewMethod'>
+		<%= label_tag :save_new, "¿Desea guardar este método de pago para futuras compras en la plataforma?", class: "form-group-label mt-2 it" %>
+		<div class="form-check">
+		    <%= check_box_tag :save_new, "save_new", false, class: "form-check-input" %>
+		    <%= label_tag :save_new, "Sí", class: "form-check-label" %>
+		</div>
+	</div>
 
     <% if flash[:form_error] %>
 	    <div class="alert alert-danger" role="alert">
@@ -117,28 +134,29 @@
     $(document).ready(function() {	
     	let existingMethod = document.getElementById('radio_existing');
     	let newMethod = document.getElementById('radio_new');
-    	let none = document.getElementById('radio_none');
+    	//let none = document.getElementById('radio_none');
     	let existing = document.querySelector("#existing");
     	let newNumber = document.getElementById("number");
     	let newName = document.getElementById("name");
     	let code = document.getElementById("code");
     	let newCompany = document.querySelector("#company");
-    	//none.checked = true;
-    	console.log(none.checked);
-    	console.log(existingMethod.checked);
-    	console.log(newMethod.checked);
-    	//alert("hola");
+    	//console.log(none.checked);
+    	//console.log(existingMethod.checked);
+    	//console.log(newMethod.checked);
 
     	if (existingMethod.checked) {
     		$('#existingMethod').show();
+    		$('#saveNewMethod').hide();
     		$('#newMethod').hide();
     		$('#code_field').show();
     	} else if (newMethod.checked) {
 			$('#existingMethod').hide();
+			$('#saveNewMethod').show();
 	    	$('#newMethod').show();
 	   		$('#code_field').show();
     	} else {
 	    	$('#existingMethod').hide();
+	    	$('#saveNewMethod').hide();
 	    	$('#newMethod').hide();
 	   		$('#code_field').hide();
 	    }
@@ -146,26 +164,29 @@
 		$("input").change(function(e){
 			existingMethod = document.getElementById('radio_existing');
     		newMethod = document.getElementById('radio_new');
-    		none = document.getElementById('radio_none');
-			console.log(none.checked);
-			console.log(existingMethod.checked);
-    		console.log(newMethod.checked);
+    		//none = document.getElementById('radio_none');
+			//console.log(none.checked);
+			//console.log(existingMethod.checked);
+    		//console.log(newMethod.checked);
     		if (existingMethod.checked) {
-    			console.log('existing');
+    			//console.log('existing');
 		  		newNumber.value = null;
         		newName.value = null;
         		newCompany.value = null;
 	    		$('#existingMethod').show();
+	    		$('#saveNewMethod').hide();
 	    		$('#newMethod').hide();
 	    		$('#code_field').show();
 	    	} else if (newMethod.checked) {
-				console.log('new');
+				//console.log('new');
 				$('#existingMethod').hide();
+				$('#saveNewMethod').show();
 		    	$('#newMethod').show();
 		   		$('#code_field').show();
 	    	} else {
-	    		console.log('none');
+	    		//console.log('none');
 		    	$('#existingMethod').hide();
+		    	$('#saveNewMethod').hide();
 		    	$('#newMethod').hide();
 		    }	
 		});

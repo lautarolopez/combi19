@@ -19,7 +19,7 @@ class CitiesController < ApplicationController
         if @city.save
             flash[:success] = @city.name.titleize + ", " + @city.state.titleize + " ha sido creada con éxito!"
             redirect_to cities_path
-          else
+        else
             @aux = City.find_by(name: @city.name, state: @city.state)
             if @aux != nil
                 flash[:form_error] = "La ciudad " + @city.name.titleize + " ya existe en la provincia " + @city.state.titleize
@@ -27,7 +27,7 @@ class CitiesController < ApplicationController
                 flash[:form_error] = "Algo salió mal."
             end
             render 'new'
-          end
+        end
     end
 
     def show

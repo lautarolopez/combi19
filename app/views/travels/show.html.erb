@@ -35,41 +35,11 @@
         <% if @travel.date_departure > DateTime.now %>
         <div class="d-flex justify-content-between align-items-end mt-3">
             <% if (current_user != nil) && (current_user.travels.include?@travel) %>
-                <ul class="list-group w-50">
-                    <h4 class='text-danger'> (Por ahora se muestran todos los insumos, todavía no está implementada la compra de insumos en los viajes)</h4>
-                    <h6>Insumos elegidos:</h6>
-                    <% @travel.route.extras.each do |extra| %>
-                    <li class="list-group-item d-flex flex-row justify-content-between">
-                        <span>
-                            <small class="font-weight-bold d-block"><%=extra.name.upcase %></small>
-                            <small class="text-secondary"><%=extra.description.capitalize %></small>
-                        </span>
-                        <% if extra.price != 0 %>
-                        	<span class="badge badge-pill badge-primary h-25 mt-2"> $<%= sprintf('%.2f', extra.price) %> </span>
-                        <% else %>
-                        	<span class="badge badge-pill badge-primary h-25 mt-2"> Gratis </span>
-                        <% end %>
-                    </li>
-                    <% end %>
-                </ul>
+                <% title = "Insumos elegidos:" %>
             <% else %>
-                <ul class="list-group w-50">
-                    <h6>Podés elegir cualquiera de estos insumos:</h6>
-                    <% @travel.route.extras.each do |extra| %>
-                    <li class="list-group-item d-flex flex-row justify-content-between">
-                        <span>
-                            <small class="font-weight-bold d-block"><%=extra.name.upcase %></small>
-                            <small class="text-secondary"><%=extra.description.capitalize %></small>
-                        </span>
-                        <% if extra.price != 0 %>
-                            <span class="badge badge-pill badge-primary h-25 mt-2"> $<%= sprintf('%.2f', extra.price) %> </span>
-                        <% else %>
-                            <span class="badge badge-pill badge-primary h-25 mt-2"> Gratis </span>
-                        <% end %>
-                    </li>
-                    <% end %>
-                </ul>
+                <% title = "Podés elegir cualquiera de estos insumos:"%>
             <% end %>
+            <%= render :partial => 'extras', :locals => { :travel => @travel, :title => title } %>
             <div class="w-50 text-right d-flex flex-column align-items-end h-100">
                 <% if @travel.discount != 0 && current_user != nil && current_user.suscribed %>
                     <span class="badge badge-primary mt-5">-<%= @travel.discount %>%</span>

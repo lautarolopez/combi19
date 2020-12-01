@@ -1,0 +1,11 @@
+<ul class="list-group pt-5">
+    <% if @travels.size == 0 %>
+        <div class="d-flex flex-column align-items-center w-100">
+            <%= image_tag  "Travels_history_empty.svg", size: '500' %>
+            <h4>No tenés viajes realizados, <%= link_to  "¡empezá a viajar ahora!", travels_path %></h4>
+        </div>
+    <% else %>
+    	<% title = 'Viajes realizados' %>
+        <%= render :partial => 'index', :locals => { :travels => @travels, :title => title } %>
+    <% end %>
+</ul>

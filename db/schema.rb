@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_18_010856) do
+ActiveRecord::Schema.define(version: 2020_12_01_124955) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(version: 2020_11_18_010856) do
     t.string "licence_plate"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "capacity", default: 0
   end
 
   create_table "extras", force: :cascade do |t|
@@ -45,6 +46,18 @@ ActiveRecord::Schema.define(version: 2020_11_18_010856) do
     t.index ["route_id"], name: "index_extras_routes_on_route_id"
   end
 
+  create_table "payment_methods", force: :cascade do |t|
+    t.integer "user_id"
+    t.bigint "card_number"
+    t.string "name"
+    t.integer "expire_month"
+    t.integer "expire_year"
+    t.integer "verification_code"
+    t.string "company"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "routes", force: :cascade do |t|
     t.integer "origin_id"
     t.integer "destination_id"
@@ -56,13 +69,13 @@ ActiveRecord::Schema.define(version: 2020_11_18_010856) do
     t.integer "driver_id"
     t.integer "route_id"
     t.integer "occupied", default: 0
-    t.integer "capacity", default: 0
     t.datetime "date_departure"
     t.datetime "date_arrival"
     t.float "price", default: 0.0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "combi_id"
+    t.integer "discount", default: 0
   end
 
   create_table "travels_users", id: false, force: :cascade do |t|
@@ -85,7 +98,9 @@ ActiveRecord::Schema.define(version: 2020_11_18_010856) do
     t.integer "dni", default: 0, null: false
     t.date "birth_date", default: "2020-11-18", null: false
     t.string "role", default: "user", null: false
-    t.boolean "suscribed", default: false, null: false
+    t.boolean "subscribed", default: false, null: false
+    t.date "discharge_date"
+    t.integer "subscription_payment_method_id"
     t.index ["dni"], name: "index_users_on_dni", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

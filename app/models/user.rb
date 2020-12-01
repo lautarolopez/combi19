@@ -8,13 +8,15 @@ class User < ApplicationRecord
   validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, message: " no es válido."
   validates :name, presence: true
   validates :last_name, presence: true
-  validates :dni, presence: true, uniqueness: true
+  validates :dni, presence: true, uniqueness: true, numericality: { greater_than_or_equal_to: 0, less_than: 999999999 }
   validates :birth_date, presence: true
   validate :validate_age
 
   # Relations
+  belongs_to :subscription_payment_method, class_name: "PaymentMethod", foreign_key: 'subscription_payment_method_id', optional: true
   has_many :driving_travels, class_name: "Travel", foreign_key: "driver_id" #, dependent: :restrict_with_exception
   has_and_belongs_to_many :travels
+  has_many :payment_methods, dependent: :destroy
 
   # Methods
   def validate_age 

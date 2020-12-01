@@ -1,0 +1,135 @@
+<% if flash[:error] %>
+    <div class="alert alert-danger text-center mt-5" role="alert">
+        <p class="my-0"><%= flash[:error] %></p>
+    </div>
+<% end %>
+<% if flash[:success] %>
+    <div class="alert alert-success text-center mt-5" role="alert">
+        <% flash[:success].each do |e| %>
+            <p class="my-0"><%= e %></p>
+        <% end %>
+    </div>
+<% end %>
+<% if flash[:warning] %>
+    <div class="alert alert-warning" role="alert">
+        <p class="my-0"><%= flash[:warning] %></p>
+    </div>
+<% end %>
+<div class="card my-5">
+    <div class="card-body">
+        <span class="badge badge-pill badge-primary"><%= @travel.combi.category.titleize %></span>
+        <div class="d-flex justify-content-around align-items-center">
+            <span class="text-center">
+                <p class="m-0 text-primary text-uppercase font-weight-bold"> Salida </p>
+                <p class="m-0 font-weight-bold"><%= @travel.route.origin.name.titleize %>, <%= @travel.route.origin.state.titleize %> </p>
+                <p class="m-0"><%= I18n.l(@travel.date_departure, format: "%A, %d de %b de %Y").capitalize %> </p>
+                <p class="m-0 hour-text"><%= I18n.l(@travel.date_departure, format: "%H:%M") %> </p>
+            </span>
+            <span class="text-center d-flex flex-column">
+                <small class="font-weight-bold m-0">Duración</small>
+                <small class="hour-text-small text-secondary"><%= @duration[0] %> h <%= @duration[1] %> m</small>
+                <i class="fas fa-long-arrow-alt-right"></i>
+            </span>
+            <span class="text-center">
+                <p class="m-0 text-primary text-uppercase font-weight-bold"> Llegada </p>
+                <p class="m-0 font-weight-bold"><%= @travel.route.destination.name.titleize %>, <%= @travel.route.destination.state.titleize %> </p>
+                <p class="m-0"><%= I18n.l(@travel.date_arrival, format: "%A, %d de %B de %Y").capitalize %> </p>
+                <p class="m-0 hour-text"><%= I18n.l(@travel.date_arrival, format: "%H:%M") %> </p>
+            </span>
+        </div>
+        <% if @travel.date_departure > DateTime.now %>
+        <div class="d-flex justify-content-between align-items-end mt-3">
+            <ul class="list-group w-50">
+                <% if (current_user != nil) && (current_user.travels.include?@travel) %>
+                    <% title = "Insumos elegidos:" %>
+                    <% extras = @travel.route.extras %> <!-- se cambiará por la lista seleccionada -->
+                <% else %>
+                    <% title = "Podés elegir cualquiera de estos insumos:"%>
+                    <% extras = @travel.route.extras %>
+                <% end %>
+                <%= render :partial => 'extras', :locals => { :extras => extras, :title => title } %>
+            </ul>
+            <div class="w-50 text-right d-flex flex-column align-items-end h-100">
+                <% if @travel.discount != 0 && current_user != nil && current_user.subscribed %>
+                    <span class="badge badge-primary mt-5">-<%= @travel.discount %>%</span>
+                    <s class="text-secondary">$<%= sprintf('%.2f', @travel.price) %></s>
+                    <p class="price-text-large h2">$<%= sprintf('%.0f', @travel.price - (@travel.price * @travel.discount / 100))%><small class="small-text">.<%=sprintf('%.2f', @travel.price - (@travel.price * @travel.discount / 100)).split(".").last%> </small>
+                    </p>
+                <% else %>
+                    <p class="m-0 price-text-large">$<%= sprintf('%.0f', @travel.price)%><small class="small-text">.<%=sprintf('%.2f', @travel.price).split(".").last%> </small>
+                    </p>
+                <% end %>
+                <span class="d-flex align-items-end">
+                    <%= link_to "Volver", travels_path, class: 'btn btn-md btn-secondary mr-1' %>
+                    <% if current_user != nil %>
+                        <% if current_user.travels.include?@travel %>
+                            <div class="tooltip-wrapper btn-block" data-title="Ya reservaste un pasaje para este viaje">
+                                <button type="button" class="btn btn-lg btn-primary" disabled>Reservado</button>
+                            </div>
+                        <% else %>
+                            <% if @travel.occupied == @travel.combi.capacity %>
+                                <button type="button" class="btn btn-lg btn-disabled" disabled>Agotado</button>
+                            <% else %>
+                                <% if current_user.discharge_date != nil && current_user.discharge_date > @travel.date_departure %>
+                                    <div class="tooltip-wrapper" data-title="No podes reservar un pasaje para este viaje porque presentas síntomas de covid">
+                                        <button type="button" class="btn btn-lg btn-primary" disabled>Comprar</button>
+                                    </div>
+                                <% else %>
+                                    <%= link_to 'Comprar', '#', "data-toggle"=>"modal", "data-target" => "#pay-#{@travel.id}", class: "btn btn-lg btn-primary" %>
+                                <% end %>
+                            <% end %>
+                        <% end %>
+                    <% end %>
+                </span>
+                <% if current_user != nil %>
+                    <% if current_user.travels.include?@travel && (current_user.discharge_date == nil || current_user.discharge_date <= @travel.date_departure) && @travel.occupied < @travel.combi.capacity %>
+                        <small class="text-secondary mt-2">Apurate, ¡solo quedan <%= @travel.combi.capacity - @travel.occupied %> lugares!</small>
+                    <% end %>
+                <% else %>
+                    <p class="m-0"> <%= link_to "Ingresá", new_user_session_path %> o <%= link_to "registrate", new_user_registration_path %> para poder comprar.</p>
+                <% end %>
+                <div class="modal fade" id="pay-<%= @travel.id %>" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <ul class="list-group text-left">
+                                    <% title = "Podés elegir cualquiera de estos insumos:" %>
+                                    <% extras = @travel.route.extras %>
+                                    <%= render :partial => 'extras', :locals => { :extras => extras, :title => title } %>
+                                </ul>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="modal-footer">
+                                    <a href="#" data-dismiss="modal" class="btn btn-secondary w-75">Cancelar</a>
+                                    <%= link_to "Continuar", book_travel_path(@travel), class: 'btn btn-primary w-100' %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% else %>
+    </div>
+</div>
+<div class="card my-5">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-end mt-3">
+            <div class="w-100 text-right d-flex flex-column align-items-end h-100">
+                <% if (current_user != nil) && (current_user.travels.include?@travel) %>
+                	<%= link_to "Volver", travels_history_path, class: 'btn btn-md btn-secondary' %>
+                <% else %>
+                	<%= link_to "Volver", travels_path, class: 'btn btn-md btn-secondary' %>
+                <% end %>
+            </div>
+        </div>
+        <p class='text-center'> [Comentarios] </p>
+        <% end %>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tooltip-wrapper').tooltip({position: "top"});
+    })
+</script>

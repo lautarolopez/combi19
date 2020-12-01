@@ -31,7 +31,7 @@ subscribed.update(subscription_payment_method_id: subscription_payment_method.id
 
 
 #Create drivers
-20.times do |i|
+10.times do |i|
 	if User.find_by(dni: 1123 * i) == nil
     	User.create(email: "driver#{i}@combi19.com", password: "combi19", name: "John #{i}", last_name: "Driver", dni: 1123 * i, birth_date: 30.years.ago, role: "driver", subscribed: false)
     end
@@ -47,8 +47,8 @@ driver8 = User.find_by(email: "driver8@combi19.com")
 driver9 = User.find_by(email: "driver9@combi19.com")
 
 #Create simple users
-20.times do |i|
-	if User.find_by(dni: 1123 * (i+20)) == nil
+10.times do |i|
+	if User.find_by(dni: 1123 * (i+10)) == nil
     	User.create(email: "user#{i}@combi19.com", password: "combi19", name: "Michael #{i}", last_name: "User", dni: 1123 * (i+20), birth_date: 25.years.ago, role: "user", subscribed: false)
     end
 end
@@ -164,26 +164,26 @@ villalaangostura_tandil.extras = villalaangostura_tandil.extras.uniq
 
 
 # Create previous travels
-previous_travel1 = Travel.find_or_create_by(route: rauch_laplata, date_departure: DateTime.new(2020, 11, 19, 13, 27), date_arrival: DateTime.new(2020, 11, 19, 17, 27), price: 900, driver: driver1, combi: combi1)
-previous_travel2 = Travel.find_or_create_by(route: rauch_laplata, date_departure: DateTime.new(2019, 12, 07, 10), date_arrival: DateTime.new(2019, 12, 07, 14), price: 900, driver: driver1, combi: combi1)
-previous_travel3 = Travel.find_or_create_by(route: laplata_tandil, date_departure: DateTime.new(2019, 12, 10, 18), date_arrival: DateTime.new(2019, 12, 10, 22), price: 900, driver: driver1, combi: combi1)
-previous_travel4 = Travel.find_or_create_by(route: laplata_villalaangostura, date_departure: DateTime.new(2020, 11, 19, 13, 27), date_arrival: DateTime.new(2020, 11, 20, 13, 27), price: 4000, driver: driver2, combi: combi2)
-previous_travel5 = Travel.find_or_create_by(route: villalaangostura_tandil, date_departure: DateTime.new(2020, 11, 19, 13, 27), date_arrival: DateTime.new(2020, 11, 20, 13, 27), price: 4000, driver: driver3, combi: combi3)
-previous_travel6 = Travel.find_or_create_by(route: rauch_laplata, date_departure: DateTime.new(2020, 12, 07, 10), date_arrival: DateTime.new(2020, 12, 07, 14), price: 900, driver: driver1, combi: combi1)
-previous_travel7 = Travel.find_or_create_by(route: chascomus_posadas, date_departure: DateTime.new(2020, 11, 22, 13, 27), date_arrival: DateTime.new(2020, 11, 23, 10, 27), price: 900, driver: driver4, combi: combi4)
-previous_travel8 = Travel.find_or_create_by(route: chascomus_posadas, date_departure: DateTime.new(2020, 07, 11, 13, 27), date_arrival: DateTime.new(2020, 07, 12, 10, 27), price: 900, driver: driver5, combi: combi5)
-previous_travel9 = Travel.find_or_create_by(route: posadas_laplata, date_departure: DateTime.new(2020, 07, 11, 13, 27), date_arrival: DateTime.new(2020, 07, 12, 10, 27), price: 900, driver: driver5, combi: combi5)
+previous_travel1 = Travel.find_or_create_by(route: rauch_laplata, date_departure: (DateTime.now - 1.months), date_arrival: (DateTime.now - 1.months + 4.hours), price: 900, driver: driver1, combi: combi1)
+previous_travel2 = Travel.find_or_create_by(route: rauch_laplata, date_departure: (DateTime.now - 2.months), date_arrival: (DateTime.now - 2.months + 4.hours), price: 900, driver: driver1, combi: combi1)
+previous_travel3 = Travel.find_or_create_by(route: laplata_tandil, date_departure: (DateTime.now - 3.months), date_arrival: (DateTime.now - 3.months + 4.hours), price: 900, driver: driver1, combi: combi1)
+previous_travel4 = Travel.find_or_create_by(route: laplata_villalaangostura, date_departure: (DateTime.now - 4.months), date_arrival: (DateTime.now - 4.months + 1.days), price: 4000, driver: driver2, combi: combi2)
+previous_travel5 = Travel.find_or_create_by(route: villalaangostura_tandil, date_departure: (DateTime.now - 5.months), date_arrival: (DateTime.now - 5.months + 1.days), price: 4000, driver: driver3, combi: combi3)
+previous_travel6 = Travel.find_or_create_by(route: rauch_laplata, date_departure: (DateTime.now - 6.months), date_arrival: (DateTime.now - 6.months + 4.hours), price: 900, driver: driver1, combi: combi1)
+previous_travel7 = Travel.find_or_create_by(route: chascomus_posadas, date_departure: (DateTime.now - 7.months), date_arrival: (DateTime.now - 7.months + 9.hours), price: 900, driver: driver4, combi: combi4)
+previous_travel8 = Travel.find_or_create_by(route: chascomus_posadas, date_departure: (DateTime.now - 8.months), date_arrival: (DateTime.now - 7.months + 9.hours), price: 900, driver: driver5, combi: combi5)
+previous_travel9 = Travel.find_or_create_by(route: posadas_laplata, date_departure: (DateTime.now - 9.months), date_arrival: (DateTime.now - 9.months + 9.hours), price: 900, driver: driver5, combi: combi5)
 
 # Create future travels
-future_travel1 = Travel.find_or_create_by(route: rauch_laplata, date_departure: DateTime.new(2021, 11, 19, 13, 27), date_arrival: DateTime.new(2021, 11, 19, 17, 27), price: 900, driver: driver1, combi: combi1)
-future_travel2 = Travel.find_or_create_by(route: rauch_laplata, date_departure: DateTime.new(2020, 12, 07, 10), date_arrival: DateTime.new(2020, 12, 07, 14), price: 900, driver: driver1, combi: combi1)
-future_travel3 = Travel.find_or_create_by(route: laplata_tandil, date_departure: DateTime.new(2020, 12, 10, 18), date_arrival: DateTime.new(2020, 12, 10, 22), price: 900, driver: driver1, combi: combi1)
-future_travel4 = Travel.find_or_create_by(route: laplata_villalaangostura, date_departure: DateTime.new(2021, 11, 19, 13, 27), date_arrival: DateTime.new(2021, 11, 20, 13, 27), price: 4000, driver: driver2, combi: combi2)
-future_travel5 = Travel.find_or_create_by(route: villalaangostura_tandil, date_departure: DateTime.new(2021, 11, 19, 13, 27), date_arrival: DateTime.new(2021, 11, 20, 13, 27), price: 4000, driver: driver3, combi: combi3)
-future_travel6 = Travel.find_or_create_by(route: rauch_laplata, date_departure: DateTime.new(2021, 12, 07, 10), date_arrival: DateTime.new(2021, 12, 07, 14), price: 900, driver: driver1, combi: combi1)
-future_travel7 = Travel.find_or_create_by(route: chascomus_posadas, date_departure: DateTime.new(2021, 11, 22, 13, 27), date_arrival: DateTime.new(2021, 11, 23, 10, 27), price: 900, driver: driver4, combi: combi4)
-future_travel8 = Travel.find_or_create_by(route: chascomus_posadas, date_departure: DateTime.new(2021, 07, 11, 13, 27), date_arrival: DateTime.new(2021, 07, 12, 10, 27), price: 900, driver: driver5, combi: combi5)
-future_travel9 = Travel.find_or_create_by(route: posadas_laplata, date_departure: DateTime.new(2021, 07, 11, 13, 27), date_arrival: DateTime.new(2021, 07, 12, 10, 27), price: 900, driver: driver5, combi: combi5)
+future_travel1 = Travel.find_or_create_by(route: rauch_laplata, date_departure: (DateTime.now + 1.hours), date_arrival: (DateTime.now + 5.hours), price: 900, driver: driver1, combi: combi1)
+future_travel2 = Travel.find_or_create_by(route: rauch_laplata, date_departure: (DateTime.now + 5.days), date_arrival: (DateTime.now + 5.days + 4.hours), price: 900, driver: driver1, combi: combi1)
+future_travel3 = Travel.find_or_create_by(route: laplata_tandil, date_departure: (DateTime.now + 10.days), date_arrival: (DateTime.now + 10.days + 4.hours), price: 900, driver: driver1, combi: combi1)
+future_travel4 = Travel.find_or_create_by(route: laplata_villalaangostura, date_departure: (DateTime.now + 15.days), date_arrival: (DateTime.now + 15.days + 1.days), price: 4000, driver: driver2, combi: combi2)
+future_travel5 = Travel.find_or_create_by(route: villalaangostura_tandil, date_departure: (DateTime.now + 20.days), date_arrival: (DateTime.now + 20.days + 1.days), price: 4000, driver: driver3, combi: combi3)
+future_travel6 = Travel.find_or_create_by(route: rauch_laplata, date_departure: (DateTime.now + 25.days), date_arrival: (DateTime.now + 25.days + 4.hours), price: 900, driver: driver1, combi: combi1)
+future_travel7 = Travel.find_or_create_by(route: chascomus_posadas, date_departure: (DateTime.now + 1.months), date_arrival: (DateTime.now + 1.months + 9.hours), price: 900, driver: driver4, combi: combi4)
+future_travel8 = Travel.find_or_create_by(route: chascomus_posadas, date_departure: (DateTime.now + 2.months), date_arrival: (DateTime.now + 2.months + 9.hours), price: 900, driver: driver5, combi: combi5)
+future_travel9 = Travel.find_or_create_by(route: posadas_laplata, date_departure: (DateTime.now + 3.months), date_arrival: (DateTime.now + 3.months + 9.hours), price: 900, driver: driver5, combi: combi5)
 
 
 # Assign travels to users
@@ -191,16 +191,20 @@ previous_travel1.passengers << user1
 previous_travel1.passengers << user2
 previous_travel1.passengers << user3
 previous_travel1.passengers << user4
-previous_travel1.update(occupied:4)
+previous_travel1.passengers << subscribed
+previous_travel1.update(occupied:5)
 previous_travel2.passengers << user2
 previous_travel2.passengers << user3
 previous_travel2.passengers << user4
-previous_travel2.update(occupied:3)
+previous_travel1.passengers << subscribed
+previous_travel2.update(occupied:4)
 previous_travel3.passengers << user3
 previous_travel3.passengers << user4
-previous_travel3.update(occupied:2)
+previous_travel1.passengers << subscribed
+previous_travel3.update(occupied:3)
 previous_travel4.passengers << user4
-previous_travel4.update(occupied:1)
+previous_travel1.passengers << subscribed
+previous_travel4.update(occupied:2)
 previous_travel5.passengers << user5
 previous_travel5.update(occupied:1)
 previous_travel6.passengers << user6
@@ -212,26 +216,32 @@ previous_travel8.update(occupied:1)
 previous_travel9.passengers << user9
 previous_travel9.update(occupied:1)
 
-future_travel1.passengers << user1
 future_travel1.passengers << user2
 future_travel1.passengers << user3
 future_travel1.passengers << user4
+future_travel1.passengers << subscribed
 future_travel1.update(occupied:4)
 future_travel2.passengers << user2
 future_travel2.passengers << user3
 future_travel2.passengers << user4
+future_travel2.passengers << subscribed
 future_travel2.update(occupied:4)
 future_travel3.passengers << user3
 future_travel3.passengers << user4
-future_travel3.update(occupied:4)
+future_travel3.passengers << subscribed
+future_travel3.update(occupied:3)
 future_travel4.passengers << user4
-future_travel4.update(occupied:4)
+future_travel4.update(occupied:1)
+future_travel5.passengers << user1
 future_travel5.passengers << user5
-future_travel5.update(occupied:4)
+future_travel5.update(occupied:2)
 future_travel6.passengers << user6
 future_travel7.passengers << user7
+future_travel8.passengers << user1
 future_travel8.passengers << user8
+future_travel9.passengers << user1
 future_travel9.passengers << user9
+future_travel9.passengers << subscribed
 
 # Simulate sold out tickets
 future_travel6.update(occupied:combi1.capacity)

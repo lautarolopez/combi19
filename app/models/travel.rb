@@ -4,6 +4,7 @@ class Travel < ApplicationRecord
 	scope :future, -> { where("date_departure >= ?", DateTime.now).reorder(date_departure: :asc, date_arrival: :asc) }
 	scope :previous, -> { where("date_arrival <= ?", DateTime.now).reorder(date_departure: :desc, date_arrival: :desc) }
 	scope :current, -> { where("date_departure <= ? and date_arrival > ?", DateTime.now, DateTime.now).reorder(date_arrival: :asc, date_departure: :asc)}
+	scope :pending, -> { where("date_arrival > ?", DateTime.now).reorder(date_departure: :asc, date_arrival: :asc) }
 
 	# Validations
 	validates :driver_id, presence: :true

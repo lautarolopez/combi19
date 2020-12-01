@@ -9,6 +9,9 @@
             <p class="my-0"><%= flash[:index_error] %></p>
         </div>
     <% end %>
+    <div class="alert alert-danger" role="alert">
+            <p class="my-0">CAMBIAR FOTO DE SIZE = 0</p>
+        </div>
     <div class="d-flex justify-content-between w-100 mb-2">
         <h1> Mis métodos de pago </h1>
         <%= link_to "Agregar método de pago", new_payment_method_path, class: 'btn btn-primary btn-md h-75 mt-2' %>
@@ -19,7 +22,7 @@
         <span class="badge badge-pill badge-primary mb-1"><%= paymentMethod.company.titleize %></span>
         <div class="d-flex flex-row justify-content-between align-items-center">
             <span class="row w-75">
-                <span class="col-4">
+                <span class="col-4 mb-3">
                     <strong class="m-0 text-primary text-titleize"> Nombre completo </strong>
                     <p class="m-0 font-weight-bold"><%= paymentMethod.name %> </p>
                 </span>
@@ -42,7 +45,7 @@
             		
             	<% else %>
             		<div class="tooltip-wrapper btn-block" data-title="Asociar este método de pago a la suscripción premium">
-                        <%= link_to 'Asociar', payment_methods_path, class: "btn btn-block btn-light mb-2" %> <!-- not implemented -->
+                        <%= link_to 'Asociar', '#', class: "btn btn-block btn-light mb-2" %> <!-- not implemented -->
                     </div>
             		
             	<% end %>

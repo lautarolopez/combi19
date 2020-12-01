@@ -1,21 +1,35 @@
 class TravelsController < ApplicationController
 	def index
-		@travels = Travel.all
-		if current_user == nil || current_user.role == "user"
+		if current_user != nil && current_user.role == "admin"
+            @travels = Travel.pending
+        else
+            @travels = Travel.future
 			render 'clients_index'
 		end
 	end
 
-    def index_history
+    def previous
+        @travels = Travel.previous
+        if current_user == nil || current_user.role == "user"
+            render 'clients_index'
+        else
+            redirect_to root_path
+        end
+    end
+
+    def history
         if current_user == nil
             redirect_to root_path
         else
-            @travels = []
-            Travel.all.each do |travel|
-                if (travel.passengers.include?current_user) && (travel.date_arrival < DateTime.now)
-                    @travels << travel
-                end
-            end
+            @travels = current_user.travels.previous
+        end
+    end
+
+    def booked
+        if current_user == nil
+            redirect_to root_path
+        else
+            @travels = current_user.travels.pending
         end
     end
 
@@ -60,12 +74,21 @@ class TravelsController < ApplicationController
                         current_user.update(discharge_date: nil)
                     else
                         current_user.update(discharge_date: Date.today + 15.days)
+                        travel_ids = []
+                        current_user.travels.where("date_departure < ?", current_user.discharge_date).each do |t|
+                            current_user.travels.delete(t)
+                            t.update(occupied: t.occupied - 1)
+                            travel_ids << t.id
+                        end
+                        if travel_ids != []
+                            flash[:warning] = "Como declaraste que presentás síntomas de covid se canceló la reserva que tenías de " + travel_ids.count.to_s + " viaje/s con fechas dentro de los próximos 15 días"#. Se envió por correo el resumen detallado de el/los mismo/s"
+                        end
                     end
                     if current_user.discharge_date != nil && current_user.discharge_date > @travel.date_departure
                         if @method == 'new'
                             @paymentMethod.destroy
                         end
-                        flash[:error] = 'No puede reservar este viaje porque presenta síntomas de covid'
+                        flash[:error] = "No podes reservar un pasaje para este viaje porque presentas síntomas de covid"
                         redirect_to travel_path(@travel)
                     else
                         @travel.update(occupied: @travel.occupied + 1)

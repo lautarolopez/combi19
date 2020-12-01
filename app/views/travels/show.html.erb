@@ -10,6 +10,11 @@
         <% end %>
     </div>
 <% end %>
+<% if flash[:warning] %>
+    <div class="alert alert-warning" role="alert">
+        <p class="my-0"><%= flash[:warning] %></p>
+    </div>
+<% end %>
 <div class="card my-5">
     <div class="card-body">
         <span class="badge badge-pill badge-primary"><%= @travel.combi.category.titleize %></span>

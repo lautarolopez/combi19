@@ -23,7 +23,7 @@
         <h1> Viajes </h1>
     </div>
 
-    <% if (current_user != nil) && (current_user.discharge_date > Date.today) %>
+    <% if (current_user != nil) && (current_user.discharge_date != nil) && (current_user.discharge_date > Date.today) %>
         <div class="alert alert-warning" role="alert">
             <p class="m-0">¡Atención! Declaraste que presentás síntomas de covid, no podrás reservar viajes que se efectúen antes del día <%= I18n.l(current_user.discharge_date, format: "%d de %B de %Y") %></p>
         </div>
@@ -90,15 +90,7 @@
     <% end %>
 </ul>
 
-
 <script>
-    //if ( window.localStorage ) {
-    //    if (!localStorage.getItem('firstLoad')) {
-    //        localStorage['firstLoad'] = true;
-    //        window.location.reload();
-    //    } else
-    //        localStorage.removeItem('firstLoad');
-    //}
     $(document).ready(function() {
         $('.tooltip-wrapper').tooltip({position: "top"});
     })

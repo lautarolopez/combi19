@@ -104,7 +104,7 @@ class PaymentMethodsController < ApplicationController
   def destroy
     @paymentMethod = PaymentMethod.find(params[:id])
     canDestroy = true
-    if current_user.suscribed
+    if current_user.subscribed
       if current_user.subscription_payment_method_id == @paymentMethod.id
         canDestroy = false
       end

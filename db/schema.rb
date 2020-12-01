@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_01_024241) do
+ActiveRecord::Schema.define(version: 2020_12_01_124955) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -98,7 +98,7 @@ ActiveRecord::Schema.define(version: 2020_12_01_024241) do
     t.integer "dni", default: 0, null: false
     t.date "birth_date", default: "2020-11-18", null: false
     t.string "role", default: "user", null: false
-    t.boolean "suscribed", default: false, null: false
+    t.boolean "subscribed", default: false, null: false
     t.date "discharge_date"
     t.integer "subscription_payment_method_id"
     t.index ["dni"], name: "index_users_on_dni", unique: true

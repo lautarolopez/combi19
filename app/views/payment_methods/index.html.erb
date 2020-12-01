@@ -28,13 +28,13 @@
                     <p class="m-0 font-weight-bold"><%= paymentMethod.encrypted_number %> </p>
                 </span>
                 <span class="col-4">
-                    <strong class="m-0 text-primary text-titleize"> Fecha de caducidad </strong>
+                    <strong class="m-0 text-primary text-titleize"> Fecha de expiración </strong>
                     <% date = Date.new(paymentMethod.expire_year, paymentMethod.expire_month) %>
                     <p class='m-0'> <%= I18n.l(date, format: "%B de %Y").capitalize %> </p>
                 </span>
             </span>
             <span class="col-2 d-flex flex-column align-items-center">
-            	<% if current_user.suscribed %>
+            	<% if current_user.subscribed %>
             	<% if (current_user.subscription_payment_method_id == paymentMethod.id) %>
             		<div class="tooltip-wrapper btn-block" data-title="Método de pago asociado a la suscripción premium">
                         <button type="button" class="btn btn-block btn-light mb-2" disabled>Asociado</button>

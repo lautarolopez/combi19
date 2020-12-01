@@ -25,7 +25,7 @@
 
     <% if (current_user != nil) && (current_user.discharge_date > Date.today) %>
         <div class="alert alert-warning" role="alert">
-            <p class="m-0">Atención! Declaraste que presentás síntomas de covid, no podrás reservar pasajes de viajes que se efectúen antes del día <%= I18n.l(current_user.discharge_date, format: "%d de %B de %Y") %></p>
+            <p class="m-0">¡Atención! Declaraste que presentás síntomas de covid, no podrás reservar viajes que se efectúen antes del día <%= I18n.l(current_user.discharge_date, format: "%d de %B de %Y") %></p>
         </div>
     <% end %>
 
@@ -35,7 +35,7 @@
         <div class="d-flex flex-row justify-content-between align-items-center">
             <%= render :partial => 'row', :locals => { :travel => travel } %>
             <span class="col-2 d-flex flex-column align-items-center">
-                <% if travel.discount != 0 && current_user != nil && current_user.suscribed %>
+                <% if travel.discount != 0 && current_user != nil && current_user.subscribed %>
                     <small class="text-secondary"><s>$<%= sprintf('%.2f', travel.price) %></s></small>
                     <p class="mb-4 mt-1 price-text h2">$<%= sprintf('%.0f', travel.price - (travel.price * travel.discount / 100))%><small class="small-text">.<%=sprintf('%.2f', travel.price - (travel.price * travel.discount / 100)).split(".").last%> </small>
                     </p>
@@ -68,20 +68,9 @@
                         <div class="modal-content">
                             <div class="modal-body">
                                 <ul class="list-group text-left">
-                                    <h6>Podés elegir cualquiera de estos insumos:</h6>
-                                    <% travel.route.extras.each do |extra| %>
-                                    <li class="list-group-item d-flex flex-row justify-content-between">
-                                        <span>
-                                            <small class="font-weight-bold d-block p-0"><%=extra.name.upcase %></small>
-                                            <small class="text-secondary p-0"><%=extra.description.capitalize %></small>
-                                        </span>
-                                        <% if extra.price != 0 %>
-                                        <span class="badge badge-pill badge-primary h-25 mt-2"> $<%= sprintf('%.2f', extra.price) %> </span>
-                                        <% else %>
-                                        <span class="badge badge-pill badge-primary h-25 mt-2"> Gratis </span>
-                                        <% end %>
-                                    </li>
-                                    <% end %>
+                                    <% title = "Podés elegir cualquiera de estos insumos:" %>
+                                    <% extras = travel.route.extras %>
+                                    <%= render :partial => 'extras', :locals => { :extras => extras, :title => title } %>
                                 </ul>
                             </div>
                             <div class="modal-footer">

@@ -1,16 +1,14 @@
-<ul class="list-group w-50">
-    <h6><%=title%></h6>
-    <% @travel.route.extras.each do |extra| %>
-    <li class="list-group-item d-flex flex-row justify-content-between">
-        <span>
-            <small class="font-weight-bold d-block"><%=extra.name.upcase %></small>
-            <small class="text-secondary"><%=extra.description.capitalize %></small>
-        </span>
-        <% if extra.price != 0 %>
-            <span class="badge badge-pill badge-primary h-25 mt-2"> $<%= sprintf('%.2f', extra.price) %> </span>
-        <% else %>
-            <span class="badge badge-pill badge-primary h-25 mt-2"> Gratis </span>
-        <% end %>
-    </li>
+<h6><%=title%></h6>
+<% extras.each do |extra| %>
+<li class="list-group-item d-flex flex-row justify-content-between">
+    <span>
+        <small class="font-weight-bold d-block"><%=extra.name.upcase %></small>
+        <small class="text-secondary"><%=extra.description.capitalize %></small>
+    </span>
+    <% if extra.price != 0 %>
+        <span class="badge badge-pill badge-primary h-25 mt-2"> $<%= sprintf('%.2f', extra.price) %> </span>
+    <% else %>
+        <span class="badge badge-pill badge-primary h-25 mt-2"> Gratis </span>
     <% end %>
-</ul>
+</li>
+<% end %>

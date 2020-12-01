@@ -17,23 +17,23 @@ PaymentMethod.destroy_all
 
 #Create first admin user
 if User.find_by(dni: 1) == nil
-	admin = User.create(email: "admin@combi19.com", password: "combi19", name: "Admin", last_name: "Admin", dni: 1, birth_date: 50.years.ago, role: "admin", suscribed: false)
+	admin = User.create(email: "admin@combi19.com", password: "combi19", name: "Admin", last_name: "Admin", dni: 1, birth_date: 50.years.ago, role: "admin", subscribed: false)
 end
 
-#Create first suscribed user
+#Create first subscribed user
 if User.find_by(dni: 987) == nil
-	subscribed = User.create(email: "suscribed@combi19.com", password: "suscribed", name: "Suscribed", last_name: "Guy", dni: 987, birth_date: 19.years.ago, role: "user", suscribed: true)
+	subscribed = User.create(email: "subscribed@combi19.com", password: "combi19", name: "Subscribed", last_name: "Guy", dni: 987, birth_date: 19.years.ago, role: "user", subscribed: true)
 end
 
 # Create subscription payment method and set it to de subscribed user
-subscription_payment_method = PaymentMethod.find_or_create_by(card_number: 4567456745674567, name: 'Suscribed Guy', expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:subscribed)
+subscription_payment_method = PaymentMethod.find_or_create_by(card_number: 4567456745674567, name: 'Subscribed Guy', expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:subscribed)
 subscribed.update(subscription_payment_method_id: subscription_payment_method.id)
 
 
 #Create drivers
 20.times do |i|
 	if User.find_by(dni: 1123 * i) == nil
-    	User.create(email: "driver#{i}@combi19.com", password: "combi19", name: "Jhon #{i}", last_name: "Driver", dni: 1123 * i, birth_date: 30.years.ago, role: "driver", suscribed: false)
+    	User.create(email: "driver#{i}@combi19.com", password: "combi19", name: "John #{i}", last_name: "Driver", dni: 1123 * i, birth_date: 30.years.ago, role: "driver", subscribed: false)
     end
 end
 driver1 = User.find_by(email: "driver1@combi19.com")
@@ -49,7 +49,7 @@ driver9 = User.find_by(email: "driver9@combi19.com")
 #Create simple users
 20.times do |i|
 	if User.find_by(dni: 1123 * (i+20)) == nil
-    	User.create(email: "user#{i}@combi19.com", password: "combi19", name: "Michael #{i}", last_name: "User", dni: 1123 * (i+20), birth_date: 25.years.ago, role: "user", suscribed: false)
+    	User.create(email: "user#{i}@combi19.com", password: "combi19", name: "Michael #{i}", last_name: "User", dni: 1123 * (i+20), birth_date: 25.years.ago, role: "user", subscribed: false)
     end
 end
 user1 = User.find_by(email: "user1@combi19.com")

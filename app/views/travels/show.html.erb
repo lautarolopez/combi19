@@ -34,14 +34,18 @@
         </div>
         <% if @travel.date_departure > DateTime.now %>
         <div class="d-flex justify-content-between align-items-end mt-3">
-            <% if (current_user != nil) && (current_user.travels.include?@travel) %>
-                <% title = "Insumos elegidos:" %>
-            <% else %>
-                <% title = "Podés elegir cualquiera de estos insumos:"%>
-            <% end %>
-            <%= render :partial => 'extras', :locals => { :travel => @travel, :title => title } %>
+            <ul class="list-group w-50">
+                <% if (current_user != nil) && (current_user.travels.include?@travel) %>
+                    <% title = "Insumos elegidos:" %>
+                    <% extras = @travel.route.extras %> <!-- se cambiará por la lista seleccionada -->
+                <% else %>
+                    <% title = "Podés elegir cualquiera de estos insumos:"%>
+                    <% extras = @travel.route.extras %>
+                <% end %>
+                <%= render :partial => 'extras', :locals => { :extras => extras, :title => title } %>
+            </ul>
             <div class="w-50 text-right d-flex flex-column align-items-end h-100">
-                <% if @travel.discount != 0 && current_user != nil && current_user.suscribed %>
+                <% if @travel.discount != 0 && current_user != nil && current_user.subscribed %>
                     <span class="badge badge-primary mt-5">-<%= @travel.discount %>%</span>
                     <s class="text-secondary">$<%= sprintf('%.2f', @travel.price) %></s>
                     <p class="price-text-large h2">$<%= sprintf('%.0f', @travel.price - (@travel.price * @travel.discount / 100))%><small class="small-text">.<%=sprintf('%.2f', @travel.price - (@travel.price * @travel.discount / 100)).split(".").last%> </small>
@@ -84,20 +88,9 @@
                         <div class="modal-content">
                             <div class="modal-body">
                                 <ul class="list-group text-left">
-                                    <h6>Podés elegir cualquiera de estos insumos:</h6>
-                                    <% @travel.route.extras.each do |extra| %>
-                                    <li class="list-group-item d-flex flex-row justify-content-between">
-                                        <span>
-                                            <small class="font-weight-bold d-block p-0"><%=extra.name.upcase %></small>
-                                            <small class="text-secondary p-0"><%=extra.description.capitalize %></small>
-                                        </span>
-                                        <% if extra.price != 0 %>
-                                        	<span class="badge badge-pill badge-primary h-25 mt-2"> $<%= sprintf('%.2f', extra.price) %> </span>
-                                        <% else %>
-                                        	<span class="badge badge-pill badge-primary h-25 mt-2"> Gratis </span>
-                                        <% end %>
-                                    </li>
-                                    <% end %>
+                                    <% title = "Podés elegir cualquiera de estos insumos:" %>
+                                    <% extras = @travel.route.extras %>
+                                    <%= render :partial => 'extras', :locals => { :extras => extras, :title => title } %>
                                 </ul>
                             </div>
                             <div class="modal-footer">

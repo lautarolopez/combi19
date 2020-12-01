@@ -39,6 +39,11 @@
     	<% end %>
 
 	    <h5 class='ml-1'> Nuevo método de pago: </h5>
+		<div class="form-group mt-2">
+	        <%= label_tag(:company, 'Compañía', class: 'ml-1') %>
+	        <%= select_tag :company, options_for_select(['Visa', 'Mastercard', 'American Express'], params[:company]), :include_blank => true, class: 'form-control', id: "company" %>
+	    </div>
+
 	    <div class="form-group">
 	        <%= label_tag(:card_number, 'Número de tarjeta', class: 'ml-1') %>
 	        <%= number_field_tag(:card_number, card_number_field, class: 'form-control', id: "number") %>
@@ -67,11 +72,6 @@
 				</span>
 			</div>
 		</li>
-
-	    <div class="form-group mt-2">
-	        <%= label_tag(:company, 'Compañía', class: 'ml-1') %>
-	        <%= select_tag :company, options_for_select(['Visa', 'Mastercard', 'American Express'], params[:company] || 0), :include_blank => true, class: 'form-control', id: "company" %>
-	    </div>
 	</div>
 
 	<div class= 'form-group' id='code_field'>
@@ -112,8 +112,8 @@
                     	<div class="form-group">
                            	<%= label_tag :covid, "¿Confirma que no presenta síntomas de COVID ni estuvo en contacto con ninguna persona que diera positivo?", class: "form-group-label" %>
                             <div class="form-check">
-							    <%= check_box_tag :covid, "confirm", false, class: "form-check-input" %>
-							    <%= label_tag :covid, "Confirmar", class: "form-check-label" %>
+							    <%= check_box_tag :not_covid, "confirm", false, class: "form-check-input" %>
+							    <%= label_tag :not_covid, "Confirmar", class: "form-check-label" %>
 							</div>
 						</div>
 						<small class='text-danger mt-5'>Este formulario tiene carácter de declaración jurada, si presenta síntomas no podrá reservar viajes con ocurrencia dentro de los próximos 15 días</small>

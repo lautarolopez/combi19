@@ -56,12 +56,15 @@ class TravelsController < ApplicationController
         if @paymentMethod != nil
             if @method == 'existing' || (@method == 'new' && @paymentMethod.save)
                 if validate_card(@paymentMethod, @method, params[:verification_code])
-                    if params[:covid]
-                        current_user.update(discharge_date: Date.today + 15.days)
-                    else
+                    if params[:not_covid]
                         current_user.update(discharge_date: nil)
+                    else
+                        current_user.update(discharge_date: Date.today + 15.days)
                     end
                     if current_user.discharge_date != nil && current_user.discharge_date > @travel.date_departure
+                        if @method == 'new'
+                            @paymentMethod.destroy
+                        end
                         flash[:error] = 'No puede reservar este viaje porque presenta síntomas de covid'
                         redirect_to travel_path(@travel)
                     else
@@ -77,7 +80,7 @@ class TravelsController < ApplicationController
                 else
                     render 'book'
                 end
-                if @method == 'new' && !params[:save_new]
+                if @paymentMethod != nil && @method == 'new' && !params[:save_new]
                     @paymentMethod.destroy
                 end
             else
@@ -269,10 +272,10 @@ class TravelsController < ApplicationController
         number = card.card_number.to_s
         if method == 'existing'
             if card.expire_year < Date.today.year || (card.expire_year == Date.today.year && card.expire_month < Date.today.month)
-                flash[:form_error] << 'La fecha de expiración es inválida. Le aconsejamos corregir o eliminar el método de pago'
+                flash[:form_error] << 'La fecha de expiración es inválida, por favor eliminá el método de pago'
                 valid = false
             end
-            if card.verification_code != code
+            if card.verification_code != code.to_i
                 flash[:form_error] << 'El código de verificación es incorrecto'
                 valid = false
             end

@@ -23,6 +23,12 @@
         <h1> Viajes </h1>
     </div>
 
+    <% if current_user.discharge_date > Date.today %>
+        <div class="alert alert-warning" role="alert">
+            <p class="m-0">Atención! Declaraste que presentás síntomas de covid, no podrás reservar pasajes de viajes que se efectúen antes del día <%= I18n.l(current_user.discharge_date, format: "%d de %B de %Y") %></p>
+        </div>
+    <% end %>
+
     <% @travels.each do |travel| %>
     <li class="list-group-item card mb-2">
         <span class="badge badge-pill badge-primary mb-1"><%= travel.combi.category.titleize %></span>

@@ -40,10 +40,11 @@ Rails.application.routes.draw do
     post 'travels/:id', to: 'travels#pay'
   end
   resources :travels
-  as :payment_method do
+  #as :payment_method do
     #get 'mismetodosdepago', to: 'payment_methods#index', as: :payment_methods
     #post 'mismetodosdepago', to: 'payment_method#create'
-  end
+  #end
+  # si le pongo metodos de pago medio que me generaba errores con las otras vistas, y personalizar todas las vistas me parece al pedo
   resources :payment_methods#, except: [:index, :create]
 
   root to: "home#index"

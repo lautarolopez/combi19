@@ -103,6 +103,22 @@ class PaymentMethodsController < ApplicationController
 
   def destroy
     @paymentMethod = PaymentMethod.find(params[:id])
+    canDestroy = true
+    if current_user.suscribed
+      if current_user.subscription_payment_method_id == @paymentMethod.id
+        canDestroy = false
+      end
+    end
+    if canDestroy
+      if @paymentMethod.destroy
+        flash[:success] = "El método de pago " + @paymentMethod.card + ' ha sido borrado con éxito'
+      else
+        flash[:index_error] = "Algo salió mal"
+      end
+    else
+      flash[:index_error] = 'No se puede borrar el método de pago ' + @paymentMethod.card + ' porque se encuentra asociado al servicio de suscripción premium. Para eliminarlo debe cambiar el método de pago asociado al servicio de suscripción premium'
+    end
     redirect_to payment_methods_path
   end
+
 end

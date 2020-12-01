@@ -81,10 +81,12 @@
                     </p>
                 <% end %>
                 <span class="d-flex align-items-end">
-                    <%= link_to "Cancelar", travels_path, class: 'btn btn-sm btn-secondary mr-1' %>
+                    <%= link_to "Volver", travels_path, class: 'btn btn-md btn-secondary mr-1' %>
                     <% if current_user != nil %>
                         <% if current_user.travels.include?@travel %>
-                            <button type="button" class="btn btn-lg btn-primary" disabled>Reservado</button>
+                            <div class="tooltip-wrapper btn-block" data-title="Ya reservaste un pasaje para este viaje">
+                                <button type="button" class="btn btn-lg btn-primary" disabled>Reservado</button>
+                            </div>
                         <% else %>
                             <% if @travel.occupied == @travel.combi.capacity %>
                                 <button type="button" class="btn btn-lg btn-disabled" disabled>Agotado</button>
@@ -101,12 +103,8 @@
                     <% end %>
                 </span>
                 <% if current_user != nil %>
-                    <% if current_user.travels.include?@travel %>
-                        <small class="text-secondary mt-2">Ya reservaste un pasaje para este viaje</small>
-                    <% else %>
-                        <% if (current_user.discharge_date == nil || current_user.discharge_date <= @travel.date_departure) && @travel.occupied < @travel.combi.capacity %>
-                            <small class="text-secondary mt-2">Apurate, ¡solo quedan <%= @travel.combi.capacity - @travel.occupied %> lugares!</small>
-                        <% end %>
+                    <% if current_user.travels.include?@travel && (current_user.discharge_date == nil || current_user.discharge_date <= @travel.date_departure) && @travel.occupied < @travel.combi.capacity %>
+                        <small class="text-secondary mt-2">Apurate, ¡solo quedan <%= @travel.combi.capacity - @travel.occupied %> lugares!</small>
                     <% end %>
                 <% else %>
                     <p class="m-0"> <%= link_to "Ingresá", new_user_session_path %> o <%= link_to "registrate", new_user_registration_path %> para poder comprar.</p>
@@ -151,9 +149,9 @@
         <div class="d-flex justify-content-between align-items-end mt-3">
             <div class="w-100 text-right d-flex flex-column align-items-end h-100">
                 <% if (current_user != nil) && (current_user.travels.include?@travel) %>
-                	<%= link_to "Cancelar", travels_history_path, class: 'btn btn-md btn-secondary' %>
+                	<%= link_to "Volver", travels_history_path, class: 'btn btn-md btn-secondary' %>
                 <% else %>
-                	<%= link_to "Cancelar", travels_path, class: 'btn btn-md btn-secondary' %>
+                	<%= link_to "Volver", travels_path, class: 'btn btn-md btn-secondary' %>
                 <% end %>
             </div>
         </div>

@@ -60,7 +60,11 @@
                     </p>
                 <% end %>
                 <span class="d-flex align-items-end">
-                    <%= link_to "Volver", travels_path, class: 'btn btn-md btn-secondary mr-1' %>
+                    <% if (current_user != nil) && (current_user.travels.include?@travel) %>
+                        <%= link_to "Volver", booked_travels_path, class: 'btn btn-md btn-secondary mr-1' %>
+                    <% else %>
+                        <%= link_to "Volver", travels_path, class: 'btn btn-md btn-secondary mr-1' %>
+                    <% end %>
                     <% if current_user != nil %>
                         <% if current_user.travels.include?@travel %>
                             <div class="tooltip-wrapper btn-block" data-title="Ya reservaste un pasaje para este viaje">

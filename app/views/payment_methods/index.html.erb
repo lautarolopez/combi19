@@ -81,10 +81,10 @@
     <% end %>
 
     <% if @paymentMethods.size == 0 %>
-    <div class="d-flex flex-column align-items-center w-100">
-        <%= image_tag  "Payment_methods_empty.svg", size: '500' %>
-        <h4>No tenés métodos de pago.</h4>
-    </div>
+	    <div class="d-flex flex-column align-items-center w-100">
+	        <%= image_tag  "Payment_methods_empty.svg", size: '500' %>
+	        <h4>No tenés métodos de pago registrados</h4>
+	    </div>
     <% end %>
 </ul>
 

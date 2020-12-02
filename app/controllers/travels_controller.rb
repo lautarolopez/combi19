@@ -17,10 +17,8 @@ class TravelsController < ApplicationController
 
     def previous
         @travels = Travel.previous
-        if current_user != nil || current_user.role == "admin"
+        if current_user != nil && current_user.role == "admin"
             render 'index'
-        else
-            render 'clients_index'
         end
     end
 
@@ -49,7 +47,7 @@ class TravelsController < ApplicationController
         @travel = Travel.find(params[:id])
         @duration = calculate_duration(@travel.date_departure, @travel.date_arrival)
         if current_user == nil
-            flash[:warning] = "Debe estar registrado para comprar pasajes"
+            flash[:warning] = "Debes estar registrado para comprar pasajes"
             redirect_to travels_path
         else
             if current_user.discharge_date != nil && current_user.discharge_date > @travel.date_departure

@@ -6,6 +6,6 @@
         </div>
     <% else %>
     	<% title = 'Viajes realizados' %>
-        <%= render :partial => 'index', :locals => { :travels => @travels, :title => title } %>
+        <%= render :partial => 'previous', :locals => { :travels => @travels, :title => title } %>
     <% end %>
 </ul>

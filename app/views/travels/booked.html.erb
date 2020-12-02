@@ -6,6 +6,12 @@
         </div>
     <% else %>
     	<% title = 'Viajes reservados' %>
-        <%= render :partial => 'index', :locals => { :travels => @travels, :title => title } %>
+        <%= render :partial => 'future', :locals => { :travels => @travels, :title => title } %>
     <% end %>
 </ul>
+
+<script>
+    $(document).ready(function() {
+        $('.tooltip-wrapper').tooltip({position: "top"});
+    })
+</script>

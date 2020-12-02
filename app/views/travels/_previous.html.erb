@@ -1,0 +1,36 @@
+<% if flash[:success] %>
+    <div class="alert alert-success" role="alert">
+        <p class="my-0"><%= flash[:success] %></p>
+    </div>
+<% end %>
+<% if flash[:index_error] %>
+    <div class="alert alert-danger" role="alert">
+        <p class="my-0"><%= flash[:index_error] %></p>
+    </div>
+<% end %> 
+
+<div class="d-flex justify-content-between w-100">
+    <h1> <%= title %> </h1>
+</div>  
+
+<% if title == 'Viajes disponibles' %>
+    <%= render :partial => 'search'%>
+<% end %>
+
+<% @travels.each do |travel| %>
+    <li class="list-group-item card mb-2">
+        <span class="badge badge-pill badge-primary mb-1"><%= travel.combi.category.titleize %></span>
+        <div class="d-flex flex-row justify-content-between align-items-center">
+            <%= render :partial => 'row', :locals => { :travel => travel } %>
+            <span class="col-2 d-flex flex-column align-items-center">
+                <p class="mb-4 mt-1 price-text h2">$<%= sprintf('%.0f', travel.price)%><small class="small-text">.<%=sprintf('%.2f', travel.price).split(".").last%> </small>
+                </p>
+                <% if (current_user != nil) && (current_user.travels.include?travel) %>
+                    <%= link_to 'Comentar', travel_path(travel), class: "btn btn-block btn-primary" %>
+                <% else %>
+                    <%= link_to "Detalles", travel_path(travel), class: 'btn btn-block btn-light' %>
+                <% end %>
+            </span>
+        </div>
+    </li>
+<% end %>

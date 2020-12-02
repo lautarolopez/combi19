@@ -47,9 +47,9 @@ driver8 = User.find_by(email: "driver8@combi19.com")
 driver9 = User.find_by(email: "driver9@combi19.com")
 
 #Create simple users
-10.times do |i|
+15.times do |i|
 	if User.find_by(dni: 1123 * (i+10)) == nil
-    	User.create(email: "user#{i}@combi19.com", password: "combi19", name: "Michael #{i}", last_name: "User", dni: 1123 * (i+20), birth_date: 25.years.ago, role: "user", subscribed: false)
+    	User.create(email: "user#{i}@combi19.com", password: "combi19", name: "Michael #{i}", last_name: "User", dni: 1123 * (i+10), birth_date: 25.years.ago, role: "user", subscribed: false)
     end
 end
 user1 = User.find_by(email: "user1@combi19.com")
@@ -70,16 +70,18 @@ user9.update(discharge_date: Date.today)
 
 
 # Create payment methods
-payment_method1 = PaymentMethod.find_or_create_by(card_number: 4444444444441111, name: user1.name + user1.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:user1)
-payment_method2 = PaymentMethod.find_or_create_by(card_number: 4444444444442222, name: user2.name + user2.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:user2)
-payment_method3 = PaymentMethod.find_or_create_by(card_number: 4444444444443333, name: user3.name + user3.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:user3)
-payment_method4 = PaymentMethod.find_or_create_by(card_number: 4444444444444444, name: user4.name + user4.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:user4)
-payment_method5 = PaymentMethod.find_or_create_by(card_number: 4444444444445555, name: user5.name + user5.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:user5)
-payment_method6 = PaymentMethod.find_or_create_by(card_number: 4444444444446666, name: user6.name + user6.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:user6)
-without_founds1 = PaymentMethod.find_or_create_by(card_number: 4444444444441119, name: user1.name + user1.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:user1)
-without_founds2 = PaymentMethod.find_or_create_by(card_number: 4444444444442229, name: user2.name + user2.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:user2)
-without_founds3 = PaymentMethod.find_or_create_by(card_number: 4444444444443339, name: user3.name + user3.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:user3)
-without_founds4 = PaymentMethod.find_or_create_by(card_number: 4444444444444449, name: user4.name + user4.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:user4)
+payment_method1 = PaymentMethod.find_or_create_by(card_number: 4444444444441111, name: user1.name + ' ' + user1.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:user1)
+payment_method2 = PaymentMethod.find_or_create_by(card_number: 4444444444442222, name: user2.name + ' ' + user2.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:user2)
+payment_method3 = PaymentMethod.find_or_create_by(card_number: 4444444444443333, name: user3.name + ' ' + user3.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:user3)
+payment_method4 = PaymentMethod.find_or_create_by(card_number: 4444444444444444, name: user4.name + ' ' + user4.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:user4)
+payment_method5 = PaymentMethod.find_or_create_by(card_number: 4444444444445555, name: user5.name + ' ' + user5.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:user5)
+payment_method6 = PaymentMethod.find_or_create_by(card_number: 4444444444446666, name: user6.name + ' ' + user6.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:user6)
+without_founds1 = PaymentMethod.find_or_create_by(card_number: 4444444444441119, name: user1.name + ' ' + user1.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:user1)
+without_founds2 = PaymentMethod.find_or_create_by(card_number: 4444444444442229, name: user2.name + ' ' + user2.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:user2)
+without_founds3 = PaymentMethod.find_or_create_by(card_number: 4444444444443339, name: user3.name + ' ' + user3.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:user3)
+without_founds4 = PaymentMethod.find_or_create_by(card_number: 4444444444444449, name: user4.name + ' ' + user4.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:user4)
+payment_method_subs1 = PaymentMethod.find_or_create_by(card_number: 4321432143214321, name: 'Subscribed Guy', expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:subscribed)
+payment_method_subs2 = PaymentMethod.find_or_create_by(card_number: 456745674567456789, name: 'Subscribed Guy', expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:subscribed)
 
 
 # Create extras
@@ -175,15 +177,15 @@ previous_travel8 = Travel.find_or_create_by(route: chascomus_posadas, date_depar
 previous_travel9 = Travel.find_or_create_by(route: posadas_laplata, date_departure: (DateTime.now - 9.months), date_arrival: (DateTime.now - 9.months + 9.hours), price: 900, driver: driver5, combi: combi5)
 
 # Create future travels
-future_travel1 = Travel.find_or_create_by(route: rauch_laplata, date_departure: (DateTime.now + 1.hours), date_arrival: (DateTime.now + 5.hours), price: 900, driver: driver1, combi: combi1)
-future_travel2 = Travel.find_or_create_by(route: rauch_laplata, date_departure: (DateTime.now + 5.days), date_arrival: (DateTime.now + 5.days + 4.hours), price: 900, driver: driver1, combi: combi1)
-future_travel3 = Travel.find_or_create_by(route: laplata_tandil, date_departure: (DateTime.now + 10.days), date_arrival: (DateTime.now + 10.days + 4.hours), price: 900, driver: driver1, combi: combi1)
-future_travel4 = Travel.find_or_create_by(route: laplata_villalaangostura, date_departure: (DateTime.now + 15.days), date_arrival: (DateTime.now + 15.days + 1.days), price: 4000, driver: driver2, combi: combi2)
-future_travel5 = Travel.find_or_create_by(route: villalaangostura_tandil, date_departure: (DateTime.now + 20.days), date_arrival: (DateTime.now + 20.days + 1.days), price: 4000, driver: driver3, combi: combi3)
-future_travel6 = Travel.find_or_create_by(route: rauch_laplata, date_departure: (DateTime.now + 25.days), date_arrival: (DateTime.now + 25.days + 4.hours), price: 900, driver: driver1, combi: combi1)
-future_travel7 = Travel.find_or_create_by(route: chascomus_posadas, date_departure: (DateTime.now + 1.months), date_arrival: (DateTime.now + 1.months + 9.hours), price: 900, driver: driver4, combi: combi4)
-future_travel8 = Travel.find_or_create_by(route: chascomus_posadas, date_departure: (DateTime.now + 2.months), date_arrival: (DateTime.now + 2.months + 9.hours), price: 900, driver: driver5, combi: combi5)
-future_travel9 = Travel.find_or_create_by(route: posadas_laplata, date_departure: (DateTime.now + 3.months), date_arrival: (DateTime.now + 3.months + 9.hours), price: 900, driver: driver5, combi: combi5)
+future_travel1 = Travel.find_or_create_by(route: rauch_laplata, date_departure: (DateTime.now + 1.hours), date_arrival: (DateTime.now + 5.hours), price: 900, discount: 0, driver: driver1, combi: combi1)
+future_travel2 = Travel.find_or_create_by(route: rauch_laplata, date_departure: (DateTime.now + 5.days), date_arrival: (DateTime.now + 5.days + 4.hours), price: 900, discount: 25, driver: driver1, combi: combi1)
+future_travel3 = Travel.find_or_create_by(route: laplata_tandil, date_departure: (DateTime.now + 10.days), date_arrival: (DateTime.now + 10.days + 4.hours), price: 900, discount: 0, driver: driver1, combi: combi1)
+future_travel4 = Travel.find_or_create_by(route: laplata_villalaangostura, date_departure: (DateTime.now + 15.days), date_arrival: (DateTime.now + 15.days + 1.days), price: 4000, discount: 50, driver: driver2, combi: combi2)
+future_travel5 = Travel.find_or_create_by(route: villalaangostura_tandil, date_departure: (DateTime.now + 20.days), date_arrival: (DateTime.now + 20.days + 1.days), price: 4000, discount: 0, driver: driver3, combi: combi3)
+future_travel6 = Travel.find_or_create_by(route: rauch_laplata, date_departure: (DateTime.now + 25.days), date_arrival: (DateTime.now + 25.days + 4.hours), price: 900, discount: 30, driver: driver1, combi: combi1)
+future_travel7 = Travel.find_or_create_by(route: chascomus_posadas, date_departure: (DateTime.now + 1.months), date_arrival: (DateTime.now + 1.months + 9.hours), price: 900, discount: 0, driver: driver4, combi: combi4)
+future_travel8 = Travel.find_or_create_by(route: chascomus_posadas, date_departure: (DateTime.now + 2.months), date_arrival: (DateTime.now + 2.months + 9.hours), price: 900, discount: 15, driver: driver5, combi: combi5)
+future_travel9 = Travel.find_or_create_by(route: posadas_laplata, date_departure: (DateTime.now + 3.months), date_arrival: (DateTime.now + 3.months + 9.hours), price: 900, discount: 0, driver: driver5, combi: combi5)
 
 
 # Assign travels to users
@@ -196,14 +198,14 @@ previous_travel1.update(occupied:5)
 previous_travel2.passengers << user2
 previous_travel2.passengers << user3
 previous_travel2.passengers << user4
-previous_travel1.passengers << subscribed
+previous_travel2.passengers << subscribed
 previous_travel2.update(occupied:4)
 previous_travel3.passengers << user3
 previous_travel3.passengers << user4
-previous_travel1.passengers << subscribed
+previous_travel3.passengers << subscribed
 previous_travel3.update(occupied:3)
 previous_travel4.passengers << user4
-previous_travel1.passengers << subscribed
+previous_travel4.passengers << subscribed
 previous_travel4.update(occupied:2)
 previous_travel5.passengers << user5
 previous_travel5.update(occupied:1)
@@ -244,7 +246,7 @@ future_travel9.passengers << user9
 future_travel9.passengers << subscribed
 
 # Simulate sold out tickets
-future_travel6.update(occupied:combi1.capacity)
-future_travel7.update(occupied:combi4.capacity)
-future_travel8.update(occupied:combi5.capacity)
+future_travel2.update(occupied:combi1.capacity)
+future_travel5.update(occupied:combi4.capacity)
+future_travel7.update(occupied:combi5.capacity)
 future_travel9.update(occupied:combi5.capacity)

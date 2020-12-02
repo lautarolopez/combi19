@@ -10,6 +10,9 @@
             <%= label_tag :dont_know_date, 'No sé la fecha', class: 'form-group m-0' %>
         </div>
 
+        <span class="d-flex flex-column">
+            <button type="submit" class="btn btn-primary mb-2">Buscar</button>
+            <%= link_to  "Limpiar búsqueda", travels_path, class: "btn btn-light" %>
+        </span>
 
-        <button type="submit" class="btn btn-primary h-25 align-self-center mb-3 ml-5">Buscar</button>
     </form>

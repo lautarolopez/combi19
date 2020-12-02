@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  get 'comments/new'
+  get 'comments/show'
+  get 'comments/index'
+  get 'comments/destroy'
   get 'payment_methods/index'
   get 'payment_methods/new'
   get 'payment_methods/edit'

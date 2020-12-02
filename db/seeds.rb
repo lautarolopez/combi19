@@ -208,8 +208,9 @@ previous_travel3.update(occupied:3)
 previous_travel4.passengers << user4
 previous_travel4.passengers << subscribed
 previous_travel4.update(occupied:2)
+previous_travel5.passengers << user1
 previous_travel5.passengers << user5
-previous_travel5.update(occupied:1)
+previous_travel5.update(occupied:2)
 previous_travel6.passengers << user6
 previous_travel6.update(occupied:1)
 previous_travel7.passengers << user7
@@ -251,3 +252,20 @@ future_travel2.update(occupied:combi1.capacity)
 future_travel5.update(occupied:combi4.capacity)
 future_travel7.update(occupied:combi5.capacity)
 future_travel9.update(occupied:combi5.capacity)
+
+
+# Create comments
+Comment.find_or_create_by(text: "Comentario #{user1.name_last_name}", travel: previous_travel1, user:user1)
+Comment.find_or_create_by(text: "Comentario #{user2.name_last_name}", travel: previous_travel1, user:user2)
+Comment.find_or_create_by(text: "Comentario #{user3.name_last_name}", travel: previous_travel1, user:user3)
+Comment.find_or_create_by(text: "Comentario #{user4.name_last_name}", travel: previous_travel1, user:user4)
+Comment.find_or_create_by(text: "Comentario #{subscribed.name_last_name}", travel: previous_travel1, user:subscribed)
+Comment.find_or_create_by(text: "Comentario #{user2.name_last_name}", travel: previous_travel2, user:user2)
+Comment.find_or_create_by(text: "Comentario #{user3.name_last_name}", travel: previous_travel2, user:user3)
+Comment.find_or_create_by(text: "Comentario #{user4.name_last_name}", travel: previous_travel2, user:user4)
+Comment.find_or_create_by(text: "Comentario #{subscribed.name_last_name}", travel: previous_travel2, user:subscribed)
+Comment.find_or_create_by(text: "Comentario #{user1.name_last_name}", travel: previous_travel2, user:user1)
+Comment.find_or_create_by(text: "Comentario #{user1.name_last_name}", travel: previous_travel2, user:user1)
+Comment.find_or_create_by(text: "Comentario #{user1.name_last_name}", travel: previous_travel3, user:user3)
+Comment.find_or_create_by(text: "Comentario #{user1.name_last_name}", travel: previous_travel4, user:user4)
+

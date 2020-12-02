@@ -1,13 +1,17 @@
 class CommentsController < ApplicationController
 	def new
 		@comment = Comment.new
+		@travel = Travel.find(params[:id])
+		@travels = Travel.where(id: @travel.id)
 	end
 
 	def create
-		@comment = Comment.create(params.require(:comment).permit(:text, :travel, :user));
+		@comment = Comment.create(params.require(:comment).permit(:text,:travel_id))
+		@comment.user = current_user
 
 		if @comment.save
-			flash[:success] = "Comentario creado con éxito!"
+			flash[:success] = []
+			flash[:success] << "Comentario creado con éxito!"
 			redirect_to travel_path(@comment.travel)
 		else
 			if @comment.errors

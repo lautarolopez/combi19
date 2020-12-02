@@ -1,2 +1,33 @@
-<h1>Comments#new</h1>
-<p>Find me in app/views/comments/new.html.erb</p>
+<div class="authform row">
+   
+ <%= form_for(@comment, :html => {class: 'd-flex flex-column justify-content-center col-lg-6 mx-auto card p-5 my-5'}) do |f| %>
+
+	<h3> Agregar comentario </h3>
+	<%= f.number_field :travel_id,:value => @travel.id ,type: 'hidden'%>	
+
+	
+
+
+	<div class="form-group">
+	    <%= f.text_area :text, :autofocus => true, class: 'form-control', required: true %>
+	</div>
+
+	<% if flash[:form_error] %>
+            <div class="alert alert-danger" role="alert">
+                <% flash[:form_error].each do |e| %>
+                    <p class="my-0"><%= e %></p>
+                <% end %>
+            </div>
+        <% end %>
+
+	<span class='row'>
+        <span class="col-6 text-center">
+            <%= button_tag "Cancelar", :type => 'button', :class => "btn-lg btn-block btn-secondary", :onclick => "location.href = '#{travel_path(@travel)}'" %>
+        </span>
+        <span class="col-6 text-center">
+            <%= f.submit 'Comentar', :class => 'btn-lg btn-block btn-primary' %> 
+        </span>
+    </span>
+
+<% end %>
+</div>

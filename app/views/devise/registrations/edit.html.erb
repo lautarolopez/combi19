@@ -24,20 +24,20 @@
         <%= f.label :email, "Email *" %>
         <%= f.email_field :email, class: 'form-control' %>
     </div>
-    <div class="form-group">
-        <%= f.label :password, "Contraseña" %>
-        <%= f.password_field :password, class: 'form-control' %>
-    </div>
-    <div class="form-group">
-        <%= f.label :password_confirmation, "Repetir contraseña" %>
-        <%= f.password_field :password_confirmation, class: 'form-control' %>
-    </div>
     <fieldset>
         <div class="form-group">
             <%= f.label :current_password, "Contraseña actual *" %>
             <%= f.password_field :current_password, class: 'form-control' %>
         </div>
     </fieldset>
+    <div class="form-group">
+        <%= f.label :password, "Nueva contraseña" %>
+        <%= f.password_field :password, class: 'form-control' %>
+    </div>
+    <div class="form-group">
+        <%= f.label :password_confirmation, "Repetir contraseña" %>
+        <%= f.password_field :password_confirmation, class: 'form-control' %>
+    </div>
     <div class="alert alert-warning" role="alert">
         <p class="m-0">Tenés que ingresar tu contraseña actual para efectuar los cambios. Si no querés cambiar tu contraseña solo dejá esos campos en blanco.</p>
     </div>

@@ -21,6 +21,7 @@ class Travel < ApplicationRecord
 	belongs_to :combi
 	belongs_to :route
 	has_and_belongs_to_many :passengers, class_name: 'User', dependent: :destroy
+	has_many :comments
 
 	#def validate_dates
 	#	if date_departure > date_arrival || date_departure < DateTime.current.beginning_of_day || date_arrival < DateTime.current.beginning_of_day

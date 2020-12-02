@@ -41,6 +41,7 @@ class TravelsController < ApplicationController
 	def show
 		@travel = Travel.find(params[:id])
 		@duration = calculate_duration(@travel.date_departure, @travel.date_arrival)
+        @comments = @travel.comments
 	end
 
     def book

@@ -1,14 +1,16 @@
 class Comment < ApplicationRecord
+	# Scopes
+	default_scope -> { order(created_at: :desc)}
 	#Validations
 	validates :text, presence: true
 
-	before_save :definir_autor
+	before_save :define_author
 
 	#Relations
 	belongs_to :travel
 	belongs_to :user
 
-	def definir_author
+	def define_author
 		self.author = user.last_name +  ", "  + user.name
 		author.capitalize
 	end

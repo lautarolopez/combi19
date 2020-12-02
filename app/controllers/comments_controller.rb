@@ -8,7 +8,7 @@ class CommentsController < ApplicationController
 
 		if @comment.save
 			flash[:success] = "Comentario creado con éxito!"
-			#redirect_to comments_path
+			redirect_to travel_path(@comment.travel)
 		else
 			if @comment.errors
 				flash[:form_error] = @comment.errors.full_messages
@@ -29,12 +29,13 @@ class CommentsController < ApplicationController
 
 	def destroy
 		@comment = Comment.find(params[:id])
-
+		@travel = @comment.travel
 		if @comment.destroy
-			flash[:success] = "El comentario ha sido borrado con éxito!"
+			flash[:success]=[]
+			flash[:success] << "El comentario ha sido borrado con éxito!"
 		else
-			flash[:index_error] = "Algo salió mal"
+			flash[:error] = "Algo salió mal"
 		end		
-		#redirect_to comments_path
+		redirect_to travel_path(@travel)
 	end
 end

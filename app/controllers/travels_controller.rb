@@ -1,25 +1,27 @@
 class TravelsController < ApplicationController
 	def index
-		if current_user == nil
-            @travels = Travel.future
+		if current_user != nil && current_user.role == "admin"
+            @travels = Travel.pending
         else
-            if current_user.role == "admin"
-                @travels = Travel.pending
-            else
+            @searchedTravels = Travel.future
+            if params[:search] && params[:search][:route_id] != ""
+                @searchedTravels = @searchedTravels.where({route_id: params[:search][:route_id]})
+            end
+            if params[:date_search] && !params[:dont_know_date]
+                @date = params[:date_search].to_date
+                @searchedTravels = @searchedTravels.where(date_departure: @date.all_day)
+            end
+            if current_user != nil
                 @travels = []
-                Travel.future.each do |travel|
+                @searchedTravels.each do |travel|
                     if !current_user.travels.include?travel
                         @travels.push(travel)
                     end
                 end
-            end 
-        end
-        if params[:search] && params[:search][:route_id] != ""
-            @travels = @travels.where({route_id: params[:search][:route_id]})
-        end
-        if params[:date_search] && !params[:dont_know_date]
-            @date = params[:date_search].to_date
-            @travels = @travels.where(date_departure: @date.all_day)
+            else
+                @travels = @searchedTravels
+            end
+            
         end
         render 'clients_index'
 	end

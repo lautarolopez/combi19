@@ -22,9 +22,15 @@
 	    <%= label_tag :method, "Nuevo método de pago", class: "form-check-label" %>
 	</div>
 
+	<% if params[:payment_method] %>
+        <% selected_payment = params[:payment_method][:id] %>
+    <% else %>
+        <% selected_payment = nil %>
+    <% end %>
+
     <div class="form-group" id='existingMethod'>
     	<%= label_tag :payment_method, 'Método de pago existente:', class: 'ml-1 h5' %>
-        <%= collection_select(:payment_method, :id, current_user.payment_methods, :id, :card, {prompt: "Seleccione un método de pago"}, {class: 'form-control', id: "existing"}) %>
+        <%= collection_select(:payment_method, :id, current_user.payment_methods, :id, :card, {:selected => selected_payment, :include_blank => true, prompt: "Seleccione un método de pago"}, {class: 'form-control', id: "existing"}) %>
         <% if (current_user.payment_methods.count == 0) %>
         	<p class='text-danger ml-1 font-weight-bold'> No hay métodos de pago disponibles en la cuenta </p>
         <% end %>
@@ -60,14 +66,19 @@
 		    			<p>Fecha de expiración</p>
 		    		</span>
 		    	</span>
+		    	<% if params[:date] %>
+				    <% selected_date = Date.new(params[:date][:year].to_i,params[:date][:month].to_i) %>
+				<% else %>
+				    <% selected_date = nil %>
+				<% end %>
 		    	<span class='row'>
 		    		<span class='col-6'>
 		        		<%= label_tag(:expire_month, 'Mes', class: 'ml-1') %>
-		        		<%= select_month(Date.today, {}, class: 'form-control', id: 'month') %>
+		        		<%= select_month(selected_date || Date.today, {}, class: 'form-control', id: 'month') %>
 		        	</span>
 		    		<span class='col-6'> 
 				        <%= label_tag(:expire_year, 'Año', class: 'ml-1') %>
-				        <%= select_year(Date.today, {:start_year => Date.today.year, :end_year => 12.years.from_now.year}, class: 'form-control', id: 'year') %>
+				        <%= select_year(selected_date || Date.today, {:start_year => Date.today.year, :end_year => 12.years.from_now.year}, class: 'form-control', id: 'year') %>
 				    </span>
 				</span>
 			</div>
@@ -134,15 +145,11 @@
     $(document).ready(function() {	
     	let existingMethod = document.getElementById('radio_existing');
     	let newMethod = document.getElementById('radio_new');
-    	//let none = document.getElementById('radio_none');
     	let existing = document.querySelector("#existing");
     	let newNumber = document.getElementById("number");
     	let newName = document.getElementById("name");
     	let code = document.getElementById("code");
     	let newCompany = document.querySelector("#company");
-    	//console.log(none.checked);
-    	//console.log(existingMethod.checked);
-    	//console.log(newMethod.checked);
 
     	if (existingMethod.checked) {
     		$('#existingMethod').show();
@@ -164,12 +171,7 @@
 		$("input").change(function(e){
 			existingMethod = document.getElementById('radio_existing');
     		newMethod = document.getElementById('radio_new');
-    		//none = document.getElementById('radio_none');
-			//console.log(none.checked);
-			//console.log(existingMethod.checked);
-    		//console.log(newMethod.checked);
     		if (existingMethod.checked) {
-    			//console.log('existing');
 		  		newNumber.value = null;
         		newName.value = null;
         		newCompany.value = null;
@@ -178,13 +180,16 @@
 	    		$('#newMethod').hide();
 	    		$('#code_field').show();
 	    	} else if (newMethod.checked) {
-				//console.log('new');
+				existing.value = 0;
 				$('#existingMethod').hide();
 				$('#saveNewMethod').show();
 		    	$('#newMethod').show();
 		   		$('#code_field').show();
 	    	} else {
-	    		//console.log('none');
+	    		newNumber.value = null;
+        		newName.value = null;
+        		newCompany.value = null;
+				existing.value = 0;
 		    	$('#existingMethod').hide();
 		    	$('#saveNewMethod').hide();
 		    	$('#newMethod').hide();

@@ -119,11 +119,11 @@
                         <button type="button" class="close" data-dismiss="modal">Anulación de reserva</button>
                     </div>
                     <div class="modal-body">
-                        <p> ¿Confirma que desea anular la reserva del viaje <%= @travel.route.origin.name.titleize %>, <%= @travel.route.origin.state.titleize %> - <%= @travel.route.destination.name.titleize %>, <%= @travel.route.destination.state.titleize %> del día <%= I18n.l(@travel.date_departure, format: "%d de %B de %Y a las %H:%M hs") %>? </p>
+                        <p> ¿Confirma que desea anular la reserva del viaje <%= @travel.name %>? </p>
                         <% if @travel.date_departure > (DateTime.now + 48.hours) %>
-                        <strong> El reintegro del pago será del 100% por estar realizando la cancelación con más de 48 hs de antelación </strong>
+                            <strong> El reintegro del pago será del 100% por estar realizando la cancelación con más de 48 hs de antelación </strong>
                         <% else %>
-                        <strong> El reintegro del pago será del 50% por estar realizando la cancelación con menos de 48 hs de antelación </strong>
+                            <strong> El reintegro del pago será del 50% por estar realizando la cancelación con menos de 48 hs de antelación </strong>
                         <% end %>
                     </div>
                     <div class="modal-footer">
@@ -136,21 +136,27 @@
             </div>
         </div>  
         <% else %>
-                <div class="d-flex justify-content-between align-items-end mt-3">
-                    <div class="w-100 text-right d-flex flex-column align-items-end h-100">
-                        <p class="m-0 price-text-large">$<%= sprintf('%.0f', @travel.price)%><small class="small-text">.<%=sprintf('%.2f', @travel.price).split(".").last%> </small>
-                        </p>
-                        <span class="d-flex align-items-end">
-                            <% if (current_user != nil) && (current_user.travels.include?@travel) %>
-                                <%= link_to "Volver", travels_history_path, class: 'btn btn-md btn-secondary' %>
+            <div class="d-flex justify-content-between align-items-end mt-3">
+                <div class="w-100 text-right d-flex flex-column align-items-end h-100">
+                    <p class="m-0 price-text-large">$<%= sprintf('%.0f', @travel.price)%><small class="small-text">.<%=sprintf('%.2f', @travel.price).split(".").last%> </small>
+                    </p>
+                    <span class="d-flex align-items-end">
+                        <% if (current_user != nil) && (current_user.travels.include?@travel) %>
+                            <% if @travel.date_departure > DateTime.now %>
+                                <%= link_to "Volver", booked_travels_path, class: 'btn btn-md btn-secondary' %>
                             <% else %>
-                                <%= link_to "Volver", travels_path, class: 'btn btn-md btn-secondary' %>
+                                <%= link_to "Volver", travels_history_path, class: 'btn btn-md btn-secondary' %>
                             <% end %>
-                        </span>
-                    </div>
-
+                        <% else %>
+                            <% if @travel.date_departure > DateTime.now %>
+                                <%= link_to "Volver", travels_path, class: 'btn btn-md btn-secondary' %>
+                            <% else %>
+                                <%= link_to "Volver", previous_travels_path, class: 'btn btn-md btn-secondary' %>
+                            <% end %>
+                        <% end %>
+                    </span>
                 </div>
-
+            </div>
     </div>
 </div>
 <div class="card my-5">
@@ -158,7 +164,9 @@
 
         <div class="d-flex justify-content-between w-100">
         <h1> Comentarios </h1>
-        <%= link_to "Agregar comentario", new_comment_path(:id => @travel.id), class: 'btn btn-primary btn-md h-75' %>
+        <% if (current_user != nil) && (current_user.travels.include?@travel) %>
+            <%= link_to "Agregar comentario", new_comment_path(:id => @travel.id), class: 'btn btn-primary btn-md h-75' %>
+        <% end %>
     </div>
         
         <% @comments.each do |comment| %>
@@ -175,7 +183,7 @@
                 </span>        
             </span>
             <span>
-                <% if current_user!= nil and ((comment.user != nil and comment.user == current_user)  or current_user.role == "admin") %>
+                <% if current_user != nil and ((comment.user != nil and comment.user == current_user)  or current_user.role == "admin") %>
                 <%= link_to 'Eliminar', '#', "data-toggle"=>"modal", "data-target" => "#delete-#{comment.id}", class: "btn btn-danger" %>
                 <% end %> 
 
@@ -183,7 +191,7 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal">Eliminación de ruta</button>
+                                <button type="button" class="close" data-dismiss="modal">Eliminación de comentario</button>
                             </div>
                             <div class="modal-body">
                                 <p> ¿Confirma que desea eliminar el comentario? </p>
@@ -200,10 +208,9 @@
             </span>
         </li>
         <% end %> 
-
-
-
-
+        <% if @comments.size == 0 %>
+            <h5 class='text-center'>No hay comentarios</h5>
+        <% end %>
         <% end %>
     </div>
 </div>

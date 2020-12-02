@@ -26,10 +26,9 @@
                 <p class="mb-4 mt-1 price-text h2">$<%= sprintf('%.0f', travel.price)%><small class="small-text">.<%=sprintf('%.2f', travel.price).split(".").last%> </small>
                 </p>
                 <% if (current_user != nil) && (current_user.travels.include?travel) %>
-                    <%= link_to 'Comentar', travel_path(travel), class: "btn btn-block btn-primary" %>
-                <% else %>
-                    <%= link_to "Detalles", travel_path(travel), class: 'btn btn-block btn-light' %>
+                    <%= link_to 'Comentar', new_comment_path(:id => travel.id), class: "btn btn-block btn-primary" %>
                 <% end %>
+                    <%= link_to "Detalles", travel_path(travel), class: 'btn btn-block btn-light' %>
             </span>
         </div>
     </li>

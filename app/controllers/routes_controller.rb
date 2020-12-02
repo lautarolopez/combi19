@@ -16,12 +16,12 @@ class RoutesController < ApplicationController
     def create
         @route = Route.new(params.require(:route).permit(:origin_id, :destination_id, extra_ids: []));
         if @route.save
-            flash[:success] = "La ruta " + @route.origin.name.titleize + ", " + @route.origin.state.titleize + " - " + @route.destination.name.titleize + ", " + @route.destination.state.titleize + " ha sido creada con éxito!"
+            flash[:success] = "La ruta " + @route.name + " ha sido creada con éxito!"
             redirect_to routes_path
         else
             @aux = Route.find_by(origin: @route.origin, destination: @route.destination)
             if @aux != nil
-                flash[:form_error] = "La ruta " + @route.origin.name.titleize + ", " + @route.origin.state.titleize + " - " + @route.destination.name.titleize + ", " + @route.destination.state.titleize + " ya existe"
+                flash[:form_error] = "La ruta " + @route.name + " ya existe"
             else 
                 flash[:form_error] = "Algo salió mal."
             end
@@ -40,12 +40,12 @@ class RoutesController < ApplicationController
     	@route = Route.find(params[:id])
         @route.attributes = params.require(:route).permit(:origin_id, :destination_id, extra_ids: [])
         if @route.save
-          flash[:success] = "La ruta " + @route.origin.name.titleize + ", " + @route.origin.state.titleize + " - " + @route.destination.name.titleize + ", " + @route.destination.state.titleize + " ha sido actualizada con éxito!"
+          flash[:success] = "La ruta " + @route.name + " ha sido actualizada con éxito!"
           redirect_to routes_path
         else
             @aux = Route.find_by(origin: @route.origin, destination: @route.destination)
             if @aux != nil
-                flash[:form_error] = "La ruta " + @route.origin.name.titleize + ", " + @route.origin.state.titleize + " - " + @route.destination.name.titleize + ", " + @route.destination.state.titleize + " ya existe"
+                flash[:form_error] = "La ruta " + @route.name + " ya existe"
             else 
                 flash[:form_error] = "Algo salió mal"
             end
@@ -56,10 +56,10 @@ class RoutesController < ApplicationController
     def destroy
     	@route = Route.find(params[:id])
         if (@route.travels.count > 0)
-            flash[:index_error] = "La ruta " + @route.origin.name.titleize + ", " + @route.origin.state.titleize + " - " + @route.destination.name.titleize + ", " + @route.destination.state.titleize + " no se puede borrar porque tiene viajes asociados"
+            flash[:index_error] = "La ruta " + @route.name + " no se puede borrar porque tiene viajes asociados"
         else
             if @route.destroy
-                flash[:success] = "La ruta " + @route.origin.name.titleize + ", " + @route.origin.state.titleize + " - " + @route.destination.name.titleize + ", " + @route.destination.state.titleize + " ha sido borrada con éxito."
+                flash[:success] = "La ruta " + @route.name + " ha sido borrada con éxito."
             else
                 flash[:index_error] = "Algo salió mal"
             end

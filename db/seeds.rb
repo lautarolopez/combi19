@@ -7,6 +7,7 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 # Delete database before create seeds
+Comment.destroy_all
 Travel.destroy_all
 Route.destroy_all
 Extra.destroy_all
@@ -71,17 +72,17 @@ user9.update(discharge_date: Date.today)
 
 # Create payment methods
 payment_method1 = PaymentMethod.find_or_create_by(card_number: 4444444444441111, name: user1.name + ' ' + user1.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:user1)
-payment_method2 = PaymentMethod.find_or_create_by(card_number: 4444444444442222, name: user2.name + ' ' + user2.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:user2)
-payment_method3 = PaymentMethod.find_or_create_by(card_number: 4444444444443333, name: user3.name + ' ' + user3.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:user3)
+payment_method2 = PaymentMethod.find_or_create_by(card_number: 4444444444442222, name: user2.name + ' ' + user2.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Mastercard', verification_code: 123, user:user2)
+payment_method3 = PaymentMethod.find_or_create_by(card_number: 4444444444443333, name: user3.name + ' ' + user3.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'American Express', verification_code: 123, user:user3)
 payment_method4 = PaymentMethod.find_or_create_by(card_number: 4444444444444444, name: user4.name + ' ' + user4.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:user4)
 payment_method5 = PaymentMethod.find_or_create_by(card_number: 4444444444445555, name: user5.name + ' ' + user5.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:user5)
 payment_method6 = PaymentMethod.find_or_create_by(card_number: 4444444444446666, name: user6.name + ' ' + user6.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:user6)
-without_founds1 = PaymentMethod.find_or_create_by(card_number: 4444444444441119, name: user1.name + ' ' + user1.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:user1)
-without_founds2 = PaymentMethod.find_or_create_by(card_number: 4444444444442229, name: user2.name + ' ' + user2.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:user2)
+without_founds1 = PaymentMethod.find_or_create_by(card_number: 4444444444441119, name: user1.name + ' ' + user1.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Mastercard', verification_code: 123, user:user1)
+without_founds2 = PaymentMethod.find_or_create_by(card_number: 4444444444442229, name: user2.name + ' ' + user2.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'American Express', verification_code: 123, user:user2)
 without_founds3 = PaymentMethod.find_or_create_by(card_number: 4444444444443339, name: user3.name + ' ' + user3.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:user3)
-without_founds4 = PaymentMethod.find_or_create_by(card_number: 4444444444444449, name: user4.name + ' ' + user4.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:user4)
-payment_method_subs1 = PaymentMethod.find_or_create_by(card_number: 4321432143214321, name: 'Subscribed Guy', expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:subscribed)
-payment_method_subs2 = PaymentMethod.find_or_create_by(card_number: 456745674567456789, name: 'Subscribed Guy', expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:subscribed)
+without_founds4 = PaymentMethod.find_or_create_by(card_number: 4444444444444449, name: user4.name + ' ' + user4.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Mastercard', verification_code: 123, user:user4)
+payment_method_subs1 = PaymentMethod.find_or_create_by(card_number: 4321432143214321, name: 'Subscribed Guy', expire_month: 1, expire_year: Date.today.year + 5, company: 'Mastercard', verification_code: 123, user:subscribed)
+payment_method_subs2 = PaymentMethod.find_or_create_by(card_number: 456745674567456789, name: 'Subscribed Guy', expire_month: 1, expire_year: Date.today.year + 5, company: 'American Express', verification_code: 123, user:subscribed)
 
 
 # Create extras
@@ -177,12 +178,12 @@ previous_travel8 = Travel.find_or_create_by(route: chascomus_posadas, date_depar
 previous_travel9 = Travel.find_or_create_by(route: posadas_laplata, date_departure: (DateTime.now - 9.months), date_arrival: (DateTime.now - 9.months + 9.hours), price: 900, driver: driver5, combi: combi5)
 
 # Create future travels
-future_travel1 = Travel.find_or_create_by(route: rauch_laplata, date_departure: (DateTime.now + 1.hours), date_arrival: (DateTime.now + 5.hours), price: 900, discount: 0, driver: driver1, combi: combi1)
-future_travel2 = Travel.find_or_create_by(route: rauch_laplata, date_departure: (DateTime.now + 5.days), date_arrival: (DateTime.now + 5.days + 4.hours), price: 900, discount: 25, driver: driver1, combi: combi1)
-future_travel3 = Travel.find_or_create_by(route: laplata_tandil, date_departure: (DateTime.now + 10.days), date_arrival: (DateTime.now + 10.days + 4.hours), price: 900, discount: 0, driver: driver1, combi: combi1)
-future_travel4 = Travel.find_or_create_by(route: laplata_villalaangostura, date_departure: (DateTime.now + 15.days), date_arrival: (DateTime.now + 15.days + 1.days), price: 4000, discount: 50, driver: driver2, combi: combi2)
-future_travel5 = Travel.find_or_create_by(route: villalaangostura_tandil, date_departure: (DateTime.now + 20.days), date_arrival: (DateTime.now + 20.days + 1.days), price: 4000, discount: 0, driver: driver3, combi: combi3)
-future_travel6 = Travel.find_or_create_by(route: rauch_laplata, date_departure: (DateTime.now + 25.days), date_arrival: (DateTime.now + 25.days + 4.hours), price: 900, discount: 30, driver: driver1, combi: combi1)
+future_travel1 = Travel.find_or_create_by(route: rauch_laplata, date_departure: (DateTime.now + 12.hours), date_arrival: (DateTime.now + 17.hours), price: 900, discount: 0, driver: driver1, combi: combi1)
+future_travel2 = Travel.find_or_create_by(route: rauch_laplata, date_departure: (DateTime.now + 2.days), date_arrival: (DateTime.now + 2.days + 4.hours), price: 900, discount: 25, driver: driver1, combi: combi1)
+future_travel3 = Travel.find_or_create_by(route: laplata_tandil, date_departure: (DateTime.now + 5.days), date_arrival: (DateTime.now + 5.days + 4.hours), price: 900, discount: 0, driver: driver1, combi: combi1)
+future_travel4 = Travel.find_or_create_by(route: laplata_villalaangostura, date_departure: (DateTime.now + 10.days), date_arrival: (DateTime.now + 10.days + 1.days), price: 4000, discount: 50, driver: driver2, combi: combi2)
+future_travel5 = Travel.find_or_create_by(route: villalaangostura_tandil, date_departure: (DateTime.now + 15.days), date_arrival: (DateTime.now + 15.days + 1.days), price: 4000, discount: 0, driver: driver3, combi: combi3)
+future_travel6 = Travel.find_or_create_by(route: rauch_laplata, date_departure: (DateTime.now + 20.days), date_arrival: (DateTime.now + 20.days + 4.hours), price: 900, discount: 30, driver: driver1, combi: combi1)
 future_travel7 = Travel.find_or_create_by(route: chascomus_posadas, date_departure: (DateTime.now + 1.months), date_arrival: (DateTime.now + 1.months + 9.hours), price: 900, discount: 0, driver: driver4, combi: combi4)
 future_travel8 = Travel.find_or_create_by(route: chascomus_posadas, date_departure: (DateTime.now + 2.months), date_arrival: (DateTime.now + 2.months + 9.hours), price: 900, discount: 15, driver: driver5, combi: combi5)
 future_travel9 = Travel.find_or_create_by(route: posadas_laplata, date_departure: (DateTime.now + 3.months), date_arrival: (DateTime.now + 3.months + 9.hours), price: 900, discount: 0, driver: driver5, combi: combi5)

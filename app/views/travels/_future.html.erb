@@ -73,7 +73,7 @@
                                 <button type="button" class="close" data-dismiss="modal">Anulación de reserva</button>
                             </div>
                             <div class="modal-body">
-                                <p> ¿Confirma que desea anular la reserva del viaje <%= travel.route.origin.name.titleize %>, <%= travel.route.origin.state.titleize %> - <%= travel.route.destination.name.titleize %>, <%= travel.route.destination.state.titleize %> del día <%= I18n.l(travel.date_departure, format: "%d de %B de %Y a las %H:%M hs") %>? </p>
+                                <p> ¿Confirma que desea anular la reserva del viaje <%= travel.name %>? </p>
                                 <% if travel.date_departure > (DateTime.now + 48.hours) %>
                                     <strong> El reintegro del pago será del 100% por estar realizando la cancelación con más de 48 hs de antelación </strong>
                                 <% else %>

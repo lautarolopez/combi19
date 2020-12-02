@@ -32,9 +32,7 @@
                     </p>
                 <% end %>
                 <% if current_user.travels.include?travel %>
-                    <div class="tooltip-wrapper btn-block" data-title="Ya reservaste un pasaje para este viaje">
-                        <button type="button" class="btn btn-block btn-primary mb-2" disabled>Reservado</button>
-                    </div>
+                    <%= link_to 'Anular reserva', '#', "data-toggle"=>"modal", "data-target" => "#cancel-#{travel.id}", class: "btn btn-block btn-danger mb-2" %>
                 <% else %>
                     <% if travel.occupied == travel.combi.capacity %>
                         <button type="button" class="btn btn-block btn-disabled mb-2" disabled>Agotado</button>
@@ -63,6 +61,29 @@
                                 <div class="modal-footer">
                                      <a href="#" data-dismiss="modal" class="btn btn-secondary w-75">Cancelar</a>
                                     <%= link_to "Continuar", book_travel_path(travel), class: 'btn btn-primary w-100' %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>  
+                <div class="modal fade" id="cancel-<%= travel.id %>" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">Anulación de reserva</button>
+                            </div>
+                            <div class="modal-body">
+                                <p> ¿Confirma que desea anular la reserva del viaje <%= travel.route.origin.name.titleize %>, <%= travel.route.origin.state.titleize %> - <%= travel.route.destination.name.titleize %>, <%= travel.route.destination.state.titleize %> del día <%= I18n.l(travel.date_departure, format: "%d de %B de %Y a las %H:%M hs") %>? </p>
+                                <% if travel.date_departure > (DateTime.now + 48.hours) %>
+                                    <strong> El reintegro del pago será del 100% por estar realizando la cancelación con más de 48 hs de antelación </strong>
+                                <% else %>
+                                    <strong> El reintegro del pago será del 50% por estar realizando la cancelación con menos de 48 hs de antelación </strong>
+                                <% end %>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="modal-footer">
+                                    <%= link_to 'Anular reserva', cancel_booking_path(travel), class: "btn btn-danger" %>
+                                    <a href="#" data-dismiss="modal" class="btn btn-secondary">Cancelar</a>
                                 </div>
                             </div>
                         </div>

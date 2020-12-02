@@ -40,6 +40,7 @@ Rails.application.routes.draw do
     get 'travels/booked', to: 'travels#booked', as: :booked_travels
     get 'travels/:id/book', to: 'travels#book', as: :book_travel
     post 'travels/:id', to: 'travels#pay'
+    get 'travels/:id/cancel', to: 'travels#cancel', as: :cancel_booking #esta ruta va a ser method delete cuando se implemente el modelo de tickets
   end
   resources :travels
   #as :payment_method do

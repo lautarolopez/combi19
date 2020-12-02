@@ -1,0 +1,15 @@
+    <form action="/travels" method="get" class="d-flex flex-row justify-content-between w-100 card p-4 my-3">
+        <div class="form-group">
+            <%= label_tag :search, 'Buscá por ruta:', class: 'form-group m-0' %>
+            <%= collection_select(:search, :route_id, Route.all, :id, :name_route, {prompt: "Seleccione una ruta"}, { class: 'form-control' }) %>
+        </div>
+        <div class="form-group">
+            <%= label_tag :search, 'Buscá por fecha:', class: 'form-group m-0' %>
+            <%= date_field_tag(:date_search, Date.today, class: "form-control")%>
+            <%= check_box_tag :dont_know_date, false, false %>
+            <%= label_tag :dont_know_date, 'No sé la fecha', class: 'form-group m-0' %>
+        </div>
+
+
+        <button type="submit" class="btn btn-primary h-25 align-self-center mb-3 ml-5">Buscar</button>
+    </form>

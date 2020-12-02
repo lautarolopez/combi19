@@ -3,17 +3,24 @@ class TravelsController < ApplicationController
 		if current_user != nil && current_user.role == "admin"
             @travels = Travel.pending
         else
-            @travels = Travel.future
-			render 'clients_index'
-		end
+            @travels = Travel.future 
+            if params[:search] && params[:search][:route_id] != ""
+                @travels = @travels.where({route_id: params[:search][:route_id]})
+            end
+            if params[:date_search] && !params[:dont_know_date]
+                @date = params[:date_search].to_date
+                @travels = @travels.where(date_departure: @date.all_day)
+            end
+            render 'clients_index'
+        end
 	end
 
     def previous
         @travels = Travel.previous
-        if current_user == nil || current_user.role == "user"
-            render 'clients_index'
+        if current_user != nil || current_user.role == "admin"
+            render 'index'
         else
-            redirect_to root_path
+            render 'clients_index'
         end
     end
 

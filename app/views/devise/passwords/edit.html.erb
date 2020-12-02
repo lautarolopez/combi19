@@ -1,5 +1,5 @@
 <div class="authform row">
-    <%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :put, , class: 'd-flex flex-column justify-content-center col-lg-6 mx-auto card p-5 my-5' }) do |f| %>
+    <%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :put, class: 'd-flex flex-column justify-content-center col-lg-6 mx-auto card p-5 my-5' }) do |f| %>
     <h3>Cambiar contraseña</h3>
     <%= f.hidden_field :reset_password_token %>
     <div class="form-group">

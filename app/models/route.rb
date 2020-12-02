@@ -9,7 +9,7 @@ class Route < ApplicationRecord
 	belongs_to :destination, class_name: 'City', foreign_key: 'destination_id'
 	has_many :travels, dependent: :restrict_with_exception
 
-	def name_route
+	def name
 		"#{origin.name.titleize}, #{origin.state.titleize} - #{destination.name.titleize}, #{destination.state.titleize}"
 	end
 	

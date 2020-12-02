@@ -21,11 +21,18 @@ class Travel < ApplicationRecord
 	belongs_to :combi
 	belongs_to :route
 	has_and_belongs_to_many :passengers, class_name: 'User', dependent: :destroy
+	has_many :comments, dependent: :destroy
 
+
+	# Methods
 	#def validate_dates
 	#	if date_departure > date_arrival || date_departure < DateTime.current.beginning_of_day || date_arrival < DateTime.current.beginning_of_day
 	#		errors.add(:date_departure, "Las fechas ingresadas son incorrectas.")
 	#		errors.add(:date_arrival, "Las fechas ingresadas son incorrectas.")
 	#	end
 	#end
+
+	def name
+		"#{route.origin.name.titleize}, #{route.origin.state.titleize} - #{route.destination.name.titleize}, #{route.destination.state.titleize} el día #{I18n.l(date_departure, format: "%d de %B de %Y a las %H:%M hs.")}"
+	end
 end

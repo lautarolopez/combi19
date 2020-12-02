@@ -47,11 +47,12 @@ class CitiesController < ApplicationController
     def update
         @city = City.find(params[:id])
         @city.attributes = params.require(:city).permit(:name, :state)
+        @city.attributes = {name: @city.name.downcase, state: @city.state.downcase}
         if @city.save
           flash[:success] = @city.name.titleize + ", " + @city.state.titleize + " ha sido actualizada con éxito!"
           redirect_to cities_path
         else
-            @aux = City.find_by(name: @city.name.downcase, state: @city.state.downcase)
+            @aux = City.find_by(name: @city.name, state: @city.state)
             if @aux != nil
                 flash[:form_error] = "La ciudad " + @city.name.titleize + " ya existe en la provincia " + @city.state.titleize
             else 

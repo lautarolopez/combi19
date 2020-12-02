@@ -36,6 +36,11 @@
                         <li class="dropdown-item">
                             <%= link_to 'Viajes antiguos', previous_travels_path %>
                         </li>
+                        <% if current_user != nil && current_user.role == 'admin' %>
+                            <li class="dropdown-item">
+                                <%= link_to 'Comentarios', comments_path %>
+                            </li>
+                        <% end %>
                     </div>
                 </div>
                 <% if current_user != nil && current_user.role != "admin" %>

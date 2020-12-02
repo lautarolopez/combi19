@@ -1,13 +1,5 @@
 Rails.application.routes.draw do
-  get 'payment_methods/index'
-  get 'payment_methods/new'
-  get 'payment_methods/edit'
-  get 'payment_methods/create'
-  get 'payment_methods/update'
-  get 'payment_methods/destroy'
-  get 'combis/new'
-  get 'combis/index'
-  get 'combis/edit'
+
   devise_for :users, skip: [:sessions, :registrations, :passwords]
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   
@@ -32,6 +24,8 @@ Rails.application.routes.draw do
   resources :cities
   resources :routes
   resources :combis
+  resources :comments, only: [:index, :create,:new,:destroy]
+
   as :travel do
     get 'travels/step_new', to: 'travels#step_new', as: :step_new_travel
     get 'travels/:id/step_edit/', to: 'travels#step_edit', as: :step_edit_travel
@@ -40,6 +34,7 @@ Rails.application.routes.draw do
     get 'travels/booked', to: 'travels#booked', as: :booked_travels
     get 'travels/:id/book', to: 'travels#book', as: :book_travel
     post 'travels/:id', to: 'travels#pay'
+    get 'travels/:id/cancel', to: 'travels#cancel', as: :cancel_booking #esta ruta va a ser method delete cuando se implemente el modelo de tickets
   end
   resources :travels
   #as :payment_method do

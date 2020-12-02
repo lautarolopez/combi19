@@ -1,0 +1,17 @@
+<ul class="list-group pt-5">
+    <% if flash[:error] %>
+        <div class="alert alert-danger" role="alert">
+            <p class="my-0"><%= flash[:error] %></p>
+        </div>
+    <% end %>
+
+    <% title = 'Viajes antiguos' %>
+    <%= render :partial => 'previous', :locals => { :travels => @travels, :title => title } %>
+
+</ul>
+
+<script>
+    $(document).ready(function() {
+        $('.tooltip-wrapper').tooltip({position: "top"});
+    })
+</script>

@@ -6,7 +6,7 @@
 
     <div class="form-group">
         <%= f.label :route_id, 'Ruta' %>
-        <%= collection_select(:travel, :route_id, @selectedRoute, :id, :name_route, {prompt: "Seleccione una ruta"}, { class: 'form-control', required: true, readonly: true }) %>
+        <%= collection_select(:travel, :route_id, @selectedRoute, :id, :name, {prompt: "Seleccione una ruta"}, { class: 'form-control', required: true, readonly: true }) %>
     </div>
 
     <div class="form-group">

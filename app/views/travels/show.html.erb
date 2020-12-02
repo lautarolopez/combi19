@@ -1,19 +1,19 @@
 <% if flash[:error] %>
-    <div class="alert alert-danger text-center mt-5" role="alert">
-        <p class="my-0"><%= flash[:error] %></p>
-    </div>
+<div class="alert alert-danger text-center mt-5" role="alert">
+    <p class="my-0"><%= flash[:error] %></p>
+</div>
 <% end %>
 <% if flash[:success] %>
-    <div class="alert alert-success text-center mt-5" role="alert">
-        <% flash[:success].each do |e| %>
-            <p class="my-0"><%= e %></p>
-        <% end %>
-    </div>
+<div class="alert alert-success text-center mt-5" role="alert">
+    <% flash[:success].each do |e| %>
+    <p class="my-0"><%= e %></p>
+    <% end %>
+</div>
 <% end %>
 <% if flash[:warning] %>
-    <div class="alert alert-warning" role="alert">
-        <p class="my-0"><%= flash[:warning] %></p>
-    </div>
+<div class="alert alert-warning" role="alert">
+    <p class="my-0"><%= flash[:warning] %></p>
+</div>
 <% end %>
 <div class="card my-5">
     <div class="card-body">
@@ -41,52 +41,55 @@
         <div class="d-flex justify-content-between align-items-end mt-3">
             <ul class="list-group w-50">
                 <% if (current_user != nil) && (current_user.travels.include?@travel) %>
-                    <% title = "Insumos elegidos:" %>
-                    <% extras = @travel.route.extras %> <!-- se cambiará por la lista seleccionada -->
+                <% title = "Insumos elegidos:" %>
+                <% extras = @travel.route.extras %> <!-- se cambiará por la lista seleccionada -->
                 <% else %>
-                    <% title = "Podés elegir cualquiera de estos insumos:"%>
-                    <% extras = @travel.route.extras %>
+                <% title = "Podés elegir cualquiera de estos insumos:"%>
+                <% extras = @travel.route.extras %>
                 <% end %>
                 <%= render :partial => 'extras', :locals => { :extras => extras, :title => title } %>
             </ul>
             <div class="w-50 text-right d-flex flex-column align-items-end h-100">
                 <% if @travel.discount != 0 && current_user != nil && current_user.subscribed %>
-                    <span class="badge badge-primary mt-5">-<%= @travel.discount %>%</span>
-                    <s class="text-secondary">$<%= sprintf('%.2f', @travel.price) %></s>
-                    <p class="price-text-large h2">$<%= sprintf('%.0f', @travel.price - (@travel.price * @travel.discount / 100))%><small class="small-text">.<%=sprintf('%.2f', @travel.price - (@travel.price * @travel.discount / 100)).split(".").last%> </small>
-                    </p>
+                <span class="badge badge-primary mt-5">-<%= @travel.discount %>%</span>
+                <s class="text-secondary">$<%= sprintf('%.2f', @travel.price) %></s>
+                <p class="price-text-large h2">$<%= sprintf('%.0f', @travel.price - (@travel.price * @travel.discount / 100))%><small class="small-text">.<%=sprintf('%.2f', @travel.price - (@travel.price * @travel.discount / 100)).split(".").last%> </small>
+                </p>
                 <% else %>
                     <p class="m-0 price-text-large">$<%= sprintf('%.0f', @travel.price)%><small class="small-text">.<%=sprintf('%.2f', @travel.price).split(".").last%> </small>
                     </p>
                 <% end %>
                 <span class="d-flex align-items-end">
+                    <% if (current_user != nil) && (current_user.travels.include?@travel) %>
+                    <%= link_to "Volver", booked_travels_path, class: 'btn btn-md btn-secondary mr-1' %>
+                    <% else %>
                     <%= link_to "Volver", travels_path, class: 'btn btn-md btn-secondary mr-1' %>
+                    <% end %>
                     <% if current_user != nil %>
-                        <% if current_user.travels.include?@travel %>
-                            <div class="tooltip-wrapper btn-block" data-title="Ya reservaste un pasaje para este viaje">
-                                <button type="button" class="btn btn-lg btn-primary" disabled>Reservado</button>
-                            </div>
-                        <% else %>
-                            <% if @travel.occupied == @travel.combi.capacity %>
-                                <button type="button" class="btn btn-lg btn-disabled" disabled>Agotado</button>
-                            <% else %>
-                                <% if current_user.discharge_date != nil && current_user.discharge_date > @travel.date_departure %>
-                                    <div class="tooltip-wrapper" data-title="No podes reservar un pasaje para este viaje porque presentas síntomas de covid">
-                                        <button type="button" class="btn btn-lg btn-primary" disabled>Comprar</button>
-                                    </div>
-                                <% else %>
-                                    <%= link_to 'Comprar', '#', "data-toggle"=>"modal", "data-target" => "#pay-#{@travel.id}", class: "btn btn-lg btn-primary" %>
-                                <% end %>
-                            <% end %>
-                        <% end %>
+                    <% if current_user.travels.include?@travel %>
+                    <%= link_to 'Anular reserva', '#', "data-toggle"=>"modal", "data-target" => "#cancel-#{@travel.id}", class: "btn btn-lg btn-danger" %>
+
+                    <% else %>
+                    <% if @travel.occupied == @travel.combi.capacity %>
+                    <button type="button" class="btn btn-lg btn-disabled" disabled>Agotado</button>
+                    <% else %>
+                    <% if current_user.discharge_date != nil && current_user.discharge_date > @travel.date_departure %>
+                    <div class="tooltip-wrapper" data-title="No podes reservar un pasaje para este viaje porque presentas síntomas de covid">
+                        <button type="button" class="btn btn-lg btn-primary" disabled>Comprar</button>
+                    </div>
+                    <% else %>
+                    <%= link_to 'Comprar', '#', "data-toggle"=>"modal", "data-target" => "#pay-#{@travel.id}", class: "btn btn-lg btn-primary" %>
+                    <% end %>
+                    <% end %>
+                    <% end %>
                     <% end %>
                 </span>
                 <% if current_user != nil %>
-                    <% if current_user.travels.include?@travel && (current_user.discharge_date == nil || current_user.discharge_date <= @travel.date_departure) && @travel.occupied < @travel.combi.capacity %>
-                        <small class="text-secondary mt-2">Apurate, ¡solo quedan <%= @travel.combi.capacity - @travel.occupied %> lugares!</small>
-                    <% end %>
+                <% if current_user.travels.include?@travel && (current_user.discharge_date == nil || current_user.discharge_date <= @travel.date_departure) && @travel.occupied < @travel.combi.capacity %>
+                <small class="text-secondary mt-2">Apurate, ¡solo quedan <%= @travel.combi.capacity - @travel.occupied %> lugares!</small>
+                <% end %>
                 <% else %>
-                    <p class="m-0"> <%= link_to "Ingresá", new_user_session_path %> o <%= link_to "registrate", new_user_registration_path %> para poder comprar.</p>
+                <p class="m-0"> <%= link_to "Ingresá", new_user_session_path %> o <%= link_to "registrate", new_user_registration_path %> para poder comprar.</p>
                 <% end %>
                 <div class="modal fade" id="pay-<%= @travel.id %>" role="dialog">
                     <div class="modal-dialog">
@@ -109,21 +112,105 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="cancel-<%= @travel.id %>" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">Anulación de reserva</button>
+                    </div>
+                    <div class="modal-body">
+                        <p> ¿Confirma que desea anular la reserva del viaje <%= @travel.name %>? </p>
+                        <% if @travel.date_departure > (DateTime.now + 48.hours) %>
+                            <strong> El reintegro del pago será del 100% por estar realizando la cancelación con más de 48 hs de antelación </strong>
+                        <% else %>
+                            <strong> El reintegro del pago será del 50% por estar realizando la cancelación con menos de 48 hs de antelación </strong>
+                        <% end %>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="modal-footer">
+                            <%= link_to 'Anular reserva', cancel_booking_path(@travel), class: "btn btn-danger" %>
+                            <a href="#" data-dismiss="modal" class="btn btn-secondary">Cancelar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>  
         <% else %>
+            <div class="d-flex justify-content-between align-items-end mt-3">
+                <div class="w-100 text-right d-flex flex-column align-items-end h-100">
+                    <p class="m-0 price-text-large">$<%= sprintf('%.0f', @travel.price)%><small class="small-text">.<%=sprintf('%.2f', @travel.price).split(".").last%> </small>
+                    </p>
+                    <span class="d-flex align-items-end">
+                        <% if (current_user != nil) && (current_user.travels.include?@travel) %>
+                            <% if @travel.date_departure > DateTime.now %>
+                                <%= link_to "Volver", booked_travels_path, class: 'btn btn-md btn-secondary' %>
+                            <% else %>
+                                <%= link_to "Volver", travels_history_path, class: 'btn btn-md btn-secondary' %>
+                            <% end %>
+                        <% else %>
+                            <% if @travel.date_departure > DateTime.now %>
+                                <%= link_to "Volver", travels_path, class: 'btn btn-md btn-secondary' %>
+                            <% else %>
+                                <%= link_to "Volver", previous_travels_path, class: 'btn btn-md btn-secondary' %>
+                            <% end %>
+                        <% end %>
+                    </span>
+                </div>
+            </div>
     </div>
 </div>
 <div class="card my-5">
     <div class="card-body">
-        <div class="d-flex justify-content-between align-items-end mt-3">
-            <div class="w-100 text-right d-flex flex-column align-items-end h-100">
-                <% if (current_user != nil) && (current_user.travels.include?@travel) %>
-                	<%= link_to "Volver", travels_history_path, class: 'btn btn-md btn-secondary' %>
-                <% else %>
-                	<%= link_to "Volver", travels_path, class: 'btn btn-md btn-secondary' %>
-                <% end %>
-            </div>
-        </div>
-        <p class='text-center'> [Comentarios] </p>
+
+        <div class="d-flex justify-content-between w-100">
+        <h1> Comentarios </h1>
+        <% if (current_user != nil) && (current_user.travels.include?@travel) %>
+            <%= link_to "Agregar comentario", new_comment_path(:id => @travel.id), class: 'btn btn-primary btn-md h-75' %>
+        <% end %>
+    </div>
+        
+        <% @comments.each do |comment| %>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <span class="row w-75">
+                <span class="col-9">
+
+                    <h5 class="m-0"> <%= comment.text %> </h5>
+                </span>
+
+                <span class="col-3">
+                    <strong class="m-0 text-primary text-titleize"> Autor </strong>
+                    <p class="m-0 font-weight-bold"><%= comment.author %> </p>
+                </span>        
+            </span>
+            <span>
+                <% if current_user != nil and ((comment.user != nil and comment.user == current_user)  or current_user.role == "admin") %>
+                <%= link_to 'Eliminar', '#', "data-toggle"=>"modal", "data-target" => "#delete-#{comment.id}", class: "btn btn-danger" %>
+                <% end %> 
+
+                <div class="modal fade" id="delete-<%= comment.id %>" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">Eliminación de comentario</button>
+                            </div>
+                            <div class="modal-body">
+                                <p> ¿Confirma que desea eliminar el comentario? </p>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="modal-footer">
+                                    <%= link_to 'Eliminar', comment, method: :delete, class: "btn btn-danger" %>                                    
+                                    <a href="#" data-dismiss="modal" class="btn btn-secondary">Cancelar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </span>
+        </li>
+        <% end %> 
+        <% if @comments.size == 0 %>
+            <h5 class='text-center'>No hay comentarios</h5>
+        <% end %>
         <% end %>
     </div>
 </div>

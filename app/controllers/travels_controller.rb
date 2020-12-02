@@ -3,17 +3,22 @@ class TravelsController < ApplicationController
 		if current_user != nil && current_user.role == "admin"
             @travels = Travel.pending
         else
-            @travels = Travel.future
-			render 'clients_index'
-		end
+            @travels = Travel.future 
+            if params[:search] && params[:search][:route_id] != ""
+                @travels = @travels.where({route_id: params[:search][:route_id]})
+            end
+            if params[:date_search] && !params[:dont_know_date]
+                @date = params[:date_search].to_date
+                @travels = @travels.where(date_departure: @date.all_day)
+            end
+            render 'clients_index'
+        end
 	end
 
     def previous
         @travels = Travel.previous
-        if current_user == nil || current_user.role == "user"
-            render 'clients_index'
-        else
-            redirect_to root_path
+        if current_user != nil && current_user.role == "admin"
+            render 'index'
         end
     end
 
@@ -36,13 +41,14 @@ class TravelsController < ApplicationController
 	def show
 		@travel = Travel.find(params[:id])
 		@duration = calculate_duration(@travel.date_departure, @travel.date_arrival)
+        @comments = @travel.comments
 	end
 
     def book
         @travel = Travel.find(params[:id])
         @duration = calculate_duration(@travel.date_departure, @travel.date_arrival)
         if current_user == nil
-            flash[:warning] = "Debe estar registrado para comprar pasajes"
+            flash[:warning] = "Debes estar registrado para comprar pasajes"
             redirect_to travels_path
         else
             if current_user.discharge_date != nil && current_user.discharge_date > @travel.date_departure
@@ -94,7 +100,7 @@ class TravelsController < ApplicationController
                         @travel.update(occupied: @travel.occupied + 1)
                         @travel.passengers << current_user
                         flash[:success] = []
-                        flash[:success] << "Has reservado el viaje " + @travel.route.origin.name.titleize + ", " + @travel.route.origin.state.titleize + " - " + @travel.route.destination.name.titleize + ", " + @travel.route.destination.state.titleize + " el día " + @travel.date_departure.strftime('%d/%m/%Y') + " a las " + @travel.date_departure.strftime('%H:%M') + " hs. con éxito!"
+                        flash[:success] << "Has reservado el viaje " + @travel.name + " con éxito!"
                         if @method == 'new' && params[:save_new]
                             flash[:success] << 'El método de pago ' + @paymentMethod.card + ' se registró exitosamente en su cuenta'
                         end
@@ -118,6 +124,25 @@ class TravelsController < ApplicationController
         end
     end
 	
+    def cancel
+        if current_user != nil
+            @travel = Travel.find(params[:id])
+            @travel.passengers.delete(current_user)
+            @travel.update(occupied: @travel.occupied)
+            flash[:success] = []
+            flash[:success] << "Se canceló su reserva para el viaje " + @travel.name
+            if @travel.date_departure > (DateTime.now + 48.hours)
+                refund = 100.to_s + '%'
+            else
+                refund = 50.to_s + '%'
+            end
+            flash[:success] << "Se reintegró el " + refund + " del pago en el método de pago utilizado"
+        else
+            flash[:fom_error] = 'Algo salió mal'
+        end
+        redirect_to travel_path(@travel)
+    end
+
     def step_new
 		if current_user == nil || current_user.role != "admin"
 			redirect_to root_path
@@ -174,7 +199,7 @@ class TravelsController < ApplicationController
     def create
 		@travel = Travel.create(params.require(:travel).permit(:route_id, :capacity, :price, :discount,:date_departure, :date_arrival, :combi_id, :driver_id))
         if @travel.save
-            flash[:success] = "El viaje " + @travel.route.origin.name.titleize + ", " + @travel.route.origin.state.titleize + " - " + @travel.route.destination.name.titleize + ", " + @travel.route.destination.state.titleize + " el día " + @travel.date_departure.strftime('%d/%m/%Y') + " a las " + @travel.date_departure.strftime('%H:%M') + " hs. ha sido creado con éxito!"
+            flash[:success] = "El viaje " + @travel.name + " ha sido creado con éxito!"
             redirect_to travels_path
         else
             flash[:form_error] = "Algo salió mal."
@@ -243,7 +268,7 @@ class TravelsController < ApplicationController
     	@travel = Travel.find(params[:id])
         @travel.attributes = params.require(:travel).permit(:route_id, :capacity, :price, :discount, :date_departure, :date_arrival, :combi_id, :driver_id)
         if @travel.save
-            flash[:success] = "El viaje " + @travel.route.origin.name.titleize + ", " + @travel.route.origin.state.titleize + " - " + @travel.route.destination.name.titleize + ", " + @travel.route.destination.state.titleize + " el día " + @travel.date_departure.strftime('%d/%m/%Y') + " a las " + @travel.date_departure.strftime('%H:%M') + " hs. ha sido actualizado con éxito!"
+            flash[:success] = "El viaje " + @travel.name + " ha sido actualizado con éxito!"
             redirect_to travels_path
         else
             flash[:form_error] = "Algo salió mal."
@@ -254,7 +279,7 @@ class TravelsController < ApplicationController
     def destroy
     	@travel = Travel.find(params[:id])
         if @travel.destroy
-            flash[:success] = "El viaje " + @travel.route.origin.name.titleize + ", " + @travel.route.origin.state.titleize + " - " + @travel.route.destination.name.titleize + ", " + @travel.route.destination.state.titleize + " del día " + @travel.date_departure.strftime('%d/%m/%Y') + " a las " + @travel.date_departure.strftime('%H:%M') + " hs. ha sido borrado con éxito"
+            flash[:success] = "El viaje " + @travel.name + " ha sido borrado con éxito"
             redirect_to travels_path
         else
             flash[:index_error] = 'Algo salió mal'

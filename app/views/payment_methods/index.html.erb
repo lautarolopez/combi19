@@ -1,17 +1,14 @@
 <ul class="list-group pt-5">
     <% if flash[:success] %>
-        <div class="alert alert-success" role="alert">
-            <p class="my-0"><%= flash[:success] %></p>
-        </div>
+    <div class="alert alert-success" role="alert">
+        <p class="my-0"><%= flash[:success] %></p>
+    </div>
     <% end %>
     <% if flash[:index_error] %>
-        <div class="alert alert-danger" role="alert">
-            <p class="my-0"><%= flash[:index_error] %></p>
-        </div>
-    <% end %>
     <div class="alert alert-danger" role="alert">
-            <p class="my-0">CAMBIAR FOTO DE SIZE = 0</p>
-        </div>
+        <p class="my-0"><%= flash[:index_error] %></p>
+    </div>
+    <% end %>
     <div class="d-flex justify-content-between w-100 mb-2">
         <h1> Mis métodos de pago </h1>
         <%= link_to "Agregar método de pago", new_payment_method_path, class: 'btn btn-primary btn-md h-75 mt-2' %>
@@ -19,7 +16,14 @@
 
     <% @paymentMethods.each do |paymentMethod| %>
     <li class="list-group-item card mb-2">
-        <span class="badge badge-pill badge-primary mb-1"><%= paymentMethod.company.titleize %></span>
+        <% case paymentMethod.company %>
+        <% when "Visa" %>
+        <i class="fab fa-cc-visa text-primary h3"></i>
+        <% when "Mastercard" %>
+        <i class="fab fa-cc-mastercard"></i>
+        <% when "American Express" %>
+        <i class="fab fa-cc-amex"></i>
+        <% end %>
         <div class="d-flex flex-row justify-content-between align-items-center">
             <span class="row w-75">
                 <span class="col-4 mb-3">
@@ -37,20 +41,21 @@
                 </span>
             </span>
             <span class="col-2 d-flex flex-column align-items-center">
-            	<% if current_user.subscribed %>
-            	<% if (current_user.subscription_payment_method_id == paymentMethod.id) %>
-            		<div class="tooltip-wrapper btn-block" data-title="Método de pago asociado a la suscripción premium">
-                        <button type="button" class="btn btn-block btn-light mb-2" disabled>Asociado</button>
-                    </div>
-            		
-            	<% else %>
-            		<div class="tooltip-wrapper btn-block" data-title="Asociar este método de pago a la suscripción premium">
-                        <%= link_to 'Asociar', '#', class: "btn btn-block btn-light mb-2" %> <!-- not implemented -->
-                    </div>
-            		
-            	<% end %>
-            	<% end %>
-            	<%= link_to 'Eliminar', '#', "data-toggle"=>"modal", "data-target" => "#delete-#{paymentMethod.id}", class: "btn btn-block btn-danger mb-3" %>
+                <% if current_user.subscribed %>
+                <% if (current_user.subscription_payment_method_id == paymentMethod.id) %>
+                <div class="tooltip-wrapper btn-block" data-title="Método de pago asociado a la suscripción premium">
+                    <button type="button" class="btn btn-block btn-light mb-2" disabled>Asociado</button>
+                </div>
+
+                <% else %>
+                <div class="tooltip-wrapper btn-block" data-title="Asociar este método de pago a la suscripción premium">
+                    <%= link_to 'Asociar', '#', class: "btn btn-block btn-light mb-2" %>
+                    <!-- not implemented -->
+                </div>
+
+                <% end %>
+                <% end %>
+                <%= link_to 'Eliminar', '#', "data-toggle"=>"modal", "data-target" => "#delete-#{paymentMethod.id}", class: "btn btn-block btn-danger mb-3" %>
             </span>
             <div class="modal fade" id="delete-<%= paymentMethod.id %>" role="dialog">
                 <div class="modal-dialog">
@@ -71,21 +76,23 @@
                 </div>
             </div>
         </div>
-    	</span>
+        </span>
     </li>
     <% end %>
 
     <% if @paymentMethods.size == 0 %>
-        <div class="d-flex flex-column align-items-center w-100">
-            <%= image_tag  "Travels_history_empty.svg", size: '500' %>
-            <h4>No tenés métodos de pago registrados %></h4>
-        </div>
+    <div class="d-flex flex-column align-items-center w-100">
+        <%= image_tag  "Payment_methods_empty.svg", size: '500' %>
+        <h4>No tenés métodos de pago.</h4>
+    </div>
     <% end %>
 </ul>
 
 
 <script>
     $(document).ready(function() {
-        $('.tooltip-wrapper').tooltip({position: "top"});
+        $('.tooltip-wrapper').tooltip({
+            position: "top"
+        });
     })
 </script>

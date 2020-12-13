@@ -7,6 +7,7 @@ class Extra < ApplicationRecord
 
     # Relations
     has_and_belongs_to_many :routes, dependent: :destroy
+    has_and_belongs_to_many :tickets, dependent: :destroy
 
     # Methods
 	def downcase

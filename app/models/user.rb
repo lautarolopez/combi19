@@ -15,7 +15,8 @@ class User < ApplicationRecord
   # Relations
   belongs_to :subscription_payment_method, class_name: "PaymentMethod", foreign_key: 'subscription_payment_method_id', optional: true
   has_many :driving_travels, class_name: "Travel", foreign_key: "driver_id" #, dependent: :restrict_with_exception
-  has_and_belongs_to_many :travels
+  has_many :tickets, dependent: :destroy
+  has_many :travels, through: :tickets
   has_many :payment_methods, dependent: :destroy
   has_many :comments
 

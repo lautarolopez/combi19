@@ -4,7 +4,7 @@ class Route < ApplicationRecord
 	validates :destination, presence: :true, uniqueness: { scope: :origin, case_sensitive: false }
 
 	# Relations
-	has_and_belongs_to_many :extras
+	has_and_belongs_to_many :extras, dependent: :destroy
 	belongs_to :origin, class_name: 'City', foreign_key: 'origin_id'
 	belongs_to :destination, class_name: 'City', foreign_key: 'destination_id'
 	has_many :travels, dependent: :restrict_with_exception

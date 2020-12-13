@@ -11,6 +11,7 @@ class PaymentMethod < ApplicationRecord
 
 	# Relations
 	belongs_to :user
+	has_many :tickets
 
 	# Methods
 	def validate_date

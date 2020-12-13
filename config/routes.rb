@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  get 'tickets/edit'
+  get 'tickets/update'
   devise_for :users, skip: [:sessions, :registrations, :passwords]
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   
@@ -32,9 +34,7 @@ Rails.application.routes.draw do
     get 'travels/previous', to: 'travels#previous', as: :previous_travels
     get 'travels/history', to: 'travels#history', as: :travels_history
     get 'travels/booked', to: 'travels#booked', as: :booked_travels
-    get 'travels/:id/book', to: 'travels#book', as: :book_travel
-    post 'travels/:id', to: 'travels#pay'
-    get 'travels/:id/cancel', to: 'travels#cancel', as: :cancel_booking #esta ruta va a ser method delete cuando se implemente el modelo de tickets
+    get 'travels/:id/book', to: 'tickets#book', as: :book_travel
   end
   resources :travels
   #as :payment_method do
@@ -43,6 +43,7 @@ Rails.application.routes.draw do
   #end
   # si le pongo metodos de pago medio que me generaba errores con las otras vistas, y personalizar todas las vistas me parece al pedo
   resources :payment_methods#, except: [:index, :create]
+  resources :tickets, only: [:create, :destroy]
 
   root to: "home#index"
 end

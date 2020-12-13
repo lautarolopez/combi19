@@ -20,7 +20,10 @@ class Travel < ApplicationRecord
 	belongs_to :driver, class_name: 'User', foreign_key: "driver_id"
 	belongs_to :combi
 	belongs_to :route
-	has_and_belongs_to_many :passengers, class_name: 'User', dependent: :destroy
+	has_one :origin, through: :route
+	has_one :destination, through: :route
+	has_many :tickets, dependent: :destroy
+	has_many :passengers, through: :tickets, source: :user
 	has_many :comments, dependent: :destroy
 
 
@@ -33,6 +36,10 @@ class Travel < ApplicationRecord
 	#end
 
 	def name
-		"#{route.origin.name.titleize}, #{route.origin.state.titleize} - #{route.destination.name.titleize}, #{route.destination.state.titleize} el día #{I18n.l(date_departure, format: "%d de %B de %Y a las %H:%M hs.")}"
+		"#{origin.name.titleize}, #{origin.state.titleize} - #{destination.name.titleize}, #{destination.state.titleize} el día #{I18n.l(date_departure, format: "%d de %B de %Y a las %H:%M hs.")}"
+	end
+
+	def occupied
+		self.tickets.count
 	end
 end

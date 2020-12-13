@@ -39,6 +39,7 @@
             </p>
             <% end %>
             <% if current_user.travels.include?travel %>
+            <% ticket = @tickets.where(travel: travel).first %>
             <%= link_to 'Anular reserva', '#', "data-toggle"=>"modal", "data-target" => "#cancel-#{travel.id}", class: "btn btn-block btn-danger mb-2" %>
             <% else %>
             <% if travel.occupied == travel.combi.capacity %>
@@ -54,25 +55,7 @@
             <% end %>
             <% end %>
             <% end %>
-            <div class="modal fade" id="pay-<%= travel.id %>" role="dialog">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-body">
-                            <ul class="list-group text-left">
-                                <% title = "Podés elegir cualquiera de estos insumos:" %>
-                                <% extras = travel.route.extras %>
-                                <%= render :partial => 'extras', :locals => { :extras => extras, :title => title } %>
-                            </ul>
-                        </div>
-                        <div class="modal-footer">
-                            <div class="modal-footer">
-                                <a href="#" data-dismiss="modal" class="btn btn-secondary w-75">Cancelar</a>
-                                <%= link_to "Continuar", book_travel_path(travel), class: 'btn btn-primary w-100' %>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <%= render :partial => 'extras_form', :locals => { :travel => travel} %>
             <div class="modal fade" id="cancel-<%= travel.id %>" role="dialog">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -89,7 +72,7 @@
                         </div>
                         <div class="modal-footer">
                             <div class="modal-footer">
-                                <%= link_to 'Anular reserva', cancel_booking_path(travel), class: "btn btn-danger" %>
+                                <%= link_to 'Anular reserva', ticket, method: :delete , class: "btn btn-danger" %>
                                 <a href="#" data-dismiss="modal" class="btn btn-secondary">Cancelar</a>
                             </div>
                         </div>

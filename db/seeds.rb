@@ -8,6 +8,7 @@
 
 # Delete database before create seeds
 Comment.destroy_all
+Ticket.destroy_all
 Travel.destroy_all
 Route.destroy_all
 Extra.destroy_all
@@ -189,69 +190,70 @@ future_travel8 = Travel.find_or_create_by(route: chascomus_posadas, date_departu
 future_travel9 = Travel.find_or_create_by(route: posadas_laplata, date_departure: (DateTime.now + 3.months), date_arrival: (DateTime.now + 3.months + 9.hours), price: 900, discount: 0, driver: driver5, combi: combi5)
 
 
-# Assign travels to users
-previous_travel1.passengers << user1
-previous_travel1.passengers << user2
-previous_travel1.passengers << user3
-previous_travel1.passengers << user4
-previous_travel1.passengers << subscribed
-previous_travel1.update(occupied:5)
-previous_travel2.passengers << user2
-previous_travel2.passengers << user3
-previous_travel2.passengers << user4
-previous_travel2.passengers << subscribed
-previous_travel2.update(occupied:4)
-previous_travel3.passengers << user3
-previous_travel3.passengers << user4
-previous_travel3.passengers << subscribed
-previous_travel3.update(occupied:3)
-previous_travel4.passengers << user4
-previous_travel4.passengers << subscribed
-previous_travel4.update(occupied:2)
-previous_travel5.passengers << user1
-previous_travel5.passengers << user5
-previous_travel5.update(occupied:2)
-previous_travel6.passengers << user6
-previous_travel6.update(occupied:1)
-previous_travel7.passengers << user7
-previous_travel7.update(occupied:1)
-previous_travel8.passengers << user8
-previous_travel8.update(occupied:1)
-previous_travel9.passengers << user9
-previous_travel9.update(occupied:1)
+# Create tickets
+Ticket.find_or_create_by(travel: previous_travel1, user: user1, price: previous_travel1.price)
+Ticket.find_or_create_by(travel: previous_travel1, user: user2, price: previous_travel1.price)
+Ticket.find_or_create_by(travel: previous_travel1, user: user3, price: previous_travel1.price)
+Ticket.find_or_create_by(travel: previous_travel1, user: user4, price: previous_travel1.price)
+Ticket.find_or_create_by(travel: previous_travel1, user: subscribed, price: previous_travel1.price*(1-previous_travel1.discount/100.0))
+Ticket.find_or_create_by(travel: previous_travel2, user: user2, price: previous_travel2.price)
+Ticket.find_or_create_by(travel: previous_travel2, user: user3, price: previous_travel2.price)
+Ticket.find_or_create_by(travel: previous_travel2, user: user4, price: previous_travel2.price)
+Ticket.find_or_create_by(travel: previous_travel2, user: subscribed, price: previous_travel2.price*(1-previous_travel2.discount/100.0))
+Ticket.find_or_create_by(travel: previous_travel3, user: user3, price: previous_travel3.price)
+Ticket.find_or_create_by(travel: previous_travel3, user: user4, price: previous_travel3.price)
+Ticket.find_or_create_by(travel: previous_travel3, user: subscribed, price: previous_travel3.price*(1-previous_travel3.discount/100.0))
+Ticket.find_or_create_by(travel: previous_travel4, user: user4, price: previous_travel4.price)
+Ticket.find_or_create_by(travel: previous_travel4, user: subscribed, price: previous_travel4.price*(1-previous_travel4.discount/100.0))
+Ticket.find_or_create_by(travel: previous_travel5, user: user1, price: previous_travel5.price)
+Ticket.find_or_create_by(travel: previous_travel5, user: user5, price: previous_travel5.price)
+Ticket.find_or_create_by(travel: previous_travel6, user: user6, price: previous_travel6.price)
+Ticket.find_or_create_by(travel: previous_travel7, user: user7, price: previous_travel7.price)
+Ticket.find_or_create_by(travel: previous_travel8, user: user8, price: previous_travel8.price)
+Ticket.find_or_create_by(travel: previous_travel9, user: user9, price: previous_travel9.price)
 
-future_travel1.passengers << user2
-future_travel1.passengers << user3
-future_travel1.passengers << user4
-future_travel1.passengers << subscribed
-future_travel1.update(occupied:4)
-future_travel2.passengers << user2
-future_travel2.passengers << user3
-future_travel2.passengers << user4
-future_travel2.passengers << subscribed
-future_travel2.update(occupied:4)
-future_travel3.passengers << user3
-future_travel3.passengers << user4
-future_travel3.passengers << subscribed
-future_travel3.update(occupied:3)
-future_travel4.passengers << user4
-future_travel4.update(occupied:1)
-future_travel5.passengers << user1
-future_travel5.passengers << user5
-future_travel5.update(occupied:2)
-future_travel6.passengers << user6
-future_travel7.passengers << user7
-future_travel8.passengers << user1
-future_travel8.passengers << user8
-future_travel9.passengers << user1
-future_travel9.passengers << user9
-future_travel9.passengers << subscribed
+Ticket.find_or_create_by(travel: future_travel1, user: user2, price: future_travel1.price)
+Ticket.find_or_create_by(travel: future_travel1, user: user3, price: future_travel1.price)
+Ticket.find_or_create_by(travel: future_travel1, user: user4, price: future_travel1.price)
+Ticket.find_or_create_by(travel: future_travel1, user: subscribed, price: future_travel1.price*(1-future_travel1.discount/100.0))
+Ticket.find_or_create_by(travel: future_travel2, user: user2, price: future_travel2.price)
+Ticket.find_or_create_by(travel: future_travel2, user: user3, price: future_travel2.price)
+Ticket.find_or_create_by(travel: future_travel2, user: user4, price: future_travel2.price)
+Ticket.find_or_create_by(travel: future_travel2, user: subscribed, price: future_travel2.price*(1-future_travel2.discount/100.0))
+Ticket.find_or_create_by(travel: future_travel3, user: user3, price: future_travel3.price)
+Ticket.find_or_create_by(travel: future_travel3, user: user4, price: future_travel3.price)
+Ticket.find_or_create_by(travel: future_travel3, user: subscribed, price: future_travel3.price*(1-future_travel3.discount/100.0))
+Ticket.find_or_create_by(travel: future_travel4, user: user4, price: future_travel4.price)
+Ticket.find_or_create_by(travel: future_travel5, user: user1, price: future_travel5.price)
+Ticket.find_or_create_by(travel: future_travel5, user: user5, price: future_travel5.price)
+Ticket.find_or_create_by(travel: future_travel6, user: user6, price: future_travel6.price)
+Ticket.find_or_create_by(travel: future_travel7, user: user7, price: future_travel7.price)
+Ticket.find_or_create_by(travel: future_travel8, user: user1, price: future_travel8.price)
+Ticket.find_or_create_by(travel: future_travel8, user: user8, price: future_travel8.price)
+Ticket.find_or_create_by(travel: future_travel9, user: user1, price: future_travel9.price)
+Ticket.find_or_create_by(travel: future_travel9, user: user9, price: future_travel9.price)
+Ticket.find_or_create_by(travel: future_travel9, user: subscribed, price: future_travel9.price*(1-future_travel9.discount/100.0))
 
 # Simulate sold out tickets
-future_travel2.update(occupied:combi1.capacity)
-future_travel5.update(occupied:combi4.capacity)
-future_travel7.update(occupied:combi5.capacity)
-future_travel9.update(occupied:combi5.capacity)
+free = future_travel2.combi.capacity - future_travel2.occupied
+free.times do |i|
+	Ticket.create(travel: future_travel2, user: admin, price: future_travel2.price)
+end
+
+free = future_travel5.combi.capacity - future_travel5.occupied
+free.times do |i|
+	Ticket.create(travel: future_travel5, user: admin, price: future_travel5.price)
+end
+
+free = future_travel7.combi.capacity - future_travel7.occupied
+free.times do |i|
+	Ticket.create(travel: future_travel7, user: admin, price: future_travel7.price)
+end
+
+free = future_travel9.combi.capacity - future_travel9.occupied
+free.times do |i|
+	Ticket.create(travel: future_travel9, user: admin, price: future_travel9.price)
+end
 
 
 # Create comments

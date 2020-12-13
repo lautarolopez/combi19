@@ -1,0 +1,42 @@
+	<div class="modal fade" id="pay-<%= travel.id %>" role="dialog">
+		<%= form_for(@ticket,  url: book_travel_path(travel), :method => :get, :html => {class: 'd-flex flex-column justify-content-center col-lg-6 mx-auto card p-5 my-5'}) do |f| %>
+		
+			<%= f.number_field(:travel_id, :value => travel.id, class: 'form-control', type: 'hidden') %>
+			<%= f.number_field(:user_id, :value => current_user.id, class: 'form-control', type: 'hidden') %>
+
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                	<h6>Podés elegir cualquiera de estos insumos:</h6>
+                	<li class="list-group-item justify-content-between">
+					<%= f.collection_check_boxes :extra_ids, travel.route.extras, :id, :name do |b| %>
+						<% extra = b.object %>
+						<span class="form-check row">
+							        <small class="font-weight-bold"><%=extra.name.upcase %></small>
+							        <small class="text-secondary"><%=extra.description.capitalize %></small>
+						    <% if extra.price != 0 %>
+						        <span class="badge badge-pill badge-primary"> $<%= sprintf('%.2f', extra.price) %> </span>
+						    <% else %>
+						        <span class="badge badge-pill badge-primary"> Gratis </span>
+	    					<% end %>
+					    	<%= b.check_box class: 'form-check-input' %>
+						</span>
+					<% end %>
+					</li>
+                </div>
+                <div class="modal-footer">
+                    <div class="modal-footer">
+                    	<span class='row'>
+							<span class="col-6 text-center">
+						    	<%= button_tag "Cancelar", :type => 'button', :class => "btn btn-secondary", :onclick => "location.href = '#'" %>
+							</span>
+							<span class="col-6 text-center">
+							    <%= f.submit 'Continuar', :class => 'btn btn-primary' %>
+							</span>
+					    </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+	<% end %>
+   </div>

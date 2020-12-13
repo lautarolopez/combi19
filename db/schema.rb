@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_02_052430) do
+ActiveRecord::Schema.define(version: 2020_12_13_083457) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,6 +55,13 @@ ActiveRecord::Schema.define(version: 2020_12_02_052430) do
     t.index ["route_id"], name: "index_extras_routes_on_route_id"
   end
 
+  create_table "extras_tickets", id: false, force: :cascade do |t|
+    t.bigint "extra_id"
+    t.bigint "ticket_id"
+    t.index ["extra_id"], name: "index_extras_tickets_on_extra_id"
+    t.index ["ticket_id"], name: "index_extras_tickets_on_ticket_id"
+  end
+
   create_table "payment_methods", force: :cascade do |t|
     t.integer "user_id"
     t.bigint "card_number"
@@ -74,10 +81,20 @@ ActiveRecord::Schema.define(version: 2020_12_02_052430) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "tickets", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "travel_id"
+    t.float "price"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "payment_method_id"
+    t.index ["travel_id"], name: "index_tickets_on_travel_id"
+    t.index ["user_id"], name: "index_tickets_on_user_id"
+  end
+
   create_table "travels", force: :cascade do |t|
     t.integer "driver_id"
     t.integer "route_id"
-    t.integer "occupied", default: 0
     t.datetime "date_departure"
     t.datetime "date_arrival"
     t.float "price", default: 0.0
@@ -85,13 +102,6 @@ ActiveRecord::Schema.define(version: 2020_12_02_052430) do
     t.datetime "updated_at", null: false
     t.integer "combi_id"
     t.integer "discount", default: 0
-  end
-
-  create_table "travels_users", id: false, force: :cascade do |t|
-    t.bigint "user_id"
-    t.bigint "travel_id"
-    t.index ["travel_id"], name: "index_travels_users_on_travel_id"
-    t.index ["user_id"], name: "index_travels_users_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -105,7 +115,7 @@ ActiveRecord::Schema.define(version: 2020_12_02_052430) do
     t.string "name", default: "", null: false
     t.string "last_name", default: "", null: false
     t.integer "dni", default: 0, null: false
-    t.date "birth_date", default: "2020-11-23", null: false
+    t.date "birth_date", default: "2020-11-18", null: false
     t.string "role", default: "user", null: false
     t.boolean "subscribed", default: false, null: false
     t.date "discharge_date"
@@ -117,6 +127,6 @@ ActiveRecord::Schema.define(version: 2020_12_02_052430) do
 
   add_foreign_key "extras_routes", "extras"
   add_foreign_key "extras_routes", "routes"
-  add_foreign_key "travels_users", "travels"
-  add_foreign_key "travels_users", "users"
+  add_foreign_key "extras_tickets", "extras"
+  add_foreign_key "extras_tickets", "tickets"
 end

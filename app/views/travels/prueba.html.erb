@@ -1,0 +1,8 @@
+<div class='mt-5'>
+    <% if @ticket %>
+        <% ticket = @ticket %>
+    <% else %>
+        <% ticket = @tickets.where(travel: travel).first %>
+    <% end %>
+    <%= debug ticket %>
+</div>

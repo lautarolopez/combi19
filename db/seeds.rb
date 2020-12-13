@@ -137,8 +137,6 @@ chascomus_posadas.extras << manaos
 chascomus_posadas.extras = chascomus_posadas.extras.uniq
 
 rauch_chascomus = Route.find_or_create_by(origin: rauch, destination: chascomus)
-rauch_chascomus.extras << cerveza
-rauch_chascomus.extras = rauch_chascomus.extras.uniq
 
 posadas_laplata = Route.find_or_create_by(origin: posadas, destination: la_plata)
 posadas_laplata.extras << choco
@@ -150,8 +148,6 @@ chascomus_laplata.extras << cerveza
 chascomus_laplata.extras = chascomus_laplata.extras.uniq
 
 chascomus_rauch = Route.find_or_create_by(origin: chascomus, destination: rauch)
-chascomus_rauch.extras << cerveza
-chascomus_rauch.extras = chascomus_rauch.extras.uniq
 
 laplata_villalaangostura = Route.find_or_create_by(origin: la_plata, destination: villa_la_angostura)
 laplata_villalaangostura.extras << cerveza

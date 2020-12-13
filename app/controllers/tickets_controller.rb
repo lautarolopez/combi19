@@ -11,13 +11,14 @@ class TicketsController < ApplicationController
             else
             	@ticket = Ticket.new(params.require(:ticket).permit(extra_ids: []))
             	@ticket.attributes = {user: current_user, travel: @travel}
+            	@ticket.price = sum_price(current_user, @travel)
             end
         end
     end
 
     def create
         @travel = Travel.find(params[:ticket][:travel_id])
-        @ticket = Ticket.new(params.require(:ticket).permit(:travel_id, :user_id, extra_ids: []))
+        @ticket = Ticket.new(params.require(:ticket).permit(:travel_id, :user_id, :price, extra_ids: []))
         @method = params[:method]
         @paymentMethod = nil
         if @method == 'existing'
@@ -35,7 +36,7 @@ class TicketsController < ApplicationController
         if @paymentMethod != nil
             if @method == 'existing' || (@method == 'new' && @paymentMethod.save)
                 if validate_card(@paymentMethod, @method, params[:verification_code])
-                	@ticket.attributes = {payment_method: @paymentMethod}
+                	@ticket.attributes = {payment_method: @paymentMethod.card}
                 	if @ticket.save
 	                    if params[:not_covid]
 	                        current_user.update(discharge_date: nil)
@@ -67,18 +68,12 @@ class TicketsController < ApplicationController
 	                        flash[:error] = "No podes reservar un pasaje para este viaje porque presentas síntomas de covid"
 	                        redirect_to travel_path(@travel)
 	                    else
-	                        if update_ticket(current_user, @travel)
-	                            flash[:success] = []
-	                            flash[:success] << "Has reservado el viaje " + @travel.name + " con éxito!"
-	                            if @method == 'new' && params[:save_new]
-	                                flash[:success] << 'El método de pago ' + @paymentMethod.card + ' se registró exitosamente en su cuenta'
-	                            end
-	                            redirect_to travel_path(@travel)
-	                        else
-	                            flash[:form_error] = []
-	                            flash[:form_error] << "Algo salió mal" 
-	                            render 'book'
-	                        end
+                            flash[:success] = []
+                            flash[:success] << "Has reservado el viaje " + @travel.name + " con éxito!"
+                            if @method == 'new' && params[:save_new]
+                                flash[:success] << 'El método de pago ' + @paymentMethod.card + ' se registró exitosamente en su cuenta'
+                            end
+                            redirect_to travel_path(@travel)
 	                    end
 	                else
 	                	flash[:form_error] = []
@@ -150,16 +145,15 @@ class TicketsController < ApplicationController
         end
     end
 
-    def update_ticket(user, travel)
+    def sum_price(user, travel)
         if user.subscribed
-            @ticket.price = travel.price *  (1 - travel.discount/100.0)
+            price = travel.price *  (1 - travel.discount/100.0)
         else
-            @ticket.price = travel.price
+            price = travel.price
         end
-        if @ticket.save
-            return true
-        else
-            return false
+        @ticket.extras.each do |extra|
+        	price = price + extra.price
         end
+        return price
     end
 end

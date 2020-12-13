@@ -1,14 +1,21 @@
-<h6><%=title%></h6>
-<% extras.each do |extra| %>
-<li class="list-group-item d-flex flex-row justify-content-between">
-    <span>
-        <small class="font-weight-bold d-block"><%=extra.name.upcase %></small>
-        <small class="text-secondary"><%=extra.description.capitalize %></small>
-    </span>
-    <% if extra.price != 0 %>
-        <span class="badge badge-pill badge-primary h-25 mt-2"> $<%= sprintf('%.2f', extra.price) %> </span>
-    <% else %>
-        <span class="badge badge-pill badge-primary h-25 mt-2"> Gratis </span>
-    <% end %>
-</li>
+<% if extras.size == 0 %>
+    <div class="d-flex flex-column align-items-center w-100">
+        <h4><%= title %></h4>
+        <%= image_tag  "Extras_empty.svg", size: '250' %>
+    </div>
+<% else %>
+	<h4><%=title%></h4>
+	<% extras.each do |extra| %>
+	<li class="list-group-item d-flex flex-row justify-content-between">
+	    <span>
+	        <small class="font-weight-bold d-block"><%=extra.name.upcase %></small>
+	        <small class="text-secondary"><%=extra.description.capitalize %></small>
+	    </span>
+	    <% if extra.price != 0 %>
+	        <span class="badge badge-pill badge-primary h-25 mt-2"> $<%= sprintf('%.2f', extra.price) %> </span>
+	    <% else %>
+	        <span class="badge badge-pill badge-primary h-25 mt-2"> Gratis </span>
+	    <% end %>
+	</li>
+	<% end %>
 <% end %>

@@ -87,7 +87,7 @@ ActiveRecord::Schema.define(version: 2020_12_13_083457) do
     t.float "price"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "payment_method_id"
+    t.string "payment_method"
     t.index ["travel_id"], name: "index_tickets_on_travel_id"
     t.index ["user_id"], name: "index_tickets_on_user_id"
   end

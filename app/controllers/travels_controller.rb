@@ -1,5 +1,6 @@
 class TravelsController < ApplicationController
 	def index
+        @ticket = Ticket.new
 		if current_user != nil && current_user.role == "admin"
             @travels = Travel.pending
         else
@@ -18,13 +19,12 @@ class TravelsController < ApplicationController
                         @travels.push(travel)
                     end
                 end
-                @ticket = Ticket.new
             else
                 @travels = @searchedTravels
             end
-            
+            render 'clients_index'
         end
-        render 'clients_index'
+        #render 'prueba'
 	end
 
     def previous

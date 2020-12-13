@@ -1,0 +1,48 @@
+<ul class="list-group pt-5">
+    <% if flash[:success] %>
+    <div class="alert alert-success" role="alert">
+        <p class="my-0"><%= flash[:success] %></p>
+    </div>
+    <% end %>
+    <% if flash[:index_error] %>
+    <div class="alert alert-danger" role="alert">
+        <p class="my-0"><%= flash[:index_error] %></p>
+    </div>
+    <% end %>
+    <div class="d-flex justify-content-between w-100 mb-2">
+        <h1> Choferes </h1>
+        <%= link_to "Registrar nuevo chofer", new_driver_registration_path, class: 'btn btn-primary btn-md h-75 mt-2' %>
+    </div>
+
+    <% @drivers.each do |driver| %>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        <span>
+            <p class="m-0 font-weight-bold text-uppercase"> <%= driver.last_name + ", " + driver.name %> </p>
+            <small class="d-block m-0"><%= "DNI: " + driver.dni.to_s %> </small>
+            <small class="m-0"><%= "Email: " + driver.email %> </small>
+        </span>
+        <span>
+            <%= link_to 'Ver estadísticas', driver_path(driver), class: "btn btn-light" %>
+            <%= link_to 'Eliminar', '#', "data-toggle"=>"modal", "data-target" => "#delete-#{driver.id}", class: "btn btn-danger" %>
+            <div class="modal fade" id="delete-<%= driver.id %>" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">Eliminación de chofer</button>
+                        </div>
+                        <div class="modal-body">
+                            <p> ¿Confirma que desea eliminar el usuario del chofer <%= driver.last_name + ", " + driver.name %>? </p>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="modal-footer">
+                                <%= link_to 'Eliminar', destroy_driver_path(driver), method: :delete, class: "btn btn-danger" %>
+                                <a href="#" data-dismiss="modal" class="btn btn-secondary">Cancelar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </span>
+        <% end %>
+    </li>
+</ul>

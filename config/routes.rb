@@ -20,6 +20,13 @@ Rails.application.routes.draw do
     get 'contraseña/editar', to: 'devise/passwords#edit', as: :edit_user_password
     put 'contraseña', to: 'devise/passwords#update', as: :user_password
     post 'contraseña', to: 'devise/passwords#create'
+
+    ## Choferes
+    get 'choferes', to: 'drivers#index', as: :drivers
+    get 'chofer/:id', to: 'drivers#show', as: :driver
+    get 'registrarchofer', to: 'drivers#new_driver', as: :new_driver_registration
+    post 'registrarchofer', to: 'drivers#create_driver', as: :create_driver
+    delete 'chofer/:id', to: 'drivers#destroy', as: :destroy_driver
   end
 
   resources :extras

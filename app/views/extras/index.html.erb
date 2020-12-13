@@ -1,13 +1,13 @@
 <ul class="list-group pt-5">
     <% if flash[:success] %>
-        <div class="alert alert-success" role="alert">
-            <p class="my-0"><%= flash[:success] %></p>
-        </div>
+    <div class="alert alert-success" role="alert">
+        <p class="my-0"><%= flash[:success] %></p>
+    </div>
     <% end %>
     <% if flash[:index_error] %>
-        <div class="alert alert-danger" role="alert">
-            <p class="my-0"><%= flash[:index_error] %></p>
-        </div>
+    <div class="alert alert-danger" role="alert">
+        <p class="my-0"><%= flash[:index_error] %></p>
+    </div>
     <% end %>
     <div class="d-flex justify-content-between w-100">
         <h1> Insumos </h1>
@@ -33,7 +33,7 @@
                         </div>
                         <div class="modal-footer">
                             <div class="modal-footer">
-                                <%= link_to 'Eliminar', extra, method: :delete, class: "btn btn-danger" %>
+                                <%= link_to 'Eliminar', , method: :delete, class: "btn btn-danger" %>
                                 <a href="#" data-dismiss="modal" class="btn btn-secondary">Cancelar</a>
                             </div>
                         </div>

@@ -1,6 +1,9 @@
 class DriversController < ApplicationController
 
     def index
+        if current_user == nil || current_user.role != "admin"
+			redirect_to root_path
+		end
         @drivers = User.drivers
     end
 

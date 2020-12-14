@@ -47,7 +47,7 @@ class DriversController < ApplicationController
     end
 
     def finish_ticket
-        @ticket = Ticket.create(user_id: params[:user_id], travel_id: params[:travel_id], price: params[:price])
+        @ticket = Ticket.create(user_id: params[:user_id], travel_id: params[:travel_id], price: params[:price], status: :confirmed)
         flash[:success] = "Pasaje vendido correctamente."
         redirect_to travels_path
     end

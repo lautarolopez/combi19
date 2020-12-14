@@ -40,40 +40,44 @@
         <% if @travel.date_departure > DateTime.now %>
         <div class="d-flex justify-content-between align-items-end mt-3">
             <ul class="list-group w-50">
-                <% if (current_user != nil) && (current_user.travels.include?@travel) %>
-                    <% extras = @ticket.extras %> 
-                    <% if extras.size == 0 %>
-                        <% title = "No seleccionaste insumos" %>
+                <% if (current_user == nil) || (current_user.role == 'user') %>
+                    <% if (current_user != nil) && (current_user.travels.include?@travel) %>
+                        <% extras = @ticket.extras %> 
+                        <% if extras.size == 0 %>
+                            <% title = "No seleccionaste insumos" %>
+                        <% else %>
+                            <% title = "Insumos elegidos:" %>
+                        <% end %>
                     <% else %>
-                        <% title = "Insumos elegidos:" %>
+                        <% extras = @travel.route.extras %>
+                        <% if extras.size == 0 %>
+                            <% title = "Esta ruta no tiene insumos disponibles" %>
+                        <% else %>
+                            <% title = "Podés elegir cualquiera de estos insumos:"%>
+                        <% end %>
                     <% end %>
-                <% else %>
-                    <% extras = @travel.route.extras %>
-                    <% if extras.size == 0 %>
-                        <% title = "Esta ruta no tiene insumos disponibles" %>
-                    <% else %>
-                        <% title = "Podés elegir cualquiera de estos insumos:"%>
-                    <% end %>
+                    <%= render :partial => 'extras', :locals => { :extras => extras, :title => title} %>
                 <% end %>
-            <%= render :partial => 'extras', :locals => { :extras => extras, :title => title} %>
             </ul>
             <div class="w-50 text-right d-flex flex-column align-items-end h-100">
-                <% if @travel.discount != 0 && current_user != nil && current_user.subscribed %>
-                    <span class="badge badge-primary mt-5">-<%= @travel.discount %>%</span>
-                    <s class="text-secondary">$<%= sprintf('%.2f', @travel.price) %></s>
-                    <p class="price-text-large h2">$<%= sprintf('%.0f', @travel.price - (@travel.price * @travel.discount / 100))%><small class="small-text">.<%=sprintf('%.2f', @travel.price - (@travel.price * @travel.discount / 100)).split(".").last%> </small>
-                    </p>
-                <% else %>
-                    <p class="m-0 price-text-large">$<%= sprintf('%.0f', @travel.price)%><small class="small-text">.<%=sprintf('%.2f', @travel.price).split(".").last%> </small>
-                    </p>
+                <% if (current_user == nil) || (current_user.role == 'user') %>
+                    <% if @travel.discount != 0 && current_user != nil && current_user.subscribed %>
+                        <span class="badge badge-primary mt-5">-<%= @travel.discount %>%</span>
+                        <s class="text-secondary">$<%= sprintf('%.2f', @travel.price) %></s>
+                        <p class="price-text-large h2">$<%= sprintf('%.0f', @travel.price - (@travel.price * @travel.discount / 100))%><small class="small-text">.<%=sprintf('%.2f', @travel.price - (@travel.price * @travel.discount / 100)).split(".").last%> </small>
+                        </p>
+                    <% else %>
+                        <p class="m-0 price-text-large">$<%= sprintf('%.0f', @travel.price)%><small class="small-text">.<%=sprintf('%.2f', @travel.price).split(".").last%> </small>
+                        </p>
+                    <% end %>
                 <% end %>
                 <span class="d-flex align-items-end">
-                   <% if (current_user != nil) && (current_user.travels.include?@travel) %>
+                   <% if (current_user != nil) && (current_user.role == 'user') && (current_user.travels.include?@travel) %>
                         <%= link_to "Volver", booked_travels_path, class: 'btn btn-md btn-secondary mr-1' %>
                     <% else %>
                         <%= link_to "Volver", travels_path, class: 'btn btn-md btn-secondary mr-1' %>
                     <% end %>
-                    <% if current_user != nil %>
+                    <% if (current_user != nil) && (current_user.role == 'user') %>
                         <% if current_user.travels.include?@travel %>
                             <%= link_to 'Anular reserva', '#', "data-toggle"=>"modal", "data-target" => "#cancel-#{@travel.id}", class: "btn btn-lg btn-danger" %>
                         <% else %>
@@ -91,12 +95,12 @@
                         <% end %>
                     <% end %>
                 </span>
-                <% if current_user != nil %>
-                    <% if (current_user.travels.include?@travel) && (current_user.discharge_date == nil || current_user.discharge_date <= @travel.date_departure) && @travel.occupied < @travel.combi.capacity %>
+                <% if current_user == nil %>
+                    <p class="m-0"> <%= link_to "Ingresá", new_user_session_path %> o <%= link_to "registrate", new_user_registration_path %> para poder comprar.</p>
+                <% else %>
+                    <% if (current_user.role == 'user') && (current_user.travels.include?@travel) && (current_user.discharge_date == nil || current_user.discharge_date <= @travel.date_departure) && (@travel.occupied < @travel.combi.capacity) %>
                         <small class="text-secondary mt-2">Apurate, ¡solo quedan <%= @travel.combi.capacity - @travel.occupied %> lugares!</small>
                     <% end %>
-                <% else %>
-                    <p class="m-0"> <%= link_to "Ingresá", new_user_session_path %> o <%= link_to "registrate", new_user_registration_path %> para poder comprar.</p>
                 <% end %>
             <%= render :partial => 'extras_form', :locals => { :travel => @travel, :ticket => @ticket} %>
             </div>
@@ -130,7 +134,7 @@
                     <p class="m-0 price-text-large">$<%= sprintf('%.0f', @travel.price)%><small class="small-text">.<%=sprintf('%.2f', @travel.price).split(".").last%> </small>
                     </p>
                     <span class="d-flex align-items-end">
-                        <% if (current_user != nil) && (current_user.travels.include?@travel) %>
+                        <% if (current_user != nil) && ((current_user.travels.include?@travel) || (current_user.travels.include?@travel)) %>
                             <% if @travel.date_departure > DateTime.now %>
                                 <%= link_to "Volver", booked_travels_path, class: 'btn btn-md btn-secondary' %>
                             <% else %>

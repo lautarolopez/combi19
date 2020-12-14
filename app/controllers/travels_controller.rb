@@ -1,9 +1,16 @@
 class TravelsController < ApplicationController
 	def index
         @ticket = Ticket.new
-		if current_user != nil && current_user.role == "admin"
-            @travels = Travel.pending
-        else
+		if current_user != nil 
+            if current_user.role == "admin"
+                @travels = Travel.pending
+            else
+                if current_user.role == "driver"
+                    redirect_to booked_travels_path
+                end
+            end
+        end
+        if current_user == nil || current_user.role == "user"
             @searchedTravels = Travel.future
             if params[:search] && params[:search][:route_id] != ""
                 @searchedTravels = @searchedTravels.where({route_id: params[:search][:route_id]})
@@ -38,7 +45,11 @@ class TravelsController < ApplicationController
         if current_user == nil
             redirect_to root_path
         else
-            @travels = current_user.travels.previous
+            if current_user.role == 'driver'
+                @travels = current_user.driving_travels.previous
+            else
+                @travels = current_user.travels.previous
+            end
         end
     end
 
@@ -46,8 +57,14 @@ class TravelsController < ApplicationController
         if current_user == nil
             redirect_to root_path
         else
-            @travels = current_user.travels.pending
-            @tickets = Ticket.where(user: current_user)
+            if current_user.role == 'driver'
+                @travels = current_user.driving_travels.future
+                @tickets = []
+                @ticket = Ticket.new
+            else
+                @travels = current_user.travels.pending
+                @tickets = Ticket.where(user: current_user)
+            end
         end
     end
 

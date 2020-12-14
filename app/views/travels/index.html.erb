@@ -36,7 +36,7 @@
                 <h5 class="m-0"><%= I18n.l(travel.date_arrival, format: :long) %> </h5>
             </span>
         </span>
-        <% if current_user != nil && current_user.role == "admin" %>
+        <% if travel.date_departure > DateTime.now %>
         <span>
             <%= link_to 'Editar', step_edit_travel_path(travel), class: "btn btn-light" %>
             <%= link_to 'Eliminar', '#', "data-toggle"=>"modal", "data-target" => "#delete-#{travel.id}", class: "btn btn-danger" %>

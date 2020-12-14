@@ -102,13 +102,14 @@ class TicketsController < ApplicationController
         if current_user != nil
         	@ticket = Ticket.find(params[:id])
             @travel = @ticket.travel
+            money = @ticket.price
             @ticket.destroy
             flash[:success] = []
             flash[:success] << "Se canceló su reserva para el viaje " + @travel.name
             if @travel.date_departure > (DateTime.now + 48.hours)
-                refund = 100.to_s + '%'
+                refund = 100.to_s + '% ($' + money.to_s + ')'
             else
-                refund = 50.to_s + '%'
+                refund = 50.to_s + '% ($' + (money*0.5).to_s + ')'
             end
             flash[:success] << "Se reintegró el " + refund + " del pago en el método de pago utilizado"
         else

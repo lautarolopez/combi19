@@ -1,11 +1,22 @@
 <ul class="list-group pt-5">
+    <% if current_user.role == 'user' %>
+       <% title = 'Viajes reservados' %>
+    <% else %>
+        <% title = 'Viajes próximos' %>
+    <% end %>
     <% if @travels.size == 0 %>
+        <div class="d-flex justify-content-between w-100">
+            <h1> <%= title %> </h1>
+        </div>
         <div class="d-flex flex-column align-items-center w-100">
-            <%= image_tag  "Travels_history_empty.svg", size: '500' %>
-            <h4>No tenés viajes reservados, <%= link_to  "¡empezá a viajar ahora!", travels_path %></h4>
+            <%= image_tag  "Travels_history_empty.svg", size: '470' %>
+            <% if current_user.role == 'user' %>
+                <h4>No tenés viajes reservados, <%= link_to  "¡empezá a viajar ahora!", travels_path %></h4>
+            <% else %>
+                <h3> No tenés viajes por realizar </h3>
+            <% end %>
         </div>
     <% else %>
-    	<% title = 'Viajes reservados' %>
         <%= render :partial => 'future', :locals => { :travels => @travels, :title => title } %>
     <% end %>
 </ul>

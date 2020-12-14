@@ -30,49 +30,58 @@
                     </div>
                 </div>
                 <% end %>
-                <div class="btn-group nav-item">
-                    <button type="button" class="btn btn-light" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Viajes</button>
-                    <div class="dropdown-menu">
-                        <li class="dropdown-item">
-                            <%= link_to 'Viajes disponibles', travels_path %>
-                        </li>
-                        <li class="dropdown-item">
-                            <%= link_to 'Viajes antiguos', previous_travels_path %>
-                        </li>
-                        <% if current_user != nil && current_user.role == 'admin' %>
-                        <li class="dropdown-item">
-                            <%= link_to 'Comentarios', comments_path %>
-                        </li>
-                        <% end %>
+                <% if current_user != nil && current_user.role == "driver" %>
+                    <li class="nav-item">
+                        <%= link_to 'Próximo', root_path, class: "nav-link" %>
+                    </li>
+                <% end %>
+                <% if current_user == nil || current_user.role != 'driver' %>
+                    <div class="btn-group nav-item">
+                        <button type="button" class="btn btn-light" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Viajes</button>
+                        <div class="dropdown-menu">
+                            <li class="dropdown-item">
+                                <%= link_to 'Viajes disponibles', travels_path %>
+                            </li>
+                            <li class="dropdown-item">
+                                <%= link_to 'Viajes antiguos', previous_travels_path %>
+                            </li>
+                            <% if current_user != nil && current_user.role == 'admin' %>
+                                <li class="dropdown-item">
+                                    <%= link_to 'Comentarios', comments_path %>
+                                </li>
+                            <% end %>
+                        </div>
                     </div>
-                </div>
+                <% end %>
                 <% if current_user != nil && current_user.role != "admin" %>
-                <div class="btn-group nav-item">
-                    <button type="button" class="btn btn-light" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Mis viajes</button>
-                    <div class="dropdown-menu">
-                        <li class="dropdown-item">
-                            <%= link_to 'Viajes realizados', travels_history_path %>
-                        </li>
-                        <li class="dropdown-item">
-                            <%= link_to 'Viajes reservados', booked_travels_path %>
-                        </li>
+                    <div class="btn-group nav-item">
+                        <button type="button" class="btn btn-light" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Mis viajes</button>
+                        <div class="dropdown-menu">
+                            <li class="dropdown-item">
+                                <%= link_to 'Viajes realizados', travels_history_path %>
+                            </li>
+                            <li class="dropdown-item">
+                                <%= link_to 'Viajes próximos', booked_travels_path %>
+                            </li>
+                        </div>
                     </div>
-                </div>
                 <% end %>
             </ul>
             <% if current_user != nil %>
-            <span>
-                <div class="btn-group mr-2">
-                    <button type="button" class="btn btn-light" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Bienvenido <%=current_user.name.titleize + ' ' + current_user.last_name.titleize %></button>
-                    <button type="button" class="btn btn-light dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="sr-only">Toggle Dropdown</span>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-lg-right">
-                        <li class="dropdown-item"><%= link_to  "Ir a mi perfil", edit_user_registration_path %></li>
-                        <li class="dropdown-item"><%= link_to  "Métodos de pago", payment_methods_path %></li>
+                <span>
+                    <div class="btn-group mr-2">
+                        <button type="button" class="btn btn-light" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Bienvenido <%=current_user.name.titleize + ' ' + current_user.last_name.titleize %></button>
+                        <button type="button" class="btn btn-light dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-lg-right">
+                            <li class="dropdown-item"><%= link_to  "Ir a mi perfil", edit_user_registration_path %></li>
+                            <% if current_user.role == 'user' %>
+                                <li class="dropdown-item"><%= link_to  "Métodos de pago", payment_methods_path %></li>
+                            <% end %>
+                        </div>
                     </div>
-                </div>
-            </span>
+                </span>
             <% end %>
             <% if user_signed_in? %>
             <%= link_to 'Cerrar sesión', destroy_user_session_path, method: :delete, class: "btn btn-danger" %>

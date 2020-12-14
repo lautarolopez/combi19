@@ -18,10 +18,10 @@
 <% end %>
 
 <% if @travels.size == 0 %>
-<div class="d-flex flex-column align-items-center w-100">
-    <%= image_tag  "Travels_history_empty.svg", size: '500' %>
-    <h4>No hay viajes disponibles.</h4>
-</div>
+    <div class="d-flex flex-column align-items-center w-100">
+        <%= image_tag  "Travels_history_empty.svg", size: '500' %>
+        <h4>No hay viajes disponibles.</h4>
+    </div>
 <% end %>
 
 <% @travels.each do |travel| %>
@@ -30,58 +30,58 @@
     <div class="d-flex flex-row justify-content-between align-items-center">
         <%= render :partial => 'row', :locals => { :travel => travel } %>
         <span class="col-2 d-flex flex-column align-items-center">
-            <% if travel.discount != 0 && current_user != nil && current_user.subscribed %>
-                <small class="text-secondary"><s>$<%= sprintf('%.2f', travel.price) %></s></small>
-                <p class="mb-4 mt-1 price-text h2">$<%= sprintf('%.0f', travel.price - (travel.price * travel.discount / 100))%><small class="small-text">.<%=sprintf('%.2f', travel.price - (travel.price * travel.discount / 100)).split(".").last%> </small>
-                </p>
-            <% else %>
-                <p class="mb-4 mt-1 price-text h2">$<%= sprintf('%.0f', travel.price)%><small class="small-text">.<%=sprintf('%.2f', travel.price).split(".").last%> </small>
-                </p>
-            <% end %>
-            <% if current_user.travels.include?travel %>
-                <% ticket = @tickets.where(travel: travel).first %>
-                <%= link_to 'Anular reserva', '#', "data-toggle"=>"modal", "data-target" => "#cancel-#{travel.id}", class: "btn btn-block btn-danger mb-2" %>
-            <% else %>
-                <% if travel.occupied == travel.combi.capacity %>
-                    <button type="button" class="btn btn-block btn-disabled mb-2" disabled>Agotado</button>
+            <% if (current_user == nil) || (current_user.role == 'user') %>
+                <% if travel.discount != 0 && current_user != nil && current_user.subscribed %>
+                    <small class="text-secondary"><s>$<%= sprintf('%.2f', travel.price) %></s></small>
+                    <p class="mb-4 mt-1 price-text h2">$<%= sprintf('%.0f', travel.price - (travel.price * travel.discount / 100))%><small class="small-text">.<%=sprintf('%.2f', travel.price - (travel.price * travel.discount / 100)).split(".").last%> </small>
+                    </p>
                 <% else %>
-                    <% if current_user.discharge_date != nil && current_user.discharge_date > travel.date_departure %>
-                        <div class="tooltip-wrapper btn-block" data-title="No podes reservar un pasaje para este viaje porque presentas síntomas de covid">
-                        <button type="button" class="btn btn-block btn-primary mb-2" disabled>Comprar</button>
-                        </div>
-
+                    <p class="mb-4 mt-1 price-text h2">$<%= sprintf('%.0f', travel.price)%><small class="small-text">.<%=sprintf('%.2f', travel.price).split(".").last%> </small>
+                    </p>
+                <% end %>
+                <% ticket = @ticket %>
+                <% if current_user.travels.include?travel %>
+                    <% ticket = @tickets.where(travel: travel).first %>
+                    <%= link_to 'Anular reserva', '#', "data-toggle"=>"modal", "data-target" => "#cancel-#{travel.id}", class: "btn btn-block btn-danger mb-2" %>
+                <% else %>
+                    <% if travel.occupied == travel.combi.capacity %>
+                        <button type="button" class="btn btn-block btn-disabled mb-2" disabled>Agotado</button>
                     <% else %>
-                        <%= link_to 'Comprar', '#', "data-toggle"=>"modal", "data-target" => "#pay-#{travel.id}", class: "btn btn-block btn-primary mb-2" %>
+                        <% if current_user.discharge_date != nil && current_user.discharge_date > travel.date_departure %>
+                            <div class="tooltip-wrapper btn-block" data-title="No podes reservar un pasaje para este viaje porque presentas síntomas de covid">
+                            <button type="button" class="btn btn-block btn-primary mb-2" disabled>Comprar</button>
+                            </div>
+
+                        <% else %>
+                            <%= link_to 'Comprar', '#', "data-toggle"=>"modal", "data-target" => "#pay-#{travel.id}", class: "btn btn-block btn-primary mb-2" %>
+                        <% end %>
                     <% end %>
                 <% end %>
-            <% end %>
-            <% if @ticket %>
-                <% ticket = @ticket %>
-            <% end %>
-            <%= render :partial => 'extras_form', :locals => { :travel => travel, :ticket => ticket} %>
-            <div class="modal fade" id="cancel-<%= travel.id %>" role="dialog">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">Anulación de reserva</button>
-                        </div>
-                        <div class="modal-body">
-                            <p> ¿Confirma que desea anular la reserva del viaje <%= travel.name %>? </p>
-                            <% if travel.date_departure > (DateTime.now + 48.hours) %>
-                            <strong> El reintegro del pago será del 100% por estar realizando la cancelación con más de 48 hs de antelación </strong>
-                            <% else %>
-                            <strong> El reintegro del pago será del 50% por estar realizando la cancelación con menos de 48 hs de antelación </strong>
-                            <% end %>
-                        </div>
-                        <div class="modal-footer">
+                <%= render :partial => 'extras_form', :locals => { :travel => travel, :ticket => ticket} %>
+                <div class="modal fade" id="cancel-<%= travel.id %>" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">Anulación de reserva</button>
+                            </div>
+                            <div class="modal-body">
+                                <p> ¿Confirma que desea anular la reserva del viaje <%= travel.name %>? </p>
+                                <% if travel.date_departure > (DateTime.now + 48.hours) %>
+                                <strong> El reintegro del pago será del 100% por estar realizando la cancelación con más de 48 hs de antelación </strong>
+                                <% else %>
+                                <strong> El reintegro del pago será del 50% por estar realizando la cancelación con menos de 48 hs de antelación </strong>
+                                <% end %>
+                            </div>
                             <div class="modal-footer">
-                                <%= link_to 'Anular reserva', ticket, method: :delete , class: "btn btn-danger" %>
-                                <a href="#" data-dismiss="modal" class="btn btn-secondary">Cancelar</a>
+                                <div class="modal-footer">
+                                    <%= link_to 'Anular reserva', ticket, method: :delete , class: "btn btn-danger" %>
+                                    <a href="#" data-dismiss="modal" class="btn btn-secondary">Cancelar</a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            <% end %>
             <%= link_to "Detalles", travel_path(travel), class: 'btn btn-block btn-light' %>
 
         </span>

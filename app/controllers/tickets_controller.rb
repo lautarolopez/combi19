@@ -98,7 +98,7 @@ class TicketsController < ApplicationController
     	else
     		flash[:error] = "Algo salió mal"
 		end
-		redirect_to root_path
+		redirect_to next_travel_path
     end
 
     def resolve
@@ -118,11 +118,11 @@ class TicketsController < ApplicationController
             flash[:error] = "El pasajero no puede viajar porque presenta síntomas compatibles de covid"
             @travel_ids = []
             if cancel_bookings
-            	flash[:warning] = "Se canceló la reserva que tenía de " + travel_ids.size.to_s + " viaje" + s + " con fechas dentro de los próximos 15 días. Se le envió por correo el resumen detallado del reintegro"
+            	flash[:warning] = "Se canceló la reserva que tenía de " + @travel_ids.size.to_s + " viaje" + s + " con fechas dentro de los próximos 15 días. Se le envió por correo el resumen detallado del reintegro"
             end
     	end
-    	#redirect_to root_path
-    	render 'prueba'
+    	redirect_to next_travel_path
+    	#render 'prueba'
     end
 	
     def destroy

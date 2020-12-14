@@ -1,0 +1,14 @@
+<ul class="list-group pt-5">
+	<% title = 'Viajes perdidos' %>
+    <% if @travels.size == 0 %>
+    	<div class="d-flex justify-content-between w-100">
+		    <h1> <%= title %> </h1>
+		</div>
+        <div class="d-flex flex-column align-items-center w-100">
+            <%= image_tag  "Travels_history_empty.svg", size: '470' %>
+		    <h4>No tenés viajes perdidos %></h4>
+        </div>
+    <% else %>
+        <%= render :partial => 'previous', :locals => { :travels => @travels, :title => title } %>
+    <% end %>
+</ul>

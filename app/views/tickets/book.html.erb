@@ -3,8 +3,9 @@
 <%= form_for(@ticket, :html => {class: 'd-flex flex-column justify-content-center col-lg-6 mx-auto card p-5 my-5'}) do |f| %>
 	<%= f.number_field(:travel_id, :value => @travel.id, class: 'form-control', type: 'hidden') %>
 	<%= f.number_field(:user_id, :value => current_user.id, class: 'form-control', type: 'hidden') %>
+	<%= f.number_field(:price, :value => @ticket.price, class: 'form-control', type: 'hidden') %>
 	<%= f.collection_check_boxes :extra_ids, @travel.route.extras, :id, :name do |b| %>
-		<% if params[:ticket][:extra_ids].include?(b.object.id.to_s) %>
+		<% if @ticket.extras.include?(b.object) %>
 	    	<%= b.check_box(checked: true, :style => 'display: none') %>
 	    <% else %>
 	    	<%= b.check_box(:style => 'display: none') %>

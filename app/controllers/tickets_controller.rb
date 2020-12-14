@@ -42,22 +42,9 @@ class TicketsController < ApplicationController
 	                        current_user.update(discharge_date: nil)
 	                    else
 	                        current_user.update(discharge_date: Date.today + 15.days)
-	                        ticket = nil
-	                        cant = 0
-	                        current_user.travels.where("date_departure < ?", current_user.discharge_date).each do |t|
-	                            ticket = Ticket.find_by(travel: t, user: current_user)
-	                            if ticket
-	                                ticket.destroy
-	                                cant = cant + 1
-	                            end
-	                        end
-	                        if cant > 1
-	                            s = "s"
-	                        else
-	                            s = ""
-	                        end
-	                        if ticket
-	                            flash[:warning] = "Como declaraste que presentás síntomas de covid se canceló la reserva que tenías de " + cant.to_s + " viaje" + s + " con fechas dentro de los próximos 15 días. Se envió por correo el resumen detallado de el/los mismo/s"
+	                        @travel_ids = []
+	                        if cancel_bookings
+	                            flash[:warning] = "Como declaraste que presentás síntomas de covid se canceló la reserva que tenías de " + @travel_ids.size.to_s + " viaje" + s + " con fechas dentro de los próximos 15 días. Se envió por correo el resumen detallado del reintegro"
 	                        end
 	                    end
 	                    if current_user.discharge_date != nil && current_user.discharge_date > @travel.date_departure
@@ -77,7 +64,7 @@ class TicketsController < ApplicationController
 	                    end
 	                else
 	                	flash[:form_error] = []
-                        flash[:form_error] << "Algo salió mal" + @ticket.travel.name + " " + @ticket.user.name
+                        flash[:form_error] << "Algo salió mal"
                         render 'book'
 	                end
                 else
@@ -96,6 +83,46 @@ class TicketsController < ApplicationController
                 render 'book'
             end
         end
+    end
+
+    def passenger
+    	@ticket = Ticket.find(params[:id])
+    	@passenger = @ticket.user
+    end
+
+    def absent
+    	@ticket = Ticket.find(params[:id])
+    	@ticket.status = :absent
+    	if @ticket.save
+    		flash[:success] = "Se registró que el pasajero no se presentó al viaje"
+    	else
+    		flash[:error] = "Algo salió mal"
+		end
+		redirect_to root_path
+    end
+
+    def resolve
+    	@ticket = Ticket.find(params[:id])
+    	@temp = params[:temp]
+    	@strong = params[:strong_synthoms]
+    	@medium = params[:medium_synthoms]
+    	@same = params[:same_synthoms]
+
+    	if confirm(@temp, @strong, @medium, @same)
+    		@ticket.update(status: :confirmed)
+    		flash[:success] = "Se registró el pasajero en el viaje"
+    	else
+    		@ticket.update(status: :rejected)
+    		@passenger = @ticket.user
+    		@passenger.update(discharge_date: DateTime.now + 15.days)
+            flash[:error] = "El pasajero no puede viajar porque presenta síntomas compatibles de covid"
+            @travel_ids = []
+            if cancel_bookings
+            	flash[:warning] = "Se canceló la reserva que tenía de " + travel_ids.size.to_s + " viaje" + s + " con fechas dentro de los próximos 15 días. Se le envió por correo el resumen detallado del reintegro"
+            end
+    	end
+    	#redirect_to root_path
+    	render 'prueba'
     end
 	
     def destroy
@@ -156,5 +183,48 @@ class TicketsController < ApplicationController
         	price = price + extra.price
         end
         return price
+    end
+
+    def confirm(temp, strong, medium, same)
+    	if strong
+    		return false
+    	else
+    		if medium
+    			if medium.size > 1
+    				return false
+    			else
+    				if same || (temp > "37.4")
+	    				return false
+	    			end
+    			end
+    		else
+    			if same && (temp > "37.4")
+    				return false
+    			end
+    		end
+    	end
+    	return true
+    end
+
+    def cancel_bookings
+    	tick = nil
+        @passenger.travels.where("date_departure < ?", @passenger.discharge_date).each do |t|
+            tick = Ticket.find_by(travel: t, user: @passenger)
+            if tick != nil && tick != @ticket
+                tick.destroy
+                #Agregar viaje a la lista del mail
+                @travel_ids.push(t)
+            end
+        end
+		if @travel_ids.size > 0
+			if @travel_ids.size > 1
+                s = "s"
+            else
+                s = ""
+            end
+            return true
+        else
+        	return false
+        end
     end
 end

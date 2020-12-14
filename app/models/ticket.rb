@@ -1,4 +1,7 @@
 class Ticket < ApplicationRecord
+	# Scopes 
+	default_scope -> { order(status: :asc)}
+
 	# Validations
 
 	# Relations
@@ -10,5 +13,7 @@ class Ticket < ApplicationRecord
     def date
     	self.travel.date_departure
     end
+
+    enum status: [:pending, :confirmed, :rejected, :absent]
 
 end

@@ -128,7 +128,7 @@
                 </div>
             </div>
         </div>  
-        <% else %>
+        <% else %> <!-- viajes antiguos -->
             <div class="d-flex justify-content-between align-items-end mt-3">
                 <div class="w-100 text-right d-flex flex-column align-items-end h-100">
                     <p class="m-0 price-text-large">$<%= sprintf('%.0f', @travel.price)%><small class="small-text">.<%=sprintf('%.2f', @travel.price).split(".").last%> </small>
@@ -157,7 +157,7 @@
 
         <div class="d-flex justify-content-between w-100">
         <h1> Comentarios </h1>
-        <% if (current_user != nil) && (current_user.travels.include?@travel) %>
+        <% if (current_user != nil) && (current_user.confirmed_travels.include?@travel) %>
             <%= link_to "Agregar comentario", new_comment_path(:id => @travel.id), class: 'btn btn-primary btn-md h-75' %>
         <% end %>
     </div>
@@ -204,7 +204,7 @@
         <% if @comments.size == 0 %>
             <h5 class='text-center'>No hay comentarios</h5>
         <% end %>
-        <% end %>   <!-- end for line 40 -->
+        <% end %>   <!-- end for line "40" -->
     </div>
 </div>
 

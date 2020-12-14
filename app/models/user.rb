@@ -7,7 +7,6 @@ class User < ApplicationRecord
   #Scopes
 	scope :drivers, -> { where("role = ?", "driver") }
 
-
   # Validations
   validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, message: " no es válido."
   validates :name, presence: true
@@ -34,4 +33,34 @@ class User < ApplicationRecord
   def name_last_name
         "#{name.capitalize} #{last_name.capitalize}"
   end   
+
+  def confirmed_travels
+    confirmed = []
+    tickets.each do |ticket|
+      if ticket.confirmed?
+        confirmed.push(ticket.travel)
+      end
+    end
+    return confirmed
+  end
+
+  def rejected_travels
+    rejected = []
+    tickets.each do |ticket|
+      if ticket.rejected?
+        rejected.push(ticket.travel)
+      end
+    end
+    return rejected
+  end
+
+  def absent_travels
+    absent = []
+    tickets.each do |ticket|
+      if ticket.absent?
+        absent.push(ticket.travel)
+      end
+    end
+    return absent
+  end
 end

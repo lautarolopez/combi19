@@ -32,7 +32,12 @@
                 <% end %>
                 <% if current_user != nil && current_user.role == "driver" %>
                     <li class="nav-item">
-                        <%= link_to 'Próximo', root_path, class: "nav-link" %>
+                        <%= link_to 'Actual', root_path, class: "nav-link" %>
+                    </li>
+                <% end %>
+                <% if current_user != nil && current_user.role == "driver" %>
+                    <li class="nav-item">
+                        <%= link_to 'Próximo', next_travel_path, class: "nav-link" %>
                     </li>
                 <% end %>
                 <% if current_user == nil || current_user.role != 'driver' %>
@@ -63,6 +68,11 @@
                             <li class="dropdown-item">
                                 <%= link_to 'Viajes próximos', booked_travels_path %>
                             </li>
+                            <% if current_user.role == 'user' %>
+                                <li class="dropdown-item">
+                                    <%= link_to 'Viajes perdidos', discarded_travels_path %>
+                                </li>
+                            <% end %>
                         </div>
                     </div>
                 <% end %>

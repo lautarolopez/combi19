@@ -7,7 +7,6 @@ class Travel < ApplicationRecord
 	scope :pending, -> { where("date_arrival > ?", DateTime.now).reorder(date_departure: :asc, date_arrival: :asc) }
 
 	# Validations
-	validates :driver_id, presence: :true
 	validates :combi_id, presence: :true
 	validates :route_id, presence: :true
 	validates :date_departure, presence: :true
@@ -41,5 +40,13 @@ class Travel < ApplicationRecord
 
 	def occupied
 		self.tickets.count
+	end
+
+	def current
+		return ((date_departure <= DateTime.now) && (date_arrival > DateTime.now))
+	end
+
+	def future
+		return (date_departure >= DateTime.now)
 	end
 end

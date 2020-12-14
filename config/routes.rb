@@ -42,6 +42,8 @@ Rails.application.routes.draw do
     get 'travels/history', to: 'travels#history', as: :travels_history
     get 'travels/booked', to: 'travels#booked', as: :booked_travels
     get 'travels/:id/book', to: 'tickets#book', as: :book_travel
+    get 'travels/discarded', to: 'travels#discarded', as: :discarded_travels
+    get 'travels/next', to: 'travels#next', as: :next_travel
   end
   resources :travels
   #as :payment_method do
@@ -50,7 +52,13 @@ Rails.application.routes.draw do
   #end
   # si le pongo metodos de pago medio que me generaba errores con las otras vistas, y personalizar todas las vistas me parece al pedo
   resources :payment_methods#, except: [:index, :create]
+  
   resources :tickets, only: [:create, :destroy]
+  as :ticket do
+    get 'tickets/:id/passenger_absent', to: 'tickets#absent', as: :passenger_absent
+    get 'tickets/:id/passenger', to: 'tickets#passenger', as: :ticket_passenger
+    post 'tickets/:id', to: 'tickets#resolve', as: :resolve_ticket
+  end
 
   root to: "home#index"
 end

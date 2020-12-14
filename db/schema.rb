@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_13_083457) do
+ActiveRecord::Schema.define(version: 2020_12_14_030907) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -88,6 +88,7 @@ ActiveRecord::Schema.define(version: 2020_12_13_083457) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "payment_method"
+    t.integer "status", default: 0
     t.index ["travel_id"], name: "index_tickets_on_travel_id"
     t.index ["user_id"], name: "index_tickets_on_user_id"
   end
@@ -115,7 +116,7 @@ ActiveRecord::Schema.define(version: 2020_12_13_083457) do
     t.string "name", default: "", null: false
     t.string "last_name", default: "", null: false
     t.integer "dni", default: 0, null: false
-    t.date "birth_date", default: "2020-12-13", null: false
+    t.date "birth_date", default: "2020-11-18", null: false
     t.string "role", default: "user", null: false
     t.boolean "subscribed", default: false, null: false
     t.date "discharge_date"

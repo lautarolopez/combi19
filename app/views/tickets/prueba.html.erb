@@ -1,0 +1,24 @@
+<div class='mt-5'>
+	<% if flash[:error] %>
+        <div class="alert alert-danger" role="alert">
+            <p class="my-0"><%= flash[:error] %></p>
+        </div>
+    <% end %>
+    <% if flash[:warning] %>
+        <div class="alert alert-warning" role="alert">
+            <p class="my-0"><%= flash[:warning] %></p>
+        </div>
+    <% end %>
+
+
+	<%= debug @temp %>
+	<%= debug @strong %>
+	<%= debug @medium %>
+	<%= debug @same %>
+
+	tamaño <%= @travel_ids.size %>
+	
+	<%= debug @travel_ids %>
+
+    <%= @ticket.status %>
+</div>

@@ -1,0 +1,103 @@
+<div class="authform row">
+
+<%= form_tag resolve_ticket_path(@ticket), method: :post, :class => 'd-flex flex-column justify-content-center col-lg-6 mx-auto card p-5 my-5' do %>
+
+    <h3>Datos del pasajero</h3>
+
+    <div class="form-row">
+        <div class="form-group col">
+            <%= label_tag :name, "Nombre" %>
+            <%= text_field_tag :name, @passenger.name, readonly: true, class: 'form-control' %>
+        </div>
+        <div class="form-group col">
+            <%= label_tag :last_name, "Apellido" %>
+            <%= text_field_tag :last_name, @passenger.last_name, readonly: true, class: 'form-control' %>
+        </div>
+    </div>
+    <div class="form-group">
+        <%= label_tag :dni, "Número de documento" %>
+        <%= number_field_tag :dni, @passenger.dni, readonly: true, class: 'form-control' %>
+    </div>
+
+    <div class="form-group">
+        <%= label_tag :email, "Email" %>
+        <%= email_field_tag :email, @passenger.email, readonly: true, class: 'form-control' %>
+    </div>
+
+    <%= label_tag :synthoms, "Síntomas:", class: "form-group-label h3 mt-2 mb-1" %>
+    <div class="row mb-2">
+    	<div class="col-5 form-group">
+    		<div class="row">
+				<div class="col-6 mt-1">
+			    	<%= label_tag :temp, "Temperatura:" %>
+			    </div>
+			   	<div class="col-6">
+			   		<%= number_field_tag :temp, nil, step: 0.1, min: 25, max: 50, :required => true, class: 'form-control' %>
+			   	</div>
+			</div>
+			<div class="row mt-1">
+				<div class="col">
+					<div class="form-check">
+					    <%= check_box_tag "strong_synthoms[]", :smell, false, {:multiple => true, class: "form-check-input"} %>
+					    <%= label_tag :smell, "Pérdida del olfato", class: "form-check-label" %>
+					</div>
+					<div class="form-check">
+					    <%= check_box_tag "strong_synthoms[]", :taste, false, {:multiple => true, class: "form-check-input"} %>
+					    <%= label_tag :taste, "Pérdida del gusto", class: "form-check-label" %>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-7 form-group">
+			<div class="row">
+		    	<div class="col-8">
+		    		<div class="form-check">
+					    <%= check_box_tag "medium_synthoms[]", :headache, false, {:multiple => true, class: "form-check-input"} %>
+					    <%= label_tag :headache, "Dolor de cabeza", class: "form-check-label" %>
+					</div>
+					<div class="form-check">
+					    <%= check_box_tag "medium_synthoms[]", :throat, false, {:multiple => true, class: "form-check-input"} %>
+					    <%= label_tag :throat, "Dolor de garganta", class: "form-check-label" %>
+					</div>
+					<div class="form-check">
+					    <%= check_box_tag "medium_synthoms[]", :body, false, {:multiple => true, class: "form-check-input"} %>
+					    <%= label_tag :body, "Dolor muscular", class: "form-check-label" %>
+					</div>
+					
+				</div>
+				<div class="col-4">
+					<div class="form-check">
+					    <%= check_box_tag "medium_synthoms[]", :cough, false, {:multiple => true, class: "form-check-input"} %>
+					    <%= label_tag :cough, "Tos", class: "form-check-label" %>
+					</div>
+					<div class="form-check">
+					    <%= check_box_tag :same_synthoms, :vomit, false, class: "form-check-input" %>
+					    <%= label_tag :vomit, "Vómitos", class: "form-check-label" %>
+					</div>
+					<div class="form-check">
+					    <%= check_box_tag :same_synthoms, :diarrhea, false, class: "form-check-input" %>
+					    <%= label_tag :diarrhea, "Diarrea", class: "form-check-label" %>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col">
+					<div class="form-check">
+					    <%= check_box_tag "medium_synthoms[]", :breathe, false, {:multiple => true, class: "form-check-input"} %>
+					    <%= label_tag :breathe, "Dificultad para respirar", class: "form-check-label" %>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<span class='row'>
+        <span class="col-6 text-center">
+            <%= button_tag "Volver", :type => 'button', :class => "btn-lg btn-block btn-secondary", :onclick => "location.href = '#{root_path()}'" %>
+        </span>
+        <span class="col-6 text-center">
+            <%= submit_tag 'Cargar', :class => 'btn-lg btn-block btn-primary' %>
+        </span>
+    </span>
+<% end %>
+</div>

@@ -48,8 +48,17 @@ class TravelsController < ApplicationController
             if current_user.role == 'driver'
                 @travels = current_user.driving_travels.previous
             else
-                @travels = current_user.travels.previous
+                @travels = current_user.confirmed_travels
             end
+        end
+    end
+
+    def discarded
+        if current_user == nil
+            redirect_to root_path
+        else
+            @travels = current_user.rejected_travels + current_user.absent_travels
+            render 'history'
         end
     end
 
@@ -76,8 +85,12 @@ class TravelsController < ApplicationController
         if @ticket == nil
             @ticket = Ticket.new
         end
-
 	end
+
+    def next
+        @ticket = Ticket.new
+        @travel = current_user.driving_travels.future.first
+    end
 
     def step_new
 		if current_user == nil || current_user.role != "admin"

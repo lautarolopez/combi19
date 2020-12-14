@@ -27,6 +27,10 @@ Rails.application.routes.draw do
     get 'registrarchofer', to: 'drivers#new_driver', as: :new_driver_registration
     post 'registrarchofer', to: 'drivers#create_driver', as: :create_driver
     delete 'chofer/:id', to: 'drivers#destroy', as: :destroy_driver
+    get 'ventaexpress', to: 'drivers#express_sell', as: :express_sell
+    post 'registrarpasajero', to: 'drivers#create_passenger', as: :create_passenger
+    post 'encontrarpasajero', to: 'drivers#find_passenger', as: :find_passenger
+    post 'express_ticket', to: 'drivers#finish_ticket', as: :finish_ticket
   end
 
   resources :extras

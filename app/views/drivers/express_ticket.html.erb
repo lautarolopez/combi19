@@ -1,0 +1,74 @@
+<div class="container p-5">
+    <% if flash[:success] %>
+    <div class="alert alert-success" role="alert">
+        <p class="my-0"><%= flash[:success] %></p>
+    </div>
+    <% end %>
+    <div class="card p-5">
+        <h3>Nuevo pasaje</h3>
+        <div>
+            <strong class="my-3">Datos del pasajero</strong>
+            <div class="row w-100 d-flex justify-content-between pl-5">
+                <span>
+                    <b>Nombre: </b>
+                    <p><%= @user.name %></p>
+                </span>
+                <span class="w-50">
+                    <b>Fecha de nacimiento: </b>
+                    <p><%= @user.birth_date %></p>
+                </span>
+            </div>
+            <div class="row w-100 d-flex justify-content-between pl-5">
+                <span>
+                    <b>Apellido: </b>
+                    <p><%= @user.last_name %></p>
+                </span>
+                <span class="w-50">
+                    <b>Correo electrónico: </b>
+                    <p><%= @user.email %></p>
+                </span>
+            </div>
+            <div class="row w-100 pl-5">
+                <span>
+                    <b>Número de documento: </b>
+                    <p><%= @user.dni %></p>
+                </span>
+            </div>
+        </div>
+        <div>
+            <strong class="my-3">Datos del viaje</strong>
+            <div class="row w-100 d-flex justify-content-between pl-5">
+                <span>
+                    <b>Origen: </b>
+                    <p><%= @travel.route.origin.name.titleize %></p>
+                </span>
+                <span class="w-50">
+                    <b>Feecha de salida: </b>
+                    <p><%= @travel.date_departure %></p>
+                </span>
+            </div>
+            <div class="row w-100 d-flex justify-content-between pl-5">
+                <span>
+                    <b>Destino: </b>
+                    <p><%= @travel.route.origin.name.titleize %></p>
+                </span>
+                <span class="w-50">
+                    <b>Fecha de llegada: </b>
+                    <p><%= @travel.date_arrival %></p>
+                </span>
+            </div>
+            <div class="row w-100 pl-5">
+                <span>
+                    <b>Total: </b>
+                    <p><%= @user.dni %></p>
+                </span>
+            </div>
+        </div>
+        <%= form_with url: "/express_ticket", method: :post, class: "w-100 d-flex flex-column align-items-center justify-content-center" do |f| %>
+        <%= f.hidden_field :user_id, value: @user.id %>
+        <%= f.hidden_field :travel_id, value: @travel.id %>
+        <%= f.hidden_field :price, value: @travel.price %>
+        <%= f.submit "Terminar", disable_with: 'Terminando...', class: "btn btn-primary" %>
+        <% end %>
+    </div>
+</div>

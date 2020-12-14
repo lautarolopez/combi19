@@ -1,0 +1,79 @@
+<div class="container pt-5">
+    <div class="row">
+        <div class="col-4">
+            <div class="list-group" id="list-tab" role="tablist">
+                <a class="list-group-item list-group-item-action <%= if !flash[:form_new_error] then "active" end %>" id="list-existing-list" data-toggle="list" href="#list-existing" role="tab" aria-controls="existing">Usuario existente</a>
+                <a class="list-group-item list-group-item-action <%= if flash[:form_new_error] then "active"  end %>" id="list-new-list" data-toggle="list" href="#list-new" role="tab" aria-controls="new">Usuario nuevo</a>
+            </div>
+        </div>
+        <div class="col-8">
+            <div class="tab-content" id="nav-tabContent">
+
+
+
+                <div class="tab-pane fade <%= if !flash[:form_new_error] then "show active"  end %>" id="list-existing" role="tabpanel" aria-labelledby="list-existing-list">
+                    <%= form_for(@user, :url => find_passenger_path, :html => {class: 'd-flex flex-column justify-content-center mx-auto card px-5 pt-5'}) do |f| %>
+                    <div class="d-flex flex-row justify-content-between align-items-center">
+                        <div class="form-row w-75">
+                            <div class="form-group w-100">
+                                <%= f.label :email, "Email *" %>
+                                <%= f.email_field :email, class: 'form-control' %>
+                            </div>
+                        </div>
+                        <%= f.submit "Buscar", :class => 'btn btn-primary mt-3' %>
+                    </div>
+                    <% if flash[:form_existing_error] %>
+                    <div class="alert alert-danger" role="alert">
+                        <p class="my-0"><%= flash[:form_existing_error] %></p>
+                    </div>
+                    <% end %>
+                    <% end %>
+                </div>
+
+
+                <div class="tab-pane fade <%= if flash[:form_new_error] then "show active"  end %>" id="list-new" role="tabpanel" aria-labelledby="list-new-list">
+                    <div class="authform row">
+                        <%= form_for(@user, :url => create_passenger_path, :html => {class: 'd-flex flex-column justify-content-center mx-auto card p-5 mb-5'}) do |f| %>
+                        <h3>Registrar </h3>
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <%= f.label :name, "Nombre *" %>
+                                <%= f.text_field :name, :autofocus => true, class: 'form-control' %>
+                            </div>
+                            <div class="form-group col">
+                                <%= f.label :last_name, "Apellido *" %>
+                                <%= f.text_field :last_name, class: 'form-control' %>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <%= f.label :birth_date, "Fecha de nacimiento *" %>
+                            <%= f.date_field :birth_date, class: 'form-control', validate: true %>
+                        </div>
+                        <div class="form-group">
+                            <%= f.label :dni, "Número de documento *" %>
+                            <%= f.number_field :dni, class: 'form-control' %>
+                        </div>
+
+                        <div class="form-group">
+                            <%= f.label :email, "Email *" %>
+                            <%= f.email_field :email, class: 'form-control' %>
+                        </div>
+                        <%= f.hidden_field :password, value: "combi19" %>
+                        <%= f.hidden_field :password_confirmation, value: "combi19" %>
+                        <%= f.hidden_field :role, value: "driver" %>
+
+                        <% if flash[:form_new_error] %>
+                        <div class="alert alert-danger" role="alert">
+                            <% flash[:form_new_error].each do |e| %>
+                            <p class="my-0"><%= e %></p>
+                            <% end %>
+                        </div>
+                        <% end %>
+                        <%= f.submit "Registrar", :class => 'btn btn-primary' %>
+                        <% end %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

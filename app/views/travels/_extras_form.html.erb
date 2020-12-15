@@ -1,53 +1,57 @@
 	<div class="modal fade" id="pay-<%= travel.id %>" role="dialog">
-		<%= form_for(ticket,  url: book_travel_path(travel), :method => :get, :html => {class: 'd-flex flex-column justify-content-center col-lg-6 mx-auto card p-5 my-5'}) do |f| %>
+	    <%= form_for(ticket,  url: book_travel_path(travel), :method => :get) do |f| %>
 
-			<%= f.number_field(:travel_id, :value => travel.id, class: 'form-control', type: 'hidden') %>
-			<%= f.number_field(:user_id, :value => current_user.id, class: 'form-control', type: 'hidden') %>
+	    <%= f.number_field(:travel_id, :value => travel.id, class: 'form-control', type: 'hidden') %>
+	    <%= f.number_field(:user_id, :value => current_user.id, class: 'form-control', type: 'hidden') %>
 
-        <div class="modal-dialog">
-            <div class="modal-content">
-            	<div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">Selección de insumos</button>
-                </div>
-                <div class="modal-body">
-                	<% if  travel.route.extras.size == 0 %>
-                    	<div class="d-flex flex-column align-items-center w-100">
-                            <h4>Esta ruta no tiene insumos disponibles</h4>
-                            <%= image_tag  "Extras_empty.svg", size: '200' %>
-                            <h4> Continua con la reserva</h4>
-                    	</div>
+	    <div class="modal-dialog">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal">Selección de insumos</button>
+	            </div>
+	            <div class="modal-body p-3">
+	                <% if  travel.route.extras.size == 0 %>
+	                <div class="d-flex flex-column align-items-center w-100">
+	                    <h4>Esta ruta no tiene insumos disponibles</h4>
+	                    <%= image_tag  "Extras_empty.svg", size: '200' %>
+	                    <h4> Continua con la reserva</h4>
+	                </div>
 	                <% else %>
-	                	<h6>Selecciona los insumos para el viaje:</h6>
-	                	<li class="list-group-item justify-content-between">
-						<%= f.collection_check_boxes :extra_ids,  travel.route.extras, :id, :name do |b| %>
-							<% extra = b.object %>
-							<span class="form-check row">
-								        <small class="font-weight-bold"><%=extra.name.upcase %></small>
-								        <small class="text-secondary"><%=extra.description.capitalize %></small>
-							    <% if extra.price != 0 %>
-							        <span class="badge badge-pill badge-primary"> $<%= sprintf('%.2f', extra.price) %> </span>
-							    <% else %>
-							        <span class="badge badge-pill badge-primary"> Gratis </span>
-		    					<% end %>
-						    	<%= b.check_box class: 'form-check-input' %>
-							</span>
-						<% end %>
-						</li>
-					<% end %>
-                </div>
-                <div class="modal-footer">
-                    <div class="modal-footer">
-                    	<span class='row'>
-							<span class="col-6 text-center">
-						    	<%= button_tag "Cancelar", :type => 'button', :class => "btn btn-secondary", :onclick => "location.href = '#'" %>
-							</span>
-							<span class="col-6 text-center">
-							    <%= f.submit 'Continuar', :class => 'btn btn-primary' %>
-							</span>
-					    </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-	<% end %>
-   </div>
+	                <h6>Selecciona los insumos para el viaje:</h6>
+	                <ul class="p-0">
+	                    <%= f.collection_check_boxes :extra_ids,  travel.route.extras, :id, :name do |b| %>
+	                    <% extra = b.object %>
+	                    <li class="d-flex flex-row list-group-item align-items-center w-100">
+	                        <%= b.check_box class: 'mr-4' %>
+	                        <div class="d-flex flex-column w-100">
+	                            <span class="d-flex flex-fow justify-content-between">
+	                                <small class="font-weight-bold"><%=extra.name.upcase %></small>
+	                                <% if extra.price != 0 %>
+	                                <span class="badge badge-pill badge-primary"> $<%= sprintf('%.2f', extra.price) %> </span>
+	                                <% else %>
+	                                <span class="badge badge-pill badge-primary"> Gratis </span>
+	                                <% end %>
+	                            </span>
+	                            <span>
+	                                <small class="text-secondary"><%=extra.description.capitalize %></small>
+	                            </span>
+	                        </div>
+	                    </li>
+	                    <% end ##End del checkbox %>
+	                </ul>
+	                <% end %>
+	            </div>
+	            <div class="modal-footer">
+	                <span class='row'>
+	                    <span class="col-6 text-center">
+	                        <%= button_tag "Cancelar", :type => 'button', :class => "btn btn-secondary", :onclick => "location.href = '#'" %>
+	                    </span>
+	                    <span class="col-6 text-center">
+	                        <%= f.submit 'Continuar', :class => 'btn btn-primary' %>
+	                    </span>
+	                </span>
+	            </div>
+	        </div>
+	    </div>
+	    <% end %>
+	</div>

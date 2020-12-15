@@ -1,15 +1,65 @@
-<h1><%= @driver.last_name + ", " + @driver.name %></h1>
-<h1><%= @driver.last_name + ", " + @driver.name %></h1>
-<h1><%= @driver.last_name + ", " + @driver.name %></h1>
-<h1><%= @driver.last_name + ", " + @driver.name %></h1>
-<h1><%= @driver.last_name + ", " + @driver.name %></h1>
-<h1><%= @driver.last_name + ", " + @driver.name %></h1>
-<h1><%= @driver.last_name + ", " + @driver.name %></h1>
-<h1><%= @driver.last_name + ", " + @driver.name %></h1>
-<h1><%= @driver.last_name + ", " + @driver.name %></h1>
-<h1><%= @driver.last_name + ", " + @driver.name %></h1>
-<h1><%= @driver.last_name + ", " + @driver.name %></h1>
-<h1><%= @driver.last_name + ", " + @driver.name %></h1>
-<h1><%= @driver.last_name + ", " + @driver.name %></h1>
-<h1><%= @driver.last_name + ", " + @driver.name %></h1>
-<h1><%= @driver.last_name + ", " + @driver.name %></h1>
+	<div class="pt-5">
+		<h1> <%= @driver.last_name + ", " + @driver.name %> </h1>
+
+
+
+		<% if @travels.size > 0 %> 	
+			<% @travels.each do |travel| %>
+				<li class="list-group-item d-flex justify-content-between align-items-center">
+					<span class="row">
+						<span class="col-3">
+							<p class="m-0"> Origen </p>
+							<h4 class="m-0"><%= travel.route.origin.name.titleize %>, <%= travel.route.origin.state.titleize %> </h4>
+						</span>
+						<span class="col-3">
+							<p class="m-0"> Destino </p>
+							<h4 class="m-0"><%= travel.route.destination.name.titleize %>, <%= travel.route.destination.state.titleize %> </h4>
+						</span>
+						<span class="col-2">
+							<p class="m-0"> Salida </p>
+							<h5 class="m-0"><%= I18n.l(travel.date_departure, format: :long) %> </h5>
+						</span>
+						<span class="col-2">
+							<p class="m-0"> Llegada </p>
+							<h5 class="m-0"><%= I18n.l(travel.date_arrival, format: :long) %> </h5>
+						</span>
+						<span class="col-2">
+							<p class="m-0"> Horas </p>
+							<h5 class="m-0"><%= (travel.date_arrival - travel.date_departure).floor/3600 %> </h5>
+						</span>
+					</span>       
+				</li>
+			<% end %>
+			<br />
+			<h2 style="text-align:center"> <%= "Realizo " + @total_hours.to_s + " horas en el mes." %> </h2>
+			<br />
+			<br />
+			<br />
+
+
+
+		<%else%>
+			<br />
+			<h2 style="text-align:center"> No realizo viajes </h2>
+			<br />
+			<br />
+			<br />
+		<%end%>
+
+
+
+		<% if flash[:form_error] %>
+			<div class="alert alert-danger" role="alert">
+				<% flash[:form_error].each do |e| %>
+				<p class="my-0"><%= e %></p>
+				<% end %>
+			</div>
+		<% end %>
+
+		<span class='row'>
+			<span class="col-6 text-center">
+				<%= button_tag "Cancelar", :type => 'button', :class => "btn-lg btn-block btn-secondary", :onclick => "location.href = '#{drivers_path()}'" %>
+			</span>
+		</span>
+
+	</div>

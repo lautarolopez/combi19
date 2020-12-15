@@ -1,8 +1,13 @@
-	<div class="modal fade" id="pay-<%= travel.id %>" role="dialog">
-	    <%= form_for(ticket,  url: book_travel_path(travel), :method => :get) do |f| %>
+<div class="modal fade" id="pay-<%= travel.id %>" role="dialog">
+    <%= form_for(ticket,  url: book_travel_path(travel), :method => :get) do |f| %>
 
-	    <%= f.number_field(:travel_id, :value => travel.id, class: 'form-control', type: 'hidden') %>
-	    <%= f.number_field(:user_id, :value => current_user.id, class: 'form-control', type: 'hidden') %>
+		<% if current_user == nil %>
+			<% current_user_id = nil %>
+		<% else %>
+			<% current_user_id = current_user.id %>
+		<% end %>
+		<%= f.number_field(:travel_id, :value => travel.id, class: 'form-control', type: 'hidden') %>
+		<%= f.number_field(:user_id, :value => current_user_id, class: 'form-control', type: 'hidden') %>
 
 	    <div class="modal-dialog">
 	        <div class="modal-content">
@@ -53,5 +58,5 @@
 	            </div>
 	        </div>
 	    </div>
-	    <% end %>
-	</div>
+    <% end %>
+</div>

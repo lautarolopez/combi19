@@ -184,13 +184,13 @@ current_travel6 = Travel.find_or_create_by(route: posadas_laplata, date_departur
 
 # Create future travels
 future_travel1 = Travel.find_or_create_by(route: rauch_laplata, date_departure: (DateTime.now + 12.hours), date_arrival: (DateTime.now + 17.hours), price: 900, discount: 0, driver: driver1, combi: combi1)
-future_travel2 = Travel.find_or_create_by(route: rauch_laplata, date_departure: (DateTime.now + 2.days), date_arrival: (DateTime.now + 2.days + 4.hours), price: 900, discount: 25, driver: driver1, combi: combi1)
+future_travel2 = Travel.find_or_create_by(route: rauch_chascomus, date_departure: (DateTime.now + 2.days), date_arrival: (DateTime.now + 2.days + 4.hours), price: 900, discount: 25, driver: driver1, combi: combi1)
 future_travel3 = Travel.find_or_create_by(route: laplata_tandil, date_departure: (DateTime.now + 5.days), date_arrival: (DateTime.now + 5.days + 4.hours), price: 900, discount: 0, driver: driver8, combi: combi1)
 future_travel4 = Travel.find_or_create_by(route: laplata_villalaangostura, date_departure: (DateTime.now + 10.days), date_arrival: (DateTime.now + 10.days + 1.days), price: 4000, discount: 50, driver: driver2, combi: combi2)
 future_travel5 = Travel.find_or_create_by(route: villalaangostura_tandil, date_departure: (DateTime.now + 15.days), date_arrival: (DateTime.now + 15.days + 1.days), price: 4000, discount: 0, driver: driver3, combi: combi3)
 future_travel6 = Travel.find_or_create_by(route: rauch_laplata, date_departure: (DateTime.now + 20.days), date_arrival: (DateTime.now + 20.days + 4.hours), price: 900, discount: 30, driver: driver7, combi: combi1)
 future_travel7 = Travel.find_or_create_by(route: chascomus_posadas, date_departure: (DateTime.now + 1.months), date_arrival: (DateTime.now + 1.months + 9.hours), price: 900, discount: 0, driver: driver4, combi: combi4)
-future_travel8 = Travel.find_or_create_by(route: chascomus_posadas, date_departure: (DateTime.now + 2.months), date_arrival: (DateTime.now + 2.months + 9.hours), price: 900, discount: 15, driver: driver5, combi: combi5)
+future_travel8 = Travel.find_or_create_by(route: chascomus_rauch, date_departure: (DateTime.now + 2.months), date_arrival: (DateTime.now + 2.months + 9.hours), price: 900, discount: 15, driver: driver5, combi: combi5)
 future_travel9 = Travel.find_or_create_by(route: posadas_laplata, date_departure: (DateTime.now + 3.months), date_arrival: (DateTime.now + 3.months + 9.hours), price: 900, discount: 0, driver: driver5, combi: combi5)
 
 

@@ -43,7 +43,7 @@
                     <p><%= @travel.route.origin.name.titleize %></p>
                 </span>
                 <span class="w-50">
-                    <b>Feecha de salida: </b>
+                    <b>Fecha de salida: </b>
                     <p><%= @travel.date_departure %></p>
                 </span>
             </div>
@@ -60,7 +60,7 @@
             <div class="row w-100 pl-5">
                 <span>
                     <b>Total: </b>
-                    <p><%= @user.dni %></p>
+                    <p><%= @travel.price %></p>
                 </span>
             </div>
         </div>
@@ -68,7 +68,7 @@
         <%= f.hidden_field :user_id, value: @user.id %>
         <%= f.hidden_field :travel_id, value: @travel.id %>
         <%= f.hidden_field :price, value: @travel.price %>
-        <%= f.submit "Terminar", disable_with: 'Terminando...', class: "btn btn-primary" %>
+        <%= f.submit "Finalizar venta", disable_with: 'Procesando...', class: "btn btn-primary" %>
         <% end %>
     </div>
 </div>

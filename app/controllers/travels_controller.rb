@@ -58,7 +58,6 @@ class TravelsController < ApplicationController
             redirect_to root_path
         else
             @travels = current_user.rejected_travels + current_user.absent_travels
-            render 'history'
         end
     end
 
@@ -86,6 +85,11 @@ class TravelsController < ApplicationController
             @ticket = Ticket.new
         end
 	end
+
+    def current
+        @ticket = Ticket.new
+        @travel = current_user.driving_travels.current.first
+    end
 
     def next
         @ticket = Ticket.new

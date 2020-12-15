@@ -44,6 +44,10 @@ class Travel < ApplicationRecord
 		self.tickets.count
 	end
 
+	def full
+		return (occupied < self.combi.capacity)
+	end
+
 	def current
 		return ((date_departure <= DateTime.now) && (date_arrival > DateTime.now))
 	end

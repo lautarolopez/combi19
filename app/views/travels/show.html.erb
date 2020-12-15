@@ -98,7 +98,7 @@
                 <% if current_user == nil %>
                     <p class="m-0"> <%= link_to "Ingresá", new_user_session_path %> o <%= link_to "registrate", new_user_registration_path %> para poder comprar.</p>
                 <% else %>
-                    <% if (current_user.role == 'user') && (current_user.travels.include?@travel) && (current_user.discharge_date == nil || current_user.discharge_date <= @travel.date_departure) && (@travel.occupied < @travel.combi.capacity) %>
+                    <% if (current_user.role == 'user') && (!current_user.travels.include?@travel) && (current_user.discharge_date == nil || current_user.discharge_date <= @travel.date_departure) && (@travel.full) %>
                         <small class="text-secondary mt-2">Apurate, ¡solo quedan <%= @travel.combi.capacity - @travel.occupied %> lugares!</small>
                     <% end %>
                 <% end %>
@@ -202,7 +202,10 @@
         </li>
         <% end %>  <!-- end for @comments.each do -->
         <% if @comments.size == 0 %>
+        <div class="d-flex flex-column align-items-center w-100">
+            <%= image_tag  "Comments_empty.svg", size: '450' %>
             <h5 class='text-center'>No hay comentarios</h5>
+        </div>
         <% end %>
         <% end %>   <!-- end for line "40" -->
     </div>

@@ -30,23 +30,14 @@
 					</span>       
 				</li>
 			<% end %>
-			<br />
-			<h2 style="text-align:center"> <%= "Realizo " + @total_hours.to_s + " horas en el mes anterior." %> </h2>
-			<br />
-			<br />
-			<br />
-
-
+			<h2 class="mt-4 mb-2 text-center"> <%= "Realizó " + @total_hours.to_s + " horas en el mes anterior." %> </h2>
 
 		<%else%>
-			<br />
-			<h2 style="text-align:center"> No realizo viajes </h2>
-			<br />
-			<br />
-			<br />
+	        <div class="d-flex flex-column align-items-center w-100">
+	            <%= image_tag  "Travels_history_empty.svg", size: '400' %>
+			    <h2 class="text-center"> No realizó viajes </h2>
+	        </div>
 		<%end%>
-
-
 
 		<% if flash[:form_error] %>
 			<div class="alert alert-danger" role="alert">
@@ -57,8 +48,8 @@
 		<% end %>
 
 		<span class='row'>
-			<span class="col-6 text-center">
-				<%= button_tag "Cancelar", :type => 'button', :class => "btn-lg btn-block btn-secondary", :onclick => "location.href = '#{drivers_path()}'" %>
+			<span>
+				<%= button_tag "Volver", :type => 'button', :class => "btn btn-secondary", :onclick => "location.href = '#{drivers_path()}'" %>
 			</span>
 		</span>
 

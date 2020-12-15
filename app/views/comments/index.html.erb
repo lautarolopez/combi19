@@ -50,4 +50,11 @@
         </span>
     </li>
     <% end %>
+
+    <% if @comments.size == 0 %>
+        <div class="d-flex flex-column align-items-center w-100">
+            <%= image_tag  "Comments_empty.svg", size: '450' %>
+            <h4>No hay comentarios realizados.</h4>
+        </div>
+    <% end %>
 </ul>

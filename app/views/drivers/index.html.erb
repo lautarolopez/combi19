@@ -45,4 +45,11 @@
         </span>
         <% end %>
     </li>
+
+    <% if @drivers.size == 0 %>
+        <div class="d-flex flex-column align-items-center w-100">
+            <%= image_tag  "Travels_history_empty.svg", size: '450' %>
+            <h4>No hay choferes disponibles.</h4>
+        </div>
+    <% end %>
 </ul>

@@ -6,7 +6,7 @@
 		</div>
         <div class="d-flex flex-column align-items-center w-100">
             <%= image_tag  "Travels_history_empty.svg", size: '470' %>
-		    <h4>No tenés viajes perdidos %></h4>
+		    <h4>No tenés viajes perdidos</h4>
         </div>
     <% else %>
         <%= render :partial => 'previous', :locals => { :travels => @travels, :title => title } %>

@@ -27,10 +27,6 @@ Rails.application.routes.draw do
     get 'registrarchofer', to: 'drivers#new_driver', as: :new_driver_registration
     post 'registrarchofer', to: 'drivers#create_driver', as: :create_driver
     delete 'chofer/:id', to: 'drivers#destroy', as: :destroy_driver
-    get 'ventaexpress', to: 'drivers#express_sell', as: :express_sell
-    post 'registrarpasajero', to: 'drivers#create_passenger', as: :create_passenger
-    post 'encontrarpasajero', to: 'drivers#find_passenger', as: :find_passenger
-    post 'express_ticket', to: 'drivers#finish_ticket', as: :finish_ticket
   end
 
   resources :extras
@@ -48,6 +44,7 @@ Rails.application.routes.draw do
     get 'travels/:id/book', to: 'tickets#book', as: :book_travel
     get 'travels/discarded', to: 'travels#discarded', as: :discarded_travels
     get 'travels/next', to: 'travels#next', as: :next_travel
+    get 'travels/current', to: 'travels#current', as: :current_travel
   end
   resources :travels
   #as :payment_method do
@@ -62,6 +59,10 @@ Rails.application.routes.draw do
     get 'tickets/:id/passenger_absent', to: 'tickets#absent', as: :passenger_absent
     get 'tickets/:id/passenger', to: 'tickets#passenger', as: :ticket_passenger
     post 'tickets/:id', to: 'tickets#resolve', as: :resolve_ticket
+    get 'ventaexpress', to: 'tickets#express_sell', as: :express_sell
+    post 'registrarpasajero', to: 'tickets#create_passenger', as: :create_passenger
+    post 'encontrarpasajero', to: 'tickets#find_passenger', as: :find_passenger
+    post 'express_ticket', to: 'tickets#finish_ticket', as: :finish_ticket
   end
 
   root to: "home#index"

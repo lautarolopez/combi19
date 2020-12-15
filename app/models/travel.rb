@@ -5,6 +5,8 @@ class Travel < ApplicationRecord
 	scope :previous, -> { where("date_arrival <= ?", DateTime.now).reorder(date_departure: :desc, date_arrival: :desc) }
 	scope :current, -> { where("date_departure <= ? and date_arrival > ?", DateTime.now, DateTime.now).reorder(date_arrival: :asc, date_departure: :asc)}
 	scope :pending, -> { where("date_arrival > ?", DateTime.now).reorder(date_departure: :asc, date_arrival: :asc) }
+	scope :last_month, -> {where("date_arrival < ? and date_arrival > ?", DateTime.current.last_month.at_end_of_month, DateTime.current.last_month.at_beginning_of_month)}
+
 
 	# Validations
 	validates :combi_id, presence: :true

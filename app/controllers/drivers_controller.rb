@@ -17,10 +17,9 @@ class DriversController < ApplicationController
     def show
         @driver = User.find(params[:id])
 
-        @travels = @driver.driving_travels
+        @travels = @driver.driving_travels.last_month
 
-        @total_hours = 0
-        @date = Date.new
+        @total_hours = 0        
         @travels.each do |travel|
             @total_hours = @total_hours + ((travel.date_arrival - travel.date_departure).floor/3600)
 

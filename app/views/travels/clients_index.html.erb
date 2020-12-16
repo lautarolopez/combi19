@@ -12,7 +12,7 @@
 
     <% if (current_user != nil) && (current_user.discharge_date != nil) && (current_user.discharge_date > Date.today) %>
         <div class="alert alert-warning" role="alert">
-            <p class="m-0">¡Atención! Declaraste que presentás síntomas de covid, no podrás reservar viajes que se efectúen antes del día <%= I18n.l(current_user.discharge_date, format: "%d de %B de %Y") %></p>
+            <p class="m-0">¡Atención! Presentás síntomas de covid, no podrás reservar viajes que se efectúen antes del día <%= I18n.l(current_user.discharge_date, format: "%d de %B de %Y") %></p>
         </div>
     <% end %>
     

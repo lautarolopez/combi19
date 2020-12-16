@@ -261,26 +261,28 @@ class TravelsController < ApplicationController
 
     def destroy
     	@travel = Travel.find(params[:id])
-        @amounts = []
-        @travel.tickets.each do |ticket|
-            @amounts.push(ticket.price)
-        end
         @travels = []
         @travels.push(@travel)
+        tickets = @travel.tickets.count
+        @travel.tickets.each do |ticket|
+            TravelMailer.refund_mail(ticket.user, @travels, 100, ticket.price).deliver_later
+        end
         if @travel.destroy
-            @amounts.each do |amount|
-                TravelMailer.refund_mail(current_user, @travels, 100, amount).deliver_later
+            if current_user.role == "admin"
+                deleted = "borrado"
+            else
+                deleted = "cancelado"
             end
-            flash[:success] = "El viaje " + @travel.name + " ha sido borrado con éxito"
-            if @travels.size > 0
+            flash[:successes] = []
+            flash[:successes] << "El viaje " + @travel.name + " ha sido " + deleted + " con éxito"
+            if tickets > 0
                 refund = '100%'
-                flash[:success] << "Se reintegró el " + refund + " del pago a todos los pasajeros del viaje"
+                flash[:successes] << "Se reintegró el " + refund + " del pago a todos los pasajeros del viaje"
             end
-            redirect_to travels_path
         else
             flash[:index_error] = 'Algo salió mal'
-            redirect_to travels_path
         end
+        redirect_to root_path
 	end
 
     def destroy_recurrents
@@ -290,7 +292,10 @@ class TravelsController < ApplicationController
         if @travel.destroy
             if recurrent
                 if destroy_recurrent_travels
-                    flash[:success] = "El viaje " + @travel.name + " y los asociados con la recurrencia: '" + @travel.recurrence_type + "' han sido borrados con éxito!"
+                    flash[:successes] = []
+                    flash[:successes] << "El viaje " + @travel.name + " y los asociados con la recurrencia: '" + @travel.recurrence_type + "' han sido borrados con éxito!"
+                    refund = '100%'
+                    flash[:successes] << "Se reintegró el " + refund + " del pago a todos los pasajeros del viaje"
                 else
                     flash[:index_error] = 'Algo salió mal'
                 end

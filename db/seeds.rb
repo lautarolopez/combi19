@@ -32,7 +32,7 @@ subscription_payment_method = PaymentMethod.find_or_create_by(card_number: 45674
 subscribed.update(subscription_payment_method_id: subscription_payment_method.id)
 
 
-#Create drivers
+# Create drivers
 10.times do |i|
 	if User.find_by(dni: 1123 * i) == nil
     	User.create(email: "driver#{i}@combi19.com", password: "combi19", name: "John #{i}", last_name: "Driver", dni: 1123 * i, birth_date: 30.years.ago, role: "driver", subscribed: false)
@@ -48,7 +48,7 @@ driver7 = User.find_by(email: "driver7@combi19.com")
 driver8 = User.find_by(email: "driver8@combi19.com")
 driver9 = User.find_by(email: "driver9@combi19.com")
 
-#Create simple users
+# Create simple users
 15.times do |i|
 	if User.find_by(dni: 1123 * (i+10)) == nil
     	User.create(email: "user#{i}@combi19.com", password: "combi19", name: "Michael #{i}", last_name: "User", dni: 1123 * (i+10), birth_date: 25.years.ago, role: "user", subscribed: false)
@@ -70,20 +70,25 @@ user7.update(discharge_date: Date.today + 10.days)
 user8.update(discharge_date: Date.today + 5.days)
 user9.update(discharge_date: Date.today)
 
+# Create user with real email
+email_user = User.create(email: "temporaryemail@combi19.com", password: "combi19", name: "Temporary", last_name: "User", dni: 1123*30, birth_date: 25.years.ago, role: "user", subscribed: false)
+
 
 # Create payment methods
-payment_method1 = PaymentMethod.find_or_create_by(card_number: 4444444444441111, name: user1.name + ' ' + user1.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:user1)
-payment_method2 = PaymentMethod.find_or_create_by(card_number: 4444444444442222, name: user2.name + ' ' + user2.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Mastercard', verification_code: 123, user:user2)
-payment_method3 = PaymentMethod.find_or_create_by(card_number: 4444444444443333, name: user3.name + ' ' + user3.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'American Express', verification_code: 123, user:user3)
-payment_method4 = PaymentMethod.find_or_create_by(card_number: 4444444444444444, name: user4.name + ' ' + user4.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:user4)
-payment_method5 = PaymentMethod.find_or_create_by(card_number: 4444444444445555, name: user5.name + ' ' + user5.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:user5)
-payment_method6 = PaymentMethod.find_or_create_by(card_number: 4444444444446666, name: user6.name + ' ' + user6.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:user6)
-without_founds1 = PaymentMethod.find_or_create_by(card_number: 4444444444441119, name: user1.name + ' ' + user1.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Mastercard', verification_code: 123, user:user1)
-without_founds2 = PaymentMethod.find_or_create_by(card_number: 4444444444442229, name: user2.name + ' ' + user2.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'American Express', verification_code: 123, user:user2)
-without_founds3 = PaymentMethod.find_or_create_by(card_number: 4444444444443339, name: user3.name + ' ' + user3.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user:user3)
-without_founds4 = PaymentMethod.find_or_create_by(card_number: 4444444444444449, name: user4.name + ' ' + user4.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Mastercard', verification_code: 123, user:user4)
-payment_method_subs1 = PaymentMethod.find_or_create_by(card_number: 4321432143214321, name: 'Subscribed Guy', expire_month: 1, expire_year: Date.today.year + 5, company: 'Mastercard', verification_code: 123, user:subscribed)
-payment_method_subs2 = PaymentMethod.find_or_create_by(card_number: 456745674567456789, name: 'Subscribed Guy', expire_month: 1, expire_year: Date.today.year + 5, company: 'American Express', verification_code: 123, user:subscribed)
+payment_method1 = PaymentMethod.find_or_create_by(card_number: 4444444444441111, name: user1.name + ' ' + user1.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user: user1)
+payment_method2 = PaymentMethod.find_or_create_by(card_number: 4444444444442222, name: user2.name + ' ' + user2.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Mastercard', verification_code: 123, user: user2)
+payment_method3 = PaymentMethod.find_or_create_by(card_number: 4444444444443333, name: user3.name + ' ' + user3.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'American Express', verification_code: 123, user: user3)
+payment_method4 = PaymentMethod.find_or_create_by(card_number: 4444444444444444, name: user4.name + ' ' + user4.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user: user4)
+payment_method5 = PaymentMethod.find_or_create_by(card_number: 4444444444445555, name: user5.name + ' ' + user5.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user: user5)
+payment_method6 = PaymentMethod.find_or_create_by(card_number: 4444444444446666, name: user6.name + ' ' + user6.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user: user6)
+without_founds1 = PaymentMethod.find_or_create_by(card_number: 4444444444441119, name: user1.name + ' ' + user1.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Mastercard', verification_code: 123, user: user1)
+without_founds2 = PaymentMethod.find_or_create_by(card_number: 4444444444442229, name: user2.name + ' ' + user2.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'American Express', verification_code: 123, user: user2)
+without_founds3 = PaymentMethod.find_or_create_by(card_number: 4444444444443339, name: user3.name + ' ' + user3.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Visa', verification_code: 123, user: user3)
+without_founds4 = PaymentMethod.find_or_create_by(card_number: 4444444444444449, name: user4.name + ' ' + user4.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Mastercard', verification_code: 123, user: user4)
+payment_methodS = PaymentMethod.find_or_create_by(card_number: 4321432143214321, name: 'Subscribed Guy', expire_month: 1, expire_year: Date.today.year + 5, company: 'Mastercard', verification_code: 123, user: subscribed)
+without_foundsS = PaymentMethod.find_or_create_by(card_number: 456745674567456789, name: 'Subscribed Guy', expire_month: 1, expire_year: Date.today.year + 5, company: 'American Express', verification_code: 123, user: subscribed)
+payment_methodE = PaymentMethod.find_or_create_by(card_number: 5444444444442222, name: email_user.name + ' ' + email_user.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'Mastercard', verification_code: 123, user: email_user)
+without_foundsE = PaymentMethod.find_or_create_by(card_number: 5444444444442229, name: email_user.name + ' ' + email_user.last_name, expire_month: 1, expire_year: Date.today.year + 5, company: 'American Express', verification_code: 123, user: email_user)
 
 
 # Create extras
@@ -193,16 +198,25 @@ future_travel7 = Travel.find_or_create_by(route: chascomus_posadas, date_departu
 future_travel8 = Travel.find_or_create_by(route: chascomus_rauch, date_departure: (DateTime.now + 2.months), date_arrival: (DateTime.now + 2.months + 9.hours), price: 900, discount: 15, driver: driver5, combi: combi5)
 future_travel9 = Travel.find_or_create_by(route: posadas_laplata, date_departure: (DateTime.now + 3.months), date_arrival: (DateTime.now + 3.months + 9.hours), price: 900, discount: 0, driver: driver5, combi: combi5)
 
+## Create recurrent travel
+time = 15.days
+while (DateTime.now + time < DateTime.now + 2.months + 15.days)
+	Travel.find_or_create_by(route: laplata_villalaangostura, date_departure: (DateTime.now  + time), date_arrival: (DateTime.now + time + 1.days), price: 4000, discount: 50, driver: driver7, combi: combi7, recurrence: :week, recurrence_name: "Semanal verano")
+	time = time + 1.week
+end
+
 
 # Create previous tickets
 Ticket.find_or_create_by(travel: previous_travel1, user: user1, price: previous_travel1.price, status: :confirmed)
 Ticket.find_or_create_by(travel: previous_travel1, user: user2, price: previous_travel1.price, status: :confirmed)
 Ticket.find_or_create_by(travel: previous_travel1, user: user3, price: previous_travel1.price, status: :rejected)
 Ticket.find_or_create_by(travel: previous_travel1, user: user4, price: previous_travel1.price, status: :confirmed)
+Ticket.find_or_create_by(travel: previous_travel1, user: email_user, price: previous_travel1.price, status: :confirmed)
 Ticket.find_or_create_by(travel: previous_travel1, user: subscribed, price: previous_travel1.price*(1-previous_travel1.discount/100.0), status: :confirmed)
 Ticket.find_or_create_by(travel: previous_travel2, user: user2, price: previous_travel2.price, status: :confirmed)
 Ticket.find_or_create_by(travel: previous_travel2, user: user3, price: previous_travel2.price, status: :confirmed)
 Ticket.find_or_create_by(travel: previous_travel2, user: user4, price: previous_travel2.price, status: :confirmed)
+Ticket.find_or_create_by(travel: previous_travel2, user: email_user, price: previous_travel2.price, status: :confirmed)
 Ticket.find_or_create_by(travel: previous_travel2, user: subscribed, price: previous_travel2.price*(1-previous_travel2.discount/100.0), status: :confirmed)
 Ticket.find_or_create_by(travel: previous_travel3, user: user3, price: previous_travel3.price, status: :confirmed)
 Ticket.find_or_create_by(travel: previous_travel3, user: user4, price: previous_travel3.price, status: :absent)
@@ -219,6 +233,7 @@ Ticket.find_or_create_by(travel: previous_travel9, user: user9, price: previous_
 # Create current tickets
 Ticket.find_or_create_by(travel: current_travel1, user: user1, price: future_travel1.price, status: :rejected)
 Ticket.find_or_create_by(travel: current_travel1, user: user2, price: future_travel1.price, status: :confirmed)
+Ticket.find_or_create_by(travel: current_travel1, user: email_user, price: future_travel1.price, status: :confirmed)
 Ticket.find_or_create_by(travel: current_travel1, user: subscribed, price: future_travel1.price*(1-future_travel1.discount/100.0), status: :confirmed)
 Ticket.find_or_create_by(travel: current_travel2, user: user3, price: future_travel2.price, status: :confirmed)
 Ticket.find_or_create_by(travel: current_travel2, user: user4, price: future_travel2.price, status: :absent)
@@ -233,10 +248,12 @@ Ticket.find_or_create_by(travel: current_travel5, user: user6, price: future_tra
 Ticket.find_or_create_by(travel: future_travel1, user: user2, price: future_travel1.price)
 Ticket.find_or_create_by(travel: future_travel1, user: user3, price: future_travel1.price)
 Ticket.find_or_create_by(travel: future_travel1, user: user4, price: future_travel1.price)
+Ticket.find_or_create_by(travel: future_travel1, user: email_user, price: future_travel1.price)
 Ticket.find_or_create_by(travel: future_travel1, user: subscribed, price: future_travel1.price*(1-future_travel1.discount/100.0))
 Ticket.find_or_create_by(travel: future_travel2, user: user2, price: future_travel2.price)
 Ticket.find_or_create_by(travel: future_travel2, user: user3, price: future_travel2.price)
 Ticket.find_or_create_by(travel: future_travel2, user: user4, price: future_travel2.price)
+Ticket.find_or_create_by(travel: future_travel2, user: email_user, price: future_travel2.price)
 Ticket.find_or_create_by(travel: future_travel2, user: subscribed, price: future_travel2.price*(1-future_travel2.discount/100.0))
 Ticket.find_or_create_by(travel: future_travel3, user: user3, price: future_travel3.price)
 Ticket.find_or_create_by(travel: future_travel3, user: user4, price: future_travel3.price)
@@ -274,10 +291,12 @@ Comment.find_or_create_by(text: "Comentario #{user1.name_last_name}", travel: pr
 Comment.find_or_create_by(text: "Comentario #{user2.name_last_name}", travel: previous_travel1, user:user2)
 Comment.find_or_create_by(text: "Comentario #{user3.name_last_name}", travel: previous_travel1, user:user3)
 Comment.find_or_create_by(text: "Comentario #{user4.name_last_name}", travel: previous_travel1, user:user4)
+Comment.find_or_create_by(text: "Comentario #{email_user.name_last_name}", travel: previous_travel1, user:email_user)
 Comment.find_or_create_by(text: "Comentario #{subscribed.name_last_name}", travel: previous_travel1, user:subscribed)
 Comment.find_or_create_by(text: "Comentario #{user2.name_last_name}", travel: previous_travel2, user:user2)
 Comment.find_or_create_by(text: "Comentario #{user3.name_last_name}", travel: previous_travel2, user:user3)
 Comment.find_or_create_by(text: "Comentario #{user4.name_last_name}", travel: previous_travel2, user:user4)
+Comment.find_or_create_by(text: "Comentario #{email_user.name_last_name}", travel: previous_travel2, user:email_user)
 Comment.find_or_create_by(text: "Comentario #{subscribed.name_last_name}", travel: previous_travel2, user:subscribed)
 Comment.find_or_create_by(text: "Comentario #{user1.name_last_name}", travel: previous_travel2, user:user1)
 Comment.find_or_create_by(text: "Comentario #{user1.name_last_name}", travel: previous_travel2, user:user1)

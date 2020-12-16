@@ -1,7 +1,14 @@
 <ul class="list-group pt-5">
     <% if flash[:success] %>
         <div class="alert alert-success" role="alert">
-            <p class="my-0"><%= flash[:success] %></p>
+            <p class="my-0"><%= flash[:warning] %></p>
+        </div>
+    <% end %>
+    <% if flash[:successes] %>
+        <div class="alert alert-success text-center mt-5" role="alert">
+            <% flash[:successes].each do |e| %>
+                <p class="my-0"><%= e %></p>
+            <% end %>
         </div>
     <% end %>
     <% if flash[:index_error] %>
@@ -87,6 +94,7 @@
                             <% else %>
                                 <p> Este es un viaje recurrente, ¿quiere eliminar solo este viaje o también todos sus asociados?
                             <% end %>
+                            <strong> Todos los pasajeros serán reembolsados en su totalidad </strong>
                         </div>
                         <div class="modal-footer">
                             <div class="modal-footer">

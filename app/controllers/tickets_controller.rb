@@ -152,7 +152,7 @@ class TicketsController < ApplicationController
 	           		TravelMailer.refund_mail(@passenger, @travelsH, 50, @amountH).deliver_later
 	           	end
 
-            	flash[:warning] = "Se canceló la reserva que tenía de " + @travels.size.to_s + " viaje" + s + " con fechas dentro de los próximos 15 días. Se le envió por correo el resumen detallado del reintegro"
+            	flash[:warning] = "Se canceló la reserva que tenía de " + (@travelsT.size+@travelsH.size).to_s + " viaje" + s + " con fechas dentro de los próximos 15 días. Se le envió por correo el resumen detallado del reintegro"
             end
     	end
     	redirect_to next_travel_path
@@ -298,7 +298,7 @@ class TicketsController < ApplicationController
                 tick.destroy
             end
         end
-		if @travelsT.size > 0 || @travelsH > 0
+		if @travelsT.size > 0 || @travelsH.size > 0
             return true
         else
         	return false

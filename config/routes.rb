@@ -73,5 +73,7 @@ Rails.application.routes.draw do
     post 'express_ticket', to: 'tickets#finish_ticket', as: :finish_ticket
   end
 
+  post '/', to: 'home#contact', as: :contact_message
+
   root to: "home#index"
 end

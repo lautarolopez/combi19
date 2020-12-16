@@ -1,3 +1,55 @@
 // Place all the styles related to the home controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.landing {
+  padding: 20rem 3rem;
+  height: 80vh;
+  background-image: url("home_background.jpg");
+  background-repeat: no-repeat;
+  color: #fff;
+  background-attachment: scroll;
+  background-position: center center;
+  background-size: cover;
+}
+
+.covid-section,
+.contact-section {
+  background-color: #115571;
+  color: white;
+}
+
+.contact-section form {
+  color: black;
+}
+
+.search-form {
+  background-color: rgba($color: #fff, $alpha: 0.3) !important;
+}
+
+.welcome-title {
+  font-size: 2.5rem;
+}
+
+.info-paragraphs {
+  font-size: 1.2rem;
+}
+
+.covid-text {
+  text-align: right;
+  max-width: 450px;
+}
+
+.subscription-text {
+  text-align: left;
+  max-width: 450px;
+}
+
+.btn-faq {
+  border: none;
+  background-color: transparent;
+}
+
+.btn-faq:focus {
+  outline: none;
+}

@@ -16,4 +16,10 @@ class TravelMailer < Devise::Mailer
         mail(to: @user.email, from: "combidiecinueve@gmail.com" ,subject: "Cancelación de viaje" + s)
     end
 
+    def contact_mail(name, email, message)
+        @name = name
+        @email = email
+        @message = message
+        mail(to: "combidiecinueve@gmail.com", from: "combidiecinueve@gmail.com", subject: "Combi19 | Nuevo mensaje")
+    end
 end

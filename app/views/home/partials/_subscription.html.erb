@@ -5,9 +5,9 @@
             <p class="info-paragraphs">¿Te encanta viajar? ¿No te podés quedar quieto? ¿Estás siempre planeando tu próximo viaje?</p>
             <p class="info-paragraphs">Tenemos una membresía con descuentos exclusivos para vos.</p>
             <% if current_user != nil %>
-            <a href="<%> new_subscription_path %>" class="btn btn-primary btn-lg text-center mt-4">¡Contratala!</a>
+            <a href="<%= new_subscription_path %>" class="btn btn-primary btn-lg text-center mt-4">¡Contratala!</a>
             <% else %>
-            <a href="<%> new_user_session_path %>" class="btn btn-primary btn-lg text-center mt-4">¡Contratala!</a>
+            <a href="<%= new_user_session_path %>" class="btn btn-primary btn-lg text-center mt-4">¡Contratala!</a>
             <% end %>
         </div>
         <%= image_tag  "travel_plans.svg", size: '400', class: "ml-5" %>

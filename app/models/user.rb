@@ -15,6 +15,8 @@ class User < ApplicationRecord
   validates :birth_date, presence: true
   validate :validate_age
 
+  before_save :update_covid
+
   # Relations
   belongs_to :subscription_payment_method, class_name: "PaymentMethod", foreign_key: 'subscription_payment_method_id', optional: true
   has_many :driving_travels, class_name: "Travel", foreign_key: "driver_id" #, dependent: :restrict_with_exception
@@ -62,5 +64,19 @@ class User < ApplicationRecord
       end
     end
     return absent
+  end
+
+  def update_covid
+    if not_covid
+      self.discharge_date = nil
+    else
+      if discharge_date == nil || discharge_date < DateTime.now
+        self.not_covid = true
+      end
+    end
+  end
+
+  def covid
+    return (!self.not_covid && discharge_date != nil && discharge_date > DateTime.now)
   end
 end

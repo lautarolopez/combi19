@@ -38,11 +38,52 @@
         <%= f.label :password_confirmation, "Repetir contraseña" %>
         <%= f.password_field :password_confirmation, class: 'form-control' %>
     </div>
+
+    <% if resource.covid %>
+        <div class="form-group mt-2">
+            <p>Puede anular el bloqueo de su cuenta para reservar viajes dentro de los próximos 15 días si declara haberse hecho un hisopado y presenta el resultado negativo del mismo </p>
+            <small class='text-danger'>Esta respuesta tiene carácter de declaración jurada</small>
+            <div class="form-check">
+                <%= f.check_box :not_covid, class: "form-check-input" %>
+                <%= f.label :not_covid, "Confirmar", class: "form-check-label" %>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="covid_file">Subir resultado del hisopado</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="covid_file_addon">Subir archivo</span>
+                </div>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="covid_file" aria-describedby="covid_file_addon" lang="es">
+                    <label class="custom-file-label" for="covid_file">Seleccionar archivo</label>
+                </div>
+            </div>
+        </div>
+    <% end %>
+
     <div class="alert alert-warning" role="alert">
         <p class="m-0">Tenés que ingresar tu contraseña actual para efectuar los cambios. Si no querés cambiar tu contraseña solo dejá esos campos en blanco.</p>
     </div>
+
     <%= render "devise/shared/error_messages", resource: resource %>
-    <%= f.submit 'Actualizar mis datos', :class => 'btn btn-primary' %>
+    <%= f.submit 'Actualizar mis datos', :class => 'btn btn-primary', :id => 'save' %>
     <%= link_to "Cancelar mi cuenta", registration_path(resource_name), :data => { :confirm => "Estás seguro? Nos pone tristes verte partir :(" }, :method => :delete, :class => 'text-danger' %>
     <% end %>
 </div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#save').bind("click",function() 
+    { 
+        var file = $('#covid_file').val(); 
+        var covid = document.getElementById('user_not_covid').checked;
+        if(covid && file=='') 
+        { 
+            alert("El resultado del hisopado es obligatorio para cancelar el bloqueo"); 
+            return false; 
+        } 
+    }); 
+});
+</script> 

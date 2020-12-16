@@ -64,11 +64,11 @@ user7 = User.find_by(email: "user7@combi19.com")
 user8 = User.find_by(email: "user8@combi19.com")
 user9 = User.find_by(email: "user9@combi19.com")
 
-# Set covid synthoms to users
-user1.update(discharge_date: Date.today + 15.days)
-user7.update(discharge_date: Date.today + 10.days)
-user8.update(discharge_date: Date.today + 5.days)
-user9.update(discharge_date: Date.today)
+# Set covid to users
+user1.update(not_covid: false, discharge_date: Date.today + 15.days)
+user7.update(not_covid: false, discharge_date: Date.today + 10.days)
+user8.update(not_covid: false, discharge_date: Date.today + 5.days)
+user9.update(not_covid: false, discharge_date: Date.today)
 
 # Create user with real email
 email_user = User.create(email: "temporaryemail@combi19.com", password: "combi19", name: "Temporary", last_name: "User", dni: 1123*30, birth_date: 25.years.ago, role: "user", subscribed: false)

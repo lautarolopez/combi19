@@ -219,22 +219,15 @@ Ticket.find_or_create_by(travel: previous_travel9, user: user9, price: previous_
 # Create current tickets
 Ticket.find_or_create_by(travel: current_travel1, user: user1, price: future_travel1.price, status: :rejected)
 Ticket.find_or_create_by(travel: current_travel1, user: user2, price: future_travel1.price, status: :confirmed)
-Ticket.find_or_create_by(travel: current_travel1, user: user3, price: future_travel1.price, status: :absent)
-Ticket.find_or_create_by(travel: current_travel1, user: user4, price: future_travel1.price, status: :confirmed)
 Ticket.find_or_create_by(travel: current_travel1, user: subscribed, price: future_travel1.price*(1-future_travel1.discount/100.0), status: :confirmed)
-Ticket.find_or_create_by(travel: current_travel2, user: user2, price: future_travel2.price, status: :confirmed)
 Ticket.find_or_create_by(travel: current_travel2, user: user3, price: future_travel2.price, status: :confirmed)
 Ticket.find_or_create_by(travel: current_travel2, user: user4, price: future_travel2.price, status: :absent)
 Ticket.find_or_create_by(travel: current_travel2, user: subscribed, price: future_travel2.price*(1-future_travel2.discount/100.0), status: :confirmed)
 Ticket.find_or_create_by(travel: current_travel3, user: user3, price: future_travel3.price, status: :confirmed)
 Ticket.find_or_create_by(travel: current_travel3, user: user4, price: future_travel3.price, status: :confirmed)
 Ticket.find_or_create_by(travel: current_travel3, user: subscribed, price: future_travel3.price*(1-future_travel3.discount/100.0), status: :confirmed)
-Ticket.find_or_create_by(travel: current_travel4, user: user4, price: future_travel4.price, status: :confirmed)
-Ticket.find_or_create_by(travel: current_travel4, user: user1, price: future_travel4.price, status: :rejected)
-Ticket.find_or_create_by(travel: current_travel5, user: user1, price: future_travel5.price, status: :confirmed)
-Ticket.find_or_create_by(travel: current_travel5, user: user5, price: future_travel5.price, status: :absent)
-Ticket.find_or_create_by(travel: current_travel6, user: user6, price: future_travel6.price, status: :confirmed)
-Ticket.find_or_create_by(travel: current_travel6, user: user1, price: future_travel6.price, status: :rejected)
+Ticket.find_or_create_by(travel: current_travel4, user: user5, price: future_travel4.price, status: :rejected)
+Ticket.find_or_create_by(travel: current_travel5, user: user6, price: future_travel5.price, status: :confirmed)
 
 # Create future tickets
 Ticket.find_or_create_by(travel: future_travel1, user: user2, price: future_travel1.price)
@@ -268,11 +261,6 @@ end
 free = future_travel5.combi.capacity - future_travel5.occupied
 free.times do |i|
 	Ticket.create(travel: future_travel5, user: admin, price: future_travel5.price)
-end
-
-free = future_travel7.combi.capacity - future_travel7.occupied
-free.times do |i|
-	Ticket.create(travel: future_travel7, user: admin, price: future_travel7.price)
 end
 
 free = future_travel9.combi.capacity - future_travel9.occupied

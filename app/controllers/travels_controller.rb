@@ -77,7 +77,7 @@ class TravelsController < ApplicationController
                 @tickets = []
                 @ticket = Ticket.new
             else
-                @travels = current_user.travels.pending
+                @travels = current_user.travels.future
                 @tickets = Ticket.where(user: current_user)
             end
         end
@@ -261,18 +261,21 @@ class TravelsController < ApplicationController
 
     def destroy
     	@travel = Travel.find(params[:id])
-        @travel.passengers.each do |user|
-            if !user.subscribed 
-                amount = @travel.price
-            else
-                amount = @travel.price - (@travel.price * @travel.discount / 100)
-            end
-            @travels = []
-            @travels.push(@travel)
-            TravelMailer.refund_mail(user, @travels, 100, amount).deliver_later
+        @amounts = []
+        @travel.tickets.each do |ticket|
+            @amounts.push(ticket.price)
         end
+        @travels = []
+        @travels.push(@travel)
         if @travel.destroy
+            @amounts.each do |amount|
+                TravelMailer.refund_mail(current_user, @travels, 100, amount).deliver_later
+            end
             flash[:success] = "El viaje " + @travel.name + " ha sido borrado con éxito"
+            if @travels.size > 0
+                refund = '100%'
+                flash[:success] << "Se reintegró el " + refund + " del pago a todos los pasajeros del viaje"
+            end
             redirect_to travels_path
         else
             flash[:index_error] = 'Algo salió mal'

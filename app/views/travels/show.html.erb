@@ -102,9 +102,9 @@
                         <small class="text-secondary mt-2">Apurate, ¡solo quedan <%= @travel.combi.capacity - @travel.occupied %> lugares!</small>
                     <% end %>
                 <% end %>
-            <%= render :partial => 'extras_form', :locals => { :travel => @travel, :ticket => @ticket} %>
             </div>
         </div>
+        <%= render :partial => 'extras_form', :locals => { :travel => @travel, :ticket => @ticket} %>
         <div class="modal fade" id="cancel-<%= @travel.id %>" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">

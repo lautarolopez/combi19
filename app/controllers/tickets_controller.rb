@@ -42,15 +42,26 @@ class TicketsController < ApplicationController
 	                        current_user.update(discharge_date: nil)
 	                    else
 	                        current_user.update(discharge_date: Date.today + 15.days)
-	                        @travel_ids = []
+	                        @travelsT = []
+	                        @travelsH = []
+	                        @amountT = 0
+	                       	@amountH = 0
 	                        @passenger = current_user
 	                        if cancel_bookings
-	                        	if @travel_ids.size > 1
-					                s = "s"
-					            else
-					                s = ""
-					            end
-	                            flash[:warning] = "Como declaraste que presentás síntomas de covid se canceló la reserva que tenías de " + @travel_ids.size.to_s + " viaje" + s + " con fechas dentro de los próximos 15 días. Se envió por correo el resumen detallado del reintegro"
+	                        	s = ""
+	                        	if @travelsT.size > 0
+		                        	if @travelsT.size > 1
+						                s = "s"
+						            end
+					           		TravelMailer.refund_mail(current_user, @travelsT, 100, @amountT).deliver_later
+					           	end
+					           	if @travelsH.size > 0
+	                            	if @travelsH.size > 1
+						                s = "s"
+						            end
+					           		TravelMailer.refund_mail(@passenger, @travelsH, 50, @amountH).deliver_later
+					           	end
+	                            flash[:warning] = "Como declaraste que presentás síntomas de covid se canceló la reserva que tenías de " + (@travelsT.size+@travelsH.size).to_s + " viaje" + s + " con fechas dentro de los próximos 15 días. Se envió por correo el resumen detallado del reintegro"
 	                        end
 	                    end
 	                    if current_user.discharge_date != nil && current_user.discharge_date > @travel.date_departure
@@ -122,14 +133,26 @@ class TicketsController < ApplicationController
     		@passenger = @ticket.user
     		@passenger.update(discharge_date: DateTime.now + 15.days)
             flash[:error] = "El pasajero no puede viajar porque presenta síntomas compatibles de covid"
-            @travel_ids = []
+            @travelsT = []
+            @travelsH = []
+            @amountT = 0
+           	@amountH = 0
             if cancel_bookings
-            	if @travel_ids.size > 1
-	                s = "s"
-	            else
-	                s = ""
-	            end
-            	flash[:warning] = "Se canceló la reserva que tenía de " + @travel_ids.size.to_s + " viaje" + s + " con fechas dentro de los próximos 15 días. Se le envió por correo el resumen detallado del reintegro"
+            	s = ""
+            	if @travelsT.size > 0
+                	if @travelsT.size > 1
+		                s = "s"
+		            end
+	           		TravelMailer.refund_mail(@passenger, @travelsT, 100, @amountT).deliver_later
+	           	end
+	           	if @travelsH.size > 0
+                	if @travelsH.size > 1
+		                s = "s"
+		            end
+	           		TravelMailer.refund_mail(@passenger, @travelsH, 50, @amountH).deliver_later
+	           	end
+
+            	flash[:warning] = "Se canceló la reserva que tenía de " + @travels.size.to_s + " viaje" + s + " con fechas dentro de los próximos 15 días. Se le envió por correo el resumen detallado del reintegro"
             end
     	end
     	redirect_to next_travel_path
@@ -177,27 +200,18 @@ class TicketsController < ApplicationController
         if current_user != nil
         	@ticket = Ticket.find(params[:id])
             @travel = @ticket.travel
-            money = @ticket.price
+            amount = @ticket.price
             @ticket.destroy
             flash[:success] = []
             flash[:success] << "Se canceló su reserva para el viaje " + @travel.name
             if @travel.date_departure > (DateTime.now + 48.hours)
-                refund = 100.to_s + '% ($' + money.to_s + ')'
-                percentage = 100
-                if !curent_user.subscribed 
-                    amount = @travel.price
-                else
-                    amount = @travel.price - (@travel.price * @travel.discount / 100)
-                end
+                percentage = 1
             else
-                if !current_user.subscribed 
-                    amount = @travel.price / 2
-                else
-                    amount = (@travel.price - (@travel.price * @travel.discount / 100)) / 2
-                end
-                refund = 50.to_s + '% ($' + (money*0.5).to_s + ')'
-                percentage = 50
+            	percentage = 0.5
             end
+            amount = amount*percentage
+            percentage = (percentage*100).to_i
+            refund = percentage.to_s + '% ($' + amount.to_s + ')'
             @travels = []
             @travels.push(@travel)
             TravelMailer.refund_mail(current_user, @travels, percentage, amount).deliver_later
@@ -274,12 +288,17 @@ class TicketsController < ApplicationController
         @passenger.travels.future.where("date_departure < ?", @passenger.discharge_date).each do |t|
             tick = Ticket.find_by(travel: t, user: @passenger)
             if tick != nil && tick != @ticket
+            	if t.date_departure > (DateTime.now + 48.hours)
+	                @amountT = @amountT + tick.price
+	                @travelsT.push(t)
+	            else
+	            	@amountH = @amountH + tick.price*0.5
+	                @travelsH.push(t)
+	            end
                 tick.destroy
-                #Agregar viaje a la lista del mail
-                @travel_ids.push(t)
             end
         end
-		if @travel_ids.size > 0
+		if @travelsT.size > 0 || @travelsH > 0
             return true
         else
         	return false

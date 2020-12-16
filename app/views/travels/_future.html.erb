@@ -27,7 +27,7 @@
 <% @travels.each do |travel| %>
 <li class="list-group-item card mb-2">
     <% if (current_user == nil) || (current_user.role == 'user') %>
-    <span class="badge badge-pill badge-primary mb-1"><%= travel.combi.category.titleize %></span>
+        <span class="badge badge-pill badge-primary mb-1"><%= travel.combi.category.titleize %></span>
     <% end %>
     <div class="d-flex flex-row justify-content-between align-items-center">
         <%= render :partial => 'row', :locals => { :travel => travel } %>

@@ -39,7 +39,6 @@ class TravelsController < ApplicationController
         else
             redirect_to booked_travels_path
         end
-        #render 'prueba'
 	end
 
     def previous
@@ -262,6 +261,16 @@ class TravelsController < ApplicationController
 
     def destroy
     	@travel = Travel.find(params[:id])
+        @travel.passengers.each do |user|
+            if !user.subscribed 
+                amount = @travel.price
+            else
+                amount = @travel.price - (@travel.price * @travel.discount / 100)
+            end
+            @travels = []
+            @travels.push(@travel)
+            TravelMailer.refund_mail(user, @travels, 100, amount).deliver_later
+        end
         if @travel.destroy
             flash[:success] = "El viaje " + @travel.name + " ha sido borrado con éxito"
             redirect_to travels_path

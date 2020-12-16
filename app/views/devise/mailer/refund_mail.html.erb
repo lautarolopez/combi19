@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+</head>
+
+<body>
+    <p>Hola <%= @user.name %>!</p>
+    <% if @travels.size == 1 %>
+    <p>
+        Nos comunicamos para informarte que el siguiente viaje fue cancelado:
+    </p>
+    <% else %>
+    <p>
+        Nos comunicamos para informarte que tus siguientes viajes fueron cancelados:
+    </p>
+    <% end %>
+    <ul>
+        <% @travels.each do |travel| %>
+        <li>
+            <%= travel.route.origin.name.titleize + " - " + travel.route.destination.name.titleize + " | " + I18n.l(travel.date_departure, format: "%A, %d de %B de %Y").capitalize %>
+        </li>
+        <% end %>
+    </ul>
+    <% if @percentage != 0 %>
+    <p>Debido a esto te notificamos el reintegro del <%= @percentage %>%, por el monto de $<%= @amount %>.</p>
+    <% end %>
+
+    <p>Lamentamos cualquier incoveniente ocasionado, y esperamos verte a bordo nuevamente.</p>
+    <p>Combi19</p>
+</body>
+
+</html>

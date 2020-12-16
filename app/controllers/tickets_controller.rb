@@ -183,9 +183,24 @@ class TicketsController < ApplicationController
             flash[:success] << "Se canceló su reserva para el viaje " + @travel.name
             if @travel.date_departure > (DateTime.now + 48.hours)
                 refund = 100.to_s + '% ($' + money.to_s + ')'
+                percentage = 100
+                if !curent_user.subscribed 
+                    amount = @travel.price
+                else
+                    amount = @travel.price - (@travel.price * @travel.discount / 100)
+                end
             else
+                if !current_user.subscribed 
+                    amount = @travel.price / 2
+                else
+                    amount = (@travel.price - (@travel.price * @travel.discount / 100)) / 2
+                end
                 refund = 50.to_s + '% ($' + (money*0.5).to_s + ')'
+                percentage = 50
             end
+            @travels = []
+            @travels.push(@travel)
+            TravelMailer.refund_mail(current_user, @travels, percentage, amount).deliver_later
             flash[:success] << "Se reintegró el " + refund + " del pago en el método de pago utilizado"
         else
             flash[:fom_error] = 'Algo salió mal'

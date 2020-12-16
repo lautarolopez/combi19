@@ -69,7 +69,7 @@ class Travel < ApplicationRecord
 	end
 
 	def now
-		return (date_departure > (DateTime.now - 30.minutes) && date_arrival > DateTime.now)
+		return (date_departure > (DateTime.now - 30.minutes) && date_departure < DateTime.now && date_arrival > DateTime.now)
 	end
 
 	def started

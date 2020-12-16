@@ -96,7 +96,7 @@ class TravelsController < ApplicationController
     def current
         @ticket = Ticket.new
         @travel = current_user.driving_travels.current.first
-        if !@travel.started
+        if @travel && !@travel.started
             render 'next'
         end
     end
@@ -104,8 +104,9 @@ class TravelsController < ApplicationController
     def next
         @ticket = Ticket.new
         @current = current_user.driving_travels.current.first
-        if !@current.started
-            redirect_to current_travel_path
+        if @current && !@current.started
+            @travel = @current
+            @current = nil
         else
             @travel = current_user.driving_travels.future.first
             if @travel && @travel.started

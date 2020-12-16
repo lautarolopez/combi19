@@ -68,8 +68,11 @@
         <%= f.hidden_field :user_id, value: @user.id %>
         <%= f.hidden_field :travel_id, value: @travel.id %>
         <%= f.hidden_field :price, value: @travel.price %>
-        <%# f.submit "Finalizar venta", disable_with: 'Procesando...', class: "btn btn-primary" %>
-        <%= link_to 'Finalizar venta', '#', "data-toggle"=>"modal", "data-target" => "#confirm-#{@travel.id}", class: "btn btn-primary" %>
+        <div>
+            <%= link_to  "Cancelar", current_travel_path, class: "btn btn-secondary" %>
+            <%= link_to 'Finalizar venta', '#', "data-toggle"=>"modal", "data-target" => "#confirm-#{@travel.id}", class: "btn btn-primary" %>
+        </div>
+
         <div class="modal fade" id="confirm-<%= @travel.id %>" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">

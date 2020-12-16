@@ -43,6 +43,16 @@ es:
         licence_plate: Patente
         category: Categoría
         capacity: Capacidad
+      travel:
+        recurrences:
+          none_:   "Ninguno"
+          half_day: "Cada 12 horas"
+          day:  "Todos los días"
+          week: "Todas las semanas"
+          half_month: "Cada 15 días"
+          month:  "Todos los meses"
+          twice_month: "Cada 2 meses"
+          half_year: "Cada 6 meses"
     errors:
       models:
         payment_method:

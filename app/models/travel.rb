@@ -36,6 +36,12 @@ class Travel < ApplicationRecord
 	#	end
 	#end
 
+	enum recurrence: [:none_, :half_day, :day, :week, :half_month, :month, :twice_month, :half_year]
+
+	def recurrence_type
+    	I18n.t("activerecord.attributes.travel.recurrences.#{recurrence}")
+  	end
+
 	def name
 		"#{origin.name.titleize}, #{origin.state.titleize} - #{destination.name.titleize}, #{destination.state.titleize} el día #{I18n.l(date_departure, format: "%d de %B de %Y a las %H:%M hs.")}"
 	end
@@ -54,5 +60,9 @@ class Travel < ApplicationRecord
 
 	def future
 		return (date_departure >= DateTime.now)
+	end
+
+	def recurrent
+		return (recurrence != "none_")
 	end
 end

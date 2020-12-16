@@ -45,6 +45,7 @@ Rails.application.routes.draw do
     get 'travels/discarded', to: 'travels#discarded', as: :discarded_travels
     get 'travels/next', to: 'travels#next', as: :next_travel
     get 'travels/current', to: 'travels#current', as: :current_travel
+    get 'travels/:id/delete_recurrrents', to: 'travels#destroy_recurrents', as: :destroy_recurrent_travels
   end
   resources :travels
   #as :payment_method do

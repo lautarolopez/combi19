@@ -19,6 +19,25 @@
         <%= f.datetime_local_field :date_arrival, class: 'form-control', required: true, readonly: true %>
     </div>
 
+    <% if @travel.recurrent && !params[:delete_recurrence] %>
+        <div class="form-group">
+            <%= f.label :recurrence, 'Período de recurrencia' %>
+            <%= f.hidden_field :recurrence, :value => @travel.recurrence %>
+            <%= text_field_tag :r, @travel.recurrence_type, readonly: true, class: 'form-control text-capitalize' %>
+        </div>
+
+        <div class="form-group">
+            <%= f.label :recurrence_name, 'Nombre de la recurrencia' %>
+            <%= f.text_field :recurrence_name, class: 'form-control', readonly: true %>
+        </div>
+    <% else %>
+        <p class='font-weight-bold font-italic mt-2'> Este viaje no es recurrente o la recurrencia fue eliminada </p>
+    <% end %>
+
+    <div class='form-check'>
+        <%= check_box_tag :delete_recurrence, params[:delete_recurrence], params[:delete_recurrence] || false, :style => 'display: none', class: "form-check-input" %>
+    </div>
+
     <div class="form-group">
         <%= f.label :price, 'Precio' %>
         <%= f.number_field :price, step: 0.01, class: 'form-control', required: true, readonly: true %>
@@ -33,7 +52,7 @@
         <%= f.label :driver_id, 'Chofer *' %>
         <%= collection_select(:travel, :driver_id, @validDrivers, :id, :name_last_name, {prompt: "Seleccione un conductor"}, { class: 'form-control', required: true }) %>
         <% if (@validDrivers.count == 0) %>
-        <small class='text-danger'> No hay choferes disponibles </small>
+        <p class='font-weight-bold font-italic text-danger'> No hay choferes disponibles </p>
         <% end %>
     </div>
 
@@ -41,7 +60,7 @@
         <%= f.label :combi_id, 'Combi *' %>
         <%= collection_select(:travel, :combi_id, @validCombis, :id, :licence_plate, {prompt: "Seleccione una combi"}, { class: 'form-control', required: true }) %>
         <% if (@validCombis.count == 0) %>
-        <small class='text-danger'> No hay combis disponibles </small>
+        <p class='font-weight-bold font-italic text-danger'> No hay combis disponibles </p>
         <% end %>
     </div>
 
@@ -53,7 +72,7 @@
 
     <span class='row'>
         <span class="col-6 text-center">
-            <%= button_tag "Cancelar", :type => 'button', :class => "btn-lg btn-block btn-secondary", :onclick => "location.href = '#{travels_path(@travel)}'" %>
+            <%= button_tag "Cancelar", :type => 'button', :class => "btn-lg btn-block btn-secondary", :onclick => "location.href = '#{travels_path}'" %>
         </span>
         <span class="col-6 text-center">
             <%= f.submit 'Actualizar', :class => 'btn-lg btn-block btn-primary' %>

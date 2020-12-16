@@ -19,6 +19,24 @@
         <%= f.datetime_local_field :date_arrival, class: 'form-control' %>
     </div>
 
+    <div class="row form-group">
+        <div class="col-6">
+            <%= f.label :recurrence, 'Período de recurrencia' %>
+            <%= f.select(:recurrence, Travel.recurrences.keys.map {|key| [I18n.t("activerecord.attributes.travel.recurrences.#{key}"), key]}, {}, {class: 'form-control text-capitalize'}) %>
+        </div>
+        <div class='col-6'>
+            <%= label_tag :end_date, 'Hasta' %>
+            <%= datetime_local_field_tag :end_date, params[:end_date] ||DateTime.now, min: DateTime.now, :max => (DateTime.now + 1.years), class: 'form-control' %>
+            <small> Los viajes recurrentes se generarán con un período máximo de un año </small>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <%= f.label :recurrence_name, 'Nombre de la recurrencia' %>
+        <%= f.text_field :recurrence_name, class: 'form-control' %>
+        <small> El nombre de la recurrencia debe ser único </small>
+    </div>
+
     <div class="form-group">
         <%= f.label :price, 'Precio *' %>
         <%= f.number_field :price, step: 0.01, class: 'form-control', required: true %>

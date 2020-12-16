@@ -19,7 +19,27 @@
         <%= f.datetime_local_field :date_arrival, class: 'form-control', required: true %>
     </div>
 
-    <div class="form-group">
+    <% if @travel.recurrent %>
+        <div class="form-group">
+            <%= f.label :recurrence, 'Período de recurrencia' %>
+            <%= f.hidden_field :recurrence, :value => @travel.recurrence %>
+            <%= text_field_tag :r, @travel.recurrence_type, readonly: true, class: 'form-control' %>
+        </div>
+
+        <div class="form-group">
+            <%= f.label :recurrence_name, 'Nombre de la recurrencia' %>
+            <%= f.text_field :recurrence_name, class: 'form-control', readonly: true %>
+        </div>
+
+        <div class='form-check'>
+            <%= check_box_tag :delete_recurrence, :delete_recurrence, params[:delete_recurrence] || false, class: "form-check-input" %>
+            <%= label_tag :delete_recurrence, "Eliminar asociación de recurrencia", class: "form-check-label" %>
+        </div>
+    <% else %>
+        <p class='font-weight-bold font-italic'> Este viaje no es recurrente </p>
+    <% end %>
+
+    <div class="form-group mt-2">
         <%= f.label :price, 'Precio *' %>
         <%= f.number_field :price, step: 0.01, class: 'form-control', required: true %>
     </div>

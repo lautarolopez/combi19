@@ -256,7 +256,7 @@ class TicketsController < ApplicationController
 
     def cancel_bookings
     	tick = nil
-        @passenger.travels.where("date_departure < ?", @passenger.discharge_date).each do |t|
+        @passenger.travels.future.where("date_departure < ?", @passenger.discharge_date).each do |t|
             tick = Ticket.find_by(travel: t, user: @passenger)
             if tick != nil && tick != @ticket
                 tick.destroy

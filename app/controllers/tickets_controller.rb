@@ -39,7 +39,9 @@ class TicketsController < ApplicationController
                 	@ticket.attributes = {payment_method: @paymentMethod.card}
                 	if @ticket.save
 	                    if params[:not_covid]
-	                        current_user.update(not_covid: params[:not_covid], discharge_date: Date.today + 15.days)
+	                    	current_user.update(not_covid: params[:not_covid])
+	                    else
+	                        current_user.update(not_covid: false, discharge_date: Date.today + 15.days)
 	                        @travelsT = []
 	                        @travelsH = []
 	                        @amountT = 0
@@ -61,8 +63,6 @@ class TicketsController < ApplicationController
 					           	end
 	                            flash[:warning] = "Como declaraste que presentás síntomas de covid se canceló la reserva que tenías de " + (@travelsT.size+@travelsH.size).to_s + " viaje" + s + " con fechas dentro de los próximos 15 días. Se envió por correo el resumen detallado del reintegro"
 	                        end
-	                    else
-	                    	current_user.update(not_covid: params[:not_covid])
 	                    end
 	                    if current_user.discharge_date != nil && current_user.discharge_date > @travel.date_departure
 	                        if @method == 'new'

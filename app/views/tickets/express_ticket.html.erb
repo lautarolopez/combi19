@@ -68,7 +68,33 @@
         <%= f.hidden_field :user_id, value: @user.id %>
         <%= f.hidden_field :travel_id, value: @travel.id %>
         <%= f.hidden_field :price, value: @travel.price %>
-        <%= f.submit "Finalizar venta", disable_with: 'Procesando...', class: "btn btn-primary" %>
+        <%# f.submit "Finalizar venta", disable_with: 'Procesando...', class: "btn btn-primary" %>
+        <%= link_to 'Finalizar venta', '#', "data-toggle"=>"modal", "data-target" => "#confirm-#{@travel.id}", class: "btn btn-primary" %>
+        <div class="modal fade" id="confirm-<%= @travel.id %>" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">Testeo de COVID</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <%= label_tag :covid, "¿El pasajero confirma que no presenta síntomas de COVID ni estuvo en contacto con ninguna persona que diera positivo?", class: "form-group-label" %>
+                            <div class="form-check">
+                                <%= check_box_tag :not_covid, "confirm", false, class: "form-check-input" %>
+                                <%= label_tag :not_covid, "Confirmar", class: "form-check-label" %>
+                            </div>
+                        </div>
+                        <small class='text-danger mt-5'>Este formulario tiene carácter de declaración jurada a nombre del pasajero. Si presenta síntomas no podrá reservar viajes con ocurrencia dentro de los próximos 15 días.</small>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="modal-footer">
+                            <a href="#" data-dismiss="modal" class="btn btn-block btn-secondary">Cancelar</a>
+                            <%= submit_tag "Finalizar venta", :class => 'form_submit btn btn-block btn-primary mb-2', data: { disable_with: "Procesando..." } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <% end %>
     </div>
 </div>

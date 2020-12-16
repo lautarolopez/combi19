@@ -196,8 +196,39 @@ class TicketsController < ApplicationController
     end
 
     def finish_ticket
-        @ticket = Ticket.create(user_id: params[:user_id], travel_id: params[:travel_id], price: params[:price], status: :confirmed)
-        flash[:success] = "Pasaje vendido correctamente."
+        @user = User.find(params[:user_id])
+        if params[:not_covid]
+            @user.update(not_covid: params[:not_covid])
+            @ticket = Ticket.create(user_id: params[:user_id], travel_id: params[:travel_id], price: params[:price], status: :confirmed)
+            flash[:success] = "Pasaje vendido correctamente."
+        else
+            @user.update(not_covid: false, discharge_date: Date.today + 15.days)
+            @travelsT = []
+            @travelsH = []
+            @amountT = 0
+            @amountH = 0
+            @passenger = @user
+            s = ""
+            if cancel_bookings
+                if @travelsT.size > 0
+                    if @travelsT.size > 1
+                        s = "s"
+                    end
+                    TravelMailer.refund_mail(@user, @travelsT, 100, @amountT).deliver_later
+                end
+                if @travelsH.size > 0
+                    if @travelsH.size > 1
+                        s = "s"
+                    end
+                    TravelMailer.refund_mail(@user, @travelsH, 50, @amountH).deliver_later
+                end
+                flash[:error] = "El pasaje no se vendió debido a que el pasajero presenta síntomas de covid."
+                if (@travelsT.size + @travelsH.size) != 0    
+                    flash[:warning] = (@travelsT.size+@travelsH.size).to_s + " viaje" + s + " con fechas dentro de los próximos 15 días fueron cancelados. Se envió por correo el resumen detallado de los reintegros correspondientes."
+                end
+            end
+        end
+        
         redirect_to root_path
     end
 	

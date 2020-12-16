@@ -79,7 +79,7 @@
                     <% end %>
                     <% if (current_user != nil) && (current_user.role == 'user') %>
                         <% if current_user.travels.include?@travel %>
-                            <% if current_user.tickets.pending.travels.include?@travel %>
+                            <% if current_user.tickets.pending.where(travel_id: @travel.id).first %>
                                 <% ticket = @tickets.where(travel: travel).first %>
                                 <%= link_to 'Anular reserva', '#', "data-toggle"=>"modal", "data-target" => "#cancel-#{@travel.id}", class: "btn btn-lg btn-danger" %>
                             <% else %>

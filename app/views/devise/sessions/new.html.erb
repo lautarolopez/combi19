@@ -1,7 +1,6 @@
 <div class="authform row">
     <%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => {class: 'd-flex flex-column justify-content-center col-lg-6 mx-auto card p-5 my-5', :role => 'form'}) do |f| %>
     <h3>Ingresá</h3>
-
     <div class="form-group">
         <%= f.label :email, "Email *" %>
         <%= f.email_field :email, :autofocus => true, class: 'form-control' %>
@@ -10,6 +9,11 @@
         <%= f.label :password, "Contraseña *" %>
         <%= f.password_field :password, class: 'form-control' %>
     </div>
+    <% if flash[:info] %>
+    <div class="alert alert-info" role="alert">
+        <p class="my-0"><%= flash[:info] %></p>
+    </div>
+    <% end %>
     <% if flash[:alert] %>
     <div class="alert alert-danger" role="alert">
         <p class="my-0"><%= flash[:alert] %></p>

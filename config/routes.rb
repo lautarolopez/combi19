@@ -19,7 +19,7 @@ Rails.application.routes.draw do
     get 'contraseña/nueva', to: 'devise/passwords#new', as: :new_user_password
     get 'contraseña/editar', to: 'devise/passwords#edit', as: :edit_user_password
     put 'contraseña', to: 'devise/passwords#update', as: :user_password
-    post 'contraseña', to: 'devise/passwords#create'
+    post 'contraseña', to: 'users/passwords#create'
 
     ## Choferes
     get 'choferes', to: 'drivers#index', as: :drivers

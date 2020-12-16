@@ -1,24 +1,5 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title>Combi19</title>
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
-
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
-</head>
-
-<body>
-    <%= render "layouts/partials/header" %>
-    <%= render :partial => 'home/partials/home_search' %>
-    <%= render :partial => 'home/partials/subscription' %>
-    <%= render :partial => 'home/partials/covid_information' %>
-    <%= render :partial => 'home/partials/faq' %>
-    <%= render :partial => 'home/partials/contact' %>
-</body>
-
-</html>
+<%= render :partial => 'home/partials/home_search' %>
+<%= render :partial => 'home/partials/subscription' %>
+<%= render :partial => 'home/partials/covid_information' %>
+<%= render :partial => 'home/partials/faq' %>
+<%= render :partial => 'home/partials/contact' %>

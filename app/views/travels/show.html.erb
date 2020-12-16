@@ -79,7 +79,14 @@
                     <% end %>
                     <% if (current_user != nil) && (current_user.role == 'user') %>
                         <% if current_user.travels.include?@travel %>
-                            <%= link_to 'Anular reserva', '#', "data-toggle"=>"modal", "data-target" => "#cancel-#{@travel.id}", class: "btn btn-lg btn-danger" %>
+                            <% if current_user.tickets.pending.travels.include?@travel %>
+                                <% ticket = @tickets.where(travel: travel).first %>
+                                <%= link_to 'Anular reserva', '#', "data-toggle"=>"modal", "data-target" => "#cancel-#{@travel.id}", class: "btn btn-lg btn-danger" %>
+                            <% else %>
+                                <div class="tooltip-wrapper btn-block" data-title="No podes reservar un pasaje para este viaje porque ya tenes otra reserva en las mismas fechas">
+                                    <button type="button" class="btn btn-lg btn-primary" disabled>Comprar</button>
+                                </div>
+                            <% end %>
                         <% else %>
                             <% if @travel.occupied == @travel.combi.capacity %>
                                 <button type="button" class="btn btn-lg btn-disabled" disabled>Agotado</button>

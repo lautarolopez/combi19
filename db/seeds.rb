@@ -198,13 +198,12 @@ future_travel7 = Travel.find_or_create_by(route: chascomus_posadas, date_departu
 future_travel8 = Travel.find_or_create_by(route: chascomus_rauch, date_departure: (DateTime.now + 2.months), date_arrival: (DateTime.now + 2.months + 9.hours), price: 900, discount: 15, driver: driver5, combi: combi5)
 future_travel9 = Travel.find_or_create_by(route: posadas_laplata, date_departure: (DateTime.now + 3.months), date_arrival: (DateTime.now + 3.months + 9.hours), price: 900, discount: 0, driver: driver5, combi: combi5)
 
-## Create recurrent travel
+# Create recurrent travel
 time = 15.days
 while (DateTime.now + time < DateTime.now + 2.months + 15.days)
 	Travel.find_or_create_by(route: laplata_villalaangostura, date_departure: (DateTime.now  + time), date_arrival: (DateTime.now + time + 1.days), price: 4000, discount: 50, driver: driver7, combi: combi7, recurrence: :week, recurrence_name: "Semanal verano")
 	time = time + 1.week
 end
-
 
 # Create previous tickets
 Ticket.find_or_create_by(travel: previous_travel1, user: user1, price: previous_travel1.price, status: :confirmed)
@@ -268,6 +267,7 @@ Ticket.find_or_create_by(travel: future_travel8, user: user8, price: future_trav
 Ticket.find_or_create_by(travel: future_travel9, user: user1, price: future_travel9.price)
 Ticket.find_or_create_by(travel: future_travel9, user: user9, price: future_travel9.price)
 Ticket.find_or_create_by(travel: future_travel9, user: subscribed, price: future_travel9.price*(1-future_travel9.discount/100.0))
+
 
 # Simulate sold out tickets
 free = future_travel2.combi.capacity - future_travel2.occupied

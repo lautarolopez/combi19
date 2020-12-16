@@ -112,6 +112,8 @@ class TravelsController < ApplicationController
             if @travel && @travel.started
                 render 'current'
             end
+            p @travel
+            p @current
         end
     end
 

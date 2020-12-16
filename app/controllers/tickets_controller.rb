@@ -9,7 +9,7 @@ class TicketsController < ApplicationController
                 flash[:error] = 'No puede reservar este viaje porque presenta síntomas de covid'
                 redirect_to travel_path(@travel)
             else
-            	if validate_travels
+            	if validate_travels(current_user)
 	            	@ticket = Ticket.new(params.require(:ticket).permit(extra_ids: []))
 	            	@ticket.attributes = {user: current_user, travel: @travel}
 	            	@ticket.price = sum_price(current_user, @travel)
@@ -186,8 +186,13 @@ class TicketsController < ApplicationController
     def find_passenger
         @user = User.find_by_email(params[:user][:email])
         if @user != nil
-            @travel = Travel.current.where("driver_id = ?", current_user.id).first
-            render 'express_ticket'
+        	@travel = Travel.current.where("driver_id = ?", current_user.id).first
+        	if validate_confirmed_travels(@user)
+	            render 'express_ticket'
+	        else
+	       		flash[:error] = 'Este usuario no puede reservar este viaje porque ya tiene una reserva confirmada para este o algún otro viaje en este momento' #bilocacion
+	       		redirect_to current_travel_path
+	       	end
         else
             flash[:form_existing_error] = "No existe un usuario con este correo electrónico."
             @user = User.new
@@ -341,8 +346,20 @@ class TicketsController < ApplicationController
         end
     end
 
-    def validate_travels
-    	current_user.travels.future.each do |t|
+    def validate_travels(user)
+    	user.tickets.pending.travels.each do |t|
+        	if !(t.date_arrival < @travel.date_departure && t.date_departure > @travel.date_arrival)
+        		return false
+        	end
+    	end
+    	return true
+    end
+
+    def validate_confirmed_travels(user)
+    	user.tickets.confirmed.travels.each do |t|
+    		if t.id == @travel.id
+    			return false
+    		end
         	if !(t.date_arrival < @travel.date_departure && t.date_departure > @travel.date_arrival)
         		return false
         	end

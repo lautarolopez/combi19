@@ -59,22 +59,22 @@
             </p>
             <% end %>
             <% ticket = @ticket %>
-            <% if current_user.travels.include?travel %>
-            <% ticket = @tickets.where(travel: travel).first %>
-            <%= link_to 'Anular reserva', '#', "data-toggle"=>"modal", "data-target" => "#cancel-#{travel.id}", class: "btn btn-block btn-danger mb-2" %>
+            <% if current_user.tickets.pending.travels.include?@travel %>
+                <% ticket = @tickets.where(travel: travel).first %>
+                <%= link_to 'Anular reserva', '#', "data-toggle"=>"modal", "data-target" => "#cancel-#{travel.id}", class: "btn btn-block btn-danger mb-2" %>
             <% else %>
-            <% if travel.occupied == travel.combi.capacity %>
-            <button type="button" class="btn btn-block btn-disabled mb-2" disabled>Agotado</button>
-            <% else %>
-            <% if current_user.discharge_date != nil && current_user.discharge_date > travel.date_departure %>
-            <div class="tooltip-wrapper btn-block" data-title="No podes reservar un pasaje para este viaje porque presentas síntomas de covid">
-                <button type="button" class="btn btn-block btn-primary mb-2" disabled>Comprar</button>
-            </div>
+                <% if travel.occupied == travel.combi.capacity %>
+                    <button type="button" class="btn btn-block btn-disabled mb-2" disabled>Agotado</button>
+                <% else %>
+                    <% if current_user.discharge_date != nil && current_user.discharge_date > travel.date_departure %>
+                        <div class="tooltip-wrapper btn-block" data-title="No podes reservar un pasaje para este viaje porque presentas síntomas de covid">
+                            <button type="button" class="btn btn-block btn-primary mb-2" disabled>Comprar</button>
+                        </div>
 
-            <% else %>
-            <%= link_to 'Comprar', '#', "data-toggle"=>"modal", "data-target" => "#pay-#{travel.id}", class: "btn btn-block btn-primary mb-2" %>
-            <% end %>
-            <% end %>
+                    <% else %>
+                        <%= link_to 'Comprar', '#', "data-toggle"=>"modal", "data-target" => "#pay-#{travel.id}", class: "btn btn-block btn-primary mb-2" %>
+                    <% end %>
+                <% end %>
             <% end %>
             <%= render :partial => 'extras_form', :locals => { :travel => travel, :ticket => ticket} %>
             <div class="modal fade" id="cancel-<%= travel.id %>" role="dialog">

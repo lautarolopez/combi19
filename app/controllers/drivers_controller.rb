@@ -10,7 +10,18 @@ class DriversController < ApplicationController
     def show
         @driver = User.find(params[:id])
 
-        @travels = @driver.driving_travels.last_month
+        if(params[:date])
+            @date = DateTime.new(params[:date][:year].to_i,params[:date][:month].to_i)
+            if(@date.year==DateTime.current.year and @date.month==DateTime.current.month)
+                @date_end = DateTime.current
+            else
+                @date_end = @date.at_end_of_month
+            end
+            @travels=@driver.driving_travels.where("date_arrival > ? and date_arrival < ?", @date, @date_end)
+        else
+            @travels = @driver.driving_travels.last_month
+        end      
+
 
         @total_hours = 0        
         @travels.each do |travel|

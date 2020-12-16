@@ -1,6 +1,41 @@
 	<div class="pt-5">
 		<h1> <%= @driver.last_name + ", " + @driver.name %> </h1>
 
+		
+
+
+	<form action="/chofer/<%= params[:id] %>" method="get" class="justify-content-between">      
+
+
+		<li class="list-group-item">
+		    <div class="form-group">
+		    	<span class='row'>
+		    		<span class='col'>
+		    			<h4>Fecha de consulta</h4>
+		    		</span>
+		    	</span>
+		    	<% if params[:date] %>
+				    <% selected_date = Date.new(params[:date][:year].to_i,params[:date][:month].to_i) %>
+				<% else %>
+				    <% selected_date = Date.current.last_month %>
+				<% end %>
+		    	<span class='row'>
+		    		<span class='col-6'>
+		        		<%= label_tag(:expire_month, 'Mes', class: 'ml-1') %>
+		        		<%= select_month(selected_date || Date.today, {}, class: 'form-control', id: 'month') %>
+		        	</span>
+		    		<span class='col-6'> 
+				        <%= label_tag(:expire_year, 'Año', class: 'ml-1') %>
+				        <%= select_year(selected_date || Date.today, {:start_year => 20.years.ago.year,:end_year => Date.today.year}, class: 'form-control', id: 'year') %>
+				    </span>
+				</span>
+			</div>
+		</li>
+
+        <span class="d-flex flex-column">
+            <button type="submit" class="btn btn-primary mb-2">Buscar</button>
+        </span>
+    </form>
 
 
 		<% if @travels.size > 0 %> 	
@@ -30,12 +65,15 @@
 					</span>       
 				</li>
 			<% end %>
-			<h2 class="mt-4 mb-2 text-center"> <%= "Realizó " + @total_hours.to_s + " horas en el mes anterior." %> </h2>
+			
+			<h2 class="mt-4 mb-2 text-center"> <%= "Realizó " + @total_hours.to_s + " horas en el mes de " + I18n.l(selected_date, format: "%B de %Y.") %></h2>
+		
+			
 
 		<%else%>
 	        <div class="d-flex flex-column align-items-center w-100">
 	            <%= image_tag  "Travels_history_empty.svg", size: '400' %>
-			    <h2 class="text-center"> No realizó viajes </h2>
+			    <h2 class="text-center"> <%= "No realizó viajes en el mes de " + I18n.l(selected_date, format: "%B de %Y.")%></h2>
 	        </div>
 		<%end%>
 

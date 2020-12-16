@@ -71,7 +71,7 @@ user8.update(not_covid: false, discharge_date: Date.today + 5.days)
 user9.update(not_covid: false, discharge_date: Date.today)
 
 # Create user with real email
-email_user = User.create(email: "temporaryemail@combi19.com", password: "combi19", name: "Temporary", last_name: "User", dni: 1123*30, birth_date: 25.years.ago, role: "user", subscribed: false)
+email_user = User.create(email: "mojawic723@febeks.com", password: "combi19", name: "Temporary", last_name: "User", dni: 1123*30, birth_date: 25.years.ago, role: "user", subscribed: false)
 
 
 # Create payment methods

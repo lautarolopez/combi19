@@ -9,9 +9,14 @@ class TicketsController < ApplicationController
                 flash[:error] = 'No puede reservar este viaje porque presenta síntomas de covid'
                 redirect_to travel_path(@travel)
             else
-            	@ticket = Ticket.new(params.require(:ticket).permit(extra_ids: []))
-            	@ticket.attributes = {user: current_user, travel: @travel}
-            	@ticket.price = sum_price(current_user, @travel)
+            	if validate_travels
+	            	@ticket = Ticket.new(params.require(:ticket).permit(extra_ids: []))
+	            	@ticket.attributes = {user: current_user, travel: @travel}
+	            	@ticket.price = sum_price(current_user, @travel)
+	            else
+	            	flash[:error] = 'No puede reservar este viaje porque posee al menos una reserva para un viaje con fechas coincidentes'
+                	redirect_to travel_path(@travel)
+                end
             end
         end
     end
@@ -39,9 +44,9 @@ class TicketsController < ApplicationController
                 	@ticket.attributes = {payment_method: @paymentMethod.card}
                 	if @ticket.save
 	                    if params[:not_covid]
-	                    	current_user.update(not_covid: params[:not_covid])
+	                        current_user.update(discharge_date: nil)
 	                    else
-	                        current_user.update(not_covid: false, discharge_date: Date.today + 15.days)
+	                        current_user.update(discharge_date: Date.today + 15.days)
 	                        @travelsT = []
 	                        @travelsH = []
 	                        @amountT = 0
@@ -111,7 +116,7 @@ class TicketsController < ApplicationController
     	@ticket = Ticket.find(params[:id])
     	@ticket.status = :absent
     	if @ticket.save
-    		flash[:success] = "Se registró que el pasajero no se presentó al viaje"
+    		flash[:warning] = "Se registró que el pasajero no se presentó al viaje"
     	else
     		flash[:error] = "Algo salió mal"
 		end
@@ -131,7 +136,7 @@ class TicketsController < ApplicationController
     	else
     		@ticket.update(status: :rejected)
     		@passenger = @ticket.user
-    		@passenger.update(not_covid: false, discharge_date: DateTime.now + 15.days)
+    		@passenger.update(discharge_date: DateTime.now + 15.days)
             flash[:error] = "El pasajero no puede viajar porque presenta síntomas compatibles de covid"
             @travelsT = []
             @travelsH = []
@@ -155,7 +160,7 @@ class TicketsController < ApplicationController
             	flash[:warning] = "Se canceló la reserva que tenía de " + (@travelsT.size+@travelsH.size).to_s + " viaje" + s + " con fechas dentro de los próximos 15 días. Se le envió por correo el resumen detallado del reintegro"
             end
     	end
-    	redirect_to next_travel_path
+    	redirect_to root_path
     	#render 'prueba'
     end
 
@@ -303,5 +308,14 @@ class TicketsController < ApplicationController
         else
         	return false
         end
+    end
+
+    def validate_travels
+    	current_user.travels.future.each do |t|
+        	if !(t.date_arrival < @travel.date_departure && t.date_departure > @travel.date_arrival)
+        		return false
+        	end
+    	end
+    	return true
     end
 end

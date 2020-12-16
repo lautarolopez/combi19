@@ -3,7 +3,7 @@ class Travel < ApplicationRecord
 	default_scope -> { order(date_departure: :asc, date_arrival: :asc)}
 	scope :future, -> { where("date_departure >= ?", DateTime.now).reorder(date_departure: :asc, date_arrival: :asc) }
 	scope :previous, -> { where("date_arrival <= ?", DateTime.now).reorder(date_departure: :desc, date_arrival: :desc) }
-	scope :current, -> { where("date_departure <= ? and date_arrival > ?", DateTime.now, DateTime.now).reorder(date_arrival: :asc, date_departure: :asc)}
+	scope :current, -> { where("date_departure <= ? and date_arrival > ?", DateTime.now + 30.minutes, DateTime.now).reorder(date_arrival: :asc, date_departure: :asc)}
 	scope :pending, -> { where("date_arrival > ?", DateTime.now).reorder(date_departure: :asc, date_arrival: :asc) }
 	scope :last_month, -> {where("date_arrival < ? and date_arrival > ?", DateTime.current.last_month.at_end_of_month, DateTime.current.last_month.at_beginning_of_month)}
 
@@ -29,12 +29,14 @@ class Travel < ApplicationRecord
 
 
 	# Methods
-	#def validate_dates
-	#	if date_departure > date_arrival || date_departure < DateTime.current.beginning_of_day || date_arrival < DateTime.current.beginning_of_day
+	def validate_dates
+		if date_departure > date_arrival || date_departure < DateTime.now || date_arrival < DateTime.now
 	#		errors.add(:date_departure, "Las fechas ingresadas son incorrectas.")
 	#		errors.add(:date_arrival, "Las fechas ingresadas son incorrectas.")
-	#	end
-	#end
+			return false
+		end
+		return true
+	end
 
 	enum recurrence: [:none_, :half_day, :day, :week, :half_month, :month, :twice_month, :half_year]
 
@@ -51,7 +53,7 @@ class Travel < ApplicationRecord
 	end
 
 	def full
-		return (occupied < self.combi.capacity)
+		return (occupied == self.combi.capacity)
 	end
 
 	def current
@@ -64,5 +66,21 @@ class Travel < ApplicationRecord
 
 	def recurrent
 		return (recurrence != "none_")
+	end
+
+	def now
+		return (date_departure > (DateTime.now - 30.minutes) && date_arrival > DateTime.now)
+	end
+
+	def started
+		if self.tickets.size == 0 
+			if date_departure > DateTime.now
+				return true
+			end
+		else
+			if self.tickets.pending.size == 0
+				return true
+			end
+		end
 	end
 end

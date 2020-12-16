@@ -5,9 +5,9 @@ class HomeController < ApplicationController
     		@ticket = Ticket.new
     		@travel = current_user.driving_travels.pending.first
     		if @travel != nil && @travel.current
-    			render 'travels/current'
+    			redirect_to current_travel_path
     		else
-    			render 'travels/next'
+                redirect_to next_travel_path
     		end
 		else
 			render 'index', :layout => 'home_layout'

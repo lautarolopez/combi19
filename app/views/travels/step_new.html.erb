@@ -22,7 +22,7 @@
     <div class="row form-group">
         <div class="col-6">
             <%= f.label :recurrence, 'Período de recurrencia' %>
-            <%= f.select(:recurrence, Travel.recurrences.keys.map {|key| [I18n.t("activerecord.attributes.travel.recurrences.#{key}"), key]}, {}, {class: 'form-control text-capitalize'}) %>
+            <%= f.select(:recurrence, Travel.recurrences.keys.map {|key| [I18n.t("activerecord.attributes.travel.recurrences.#{key}"), key]}, {}, {class: 'form-control'}) %>
         </div>
         <div class='col-6'>
             <%= label_tag :end_date, 'Hasta' %>

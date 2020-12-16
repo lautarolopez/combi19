@@ -96,11 +96,22 @@ class TravelsController < ApplicationController
     def current
         @ticket = Ticket.new
         @travel = current_user.driving_travels.current.first
+        if !@travel.started
+            render 'next'
+        end
     end
 
     def next
         @ticket = Ticket.new
-        @travel = current_user.driving_travels.future.first
+        @current = current_user.driving_travels.current.first
+        if !@current.started
+            redirect_to current_travel_path
+        else
+            @travel = current_user.driving_travels.future.first
+            if @travel && @travel.started
+                render 'current'
+            end
+        end
     end
 
     def step_new
@@ -120,38 +131,12 @@ class TravelsController < ApplicationController
             @travel.recurrence_name = nil
         end
 		if validate_fields(true, @travel.price, @travel.discount, @travel.date_departure, @travel.date_arrival, @travel.recurrence, @travel.recurrence_name, params[:end_date])
-        	@validDrivers = []
-        	User.drivers.each do |driver|
-        		@valid = true
-        		driver.driving_travels.each do |t|
-        			if (t.id != @travel.id)
-        				if !(t.date_arrival < @travel.date_departure || t.date_departure > @travel.date_arrival)
-        					@valid = false
-        					break
-        				end
-        			end
-        		end
-        		if (@valid)
-        				@validDrivers.push(driver)
-        		end
-        	end
-
-
-        	@validCombis = []
-        	Combi.all.each do |combi|
-        		@valid = true
-        		combi.travels.each do |t|
-        			if (t.id != @travel.id)
-          				if !(t.date_arrival < @travel.date_departure || t.date_departure > @travel.date_arrival)
-        					@valid = false
-        					break
-        				end
-        			end
-        		end
-        		if @valid
-        			@validCombis.push(combi)
-        		end
-        	end
+            @drivers = User.drivers
+            @validDrivers = []
+            validate_drivers
+            @combis = Combi.all
+            @validCombis = []
+            validate_combis
         else
             render 'step_new'
         end
@@ -204,41 +189,14 @@ class TravelsController < ApplicationController
        	@travel.attributes = params.require(:travel).permit(:route_id, :price, :discount, :date_departure, :date_arrival, :combi_id, :driver_id)
 		if validate_fields(false, @travel.price, @travel.discount ,@travel.date_departure, @travel.date_arrival, @travel.recurrence.downcase, nil, DateTime.now + 1.days)
             @selectedRoute = Route.where(id: @travel.route.id)
-    	    @drivers = User.where(role: "driver")
-        	@validDrivers = []
-        	@drivers.each do |driver|
-        		@valid = true
-        		driver.driving_travels.each do |t|
-        			if (t.id != @travel.id)
-        				if !(t.date_arrival < @travel.date_departure || t.date_departure > @travel.date_arrival)
-        					@valid = false
-        					break
-        				end
-        			end
-        		end
-        		if (@valid)
-        				@validDrivers.push(driver)
-        		end
-        	end
-
-        	@combis = Combi.all
-        	@validCombis = []
-        	@combis.each do |combi|
-        		@valid = true
-        		combi.travels.each do |t|
-        			if (t.id != @travel.id)
-    	      			if !(t.date_arrival < @travel.date_departure || t.date_departure > @travel.date_arrival)
-    	    				@valid = false
-    	    				break
-    	    			end
-    	    		end
-        		end
-        		if @valid
-        			@validCombis.push(combi)
-        		end
-        	end
+            @drivers = User.drivers
+            @validDrivers = []
+            validate_drivers
+            @combis = Combi.all
+            @validCombis = []
+            validate_combis
         else
-            @selectedDriver = User.where(id: @travel.driver.id)
+            @selectedDriver = User.drivers.where(id: @travel.driver.id)
             @selectedCombi = Combi.where(id: @travel.combi.id)
             render 'step_edit'
         end
@@ -340,6 +298,44 @@ class TravelsController < ApplicationController
         end
     end
 
+    def validate_drivers
+        @drivers.each do |driver|
+            if (valid_driver(driver))
+                @validDrivers.push(driver)
+            end
+        end
+    end
+
+    def valid_driver(driver)
+        driver.driving_travels.each do |t|
+            if (t.id != @travel.id)
+                if !(t.date_arrival < @travel.date_departure && t.date_departure > @travel.date_arrival)
+                    return false
+                end
+            end
+        end
+        return true
+    end
+
+    def validate_combis
+        @combis.each do |combi|
+            if (valid_combi(combi))
+                @validCombis.push(combi)
+            end
+        end
+    end
+
+    def valid_combi(combi)
+        combi.travels.each do |t|
+            if (t.id != @travel.id)
+                if !(t.date_arrival < @travel.date_departure && t.date_departure > @travel.date_arrival)
+                    return false
+                end
+            end
+        end
+        return true
+    end
+
     def calculate_duration(departure, arrival)
         duration_hours = ((arrival.to_time - departure.to_time) / 1.hour).floor
         duration_minutes = (((arrival.to_time - departure.to_time) / 1.minute).round) - (duration_hours * 60)
@@ -375,7 +371,7 @@ class TravelsController < ApplicationController
         while departure < end_date
             t = Travel.create(route: @travel.route, price: @travel.price, discount: @travel.discount, date_departure: departure, date_arrival: arrival, combi: @travel.combi, driver: @travel.driver, recurrence: @travel.recurrence, recurrence_name: @travel.recurrence_name)
             driving_travels.each do |dt|
-                if !(dt.date_arrival < t.date_departure || dt.date_departure > t.date_arrival)
+                if !(dt.date_arrival < t.date_departure && dt.date_departure > t.date_arrival)
                     return false
                 end
             end

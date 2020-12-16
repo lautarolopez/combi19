@@ -45,13 +45,6 @@ class DriversController < ApplicationController
         end
     end
 
-    def create_driver
-        @user = User.create(email: params[:user][:email], password: "combi19", name: params[:user][:name], last_name: params[:user][:last_name], dni: params[:user][:dni], birth_date: params[:user][:birth_date], role: "driver", subscribed: false)
-        if @user.save
-            flash[:success] = "El chofer " + @user.name + " " + @user.last_name + " ha sido creado con éxito!"
-        end
-    end
-
     def destroy
         @driver = User.find(params[:id])
         if Travel.future.where("driver_id = ?", @driver.id).size == 0

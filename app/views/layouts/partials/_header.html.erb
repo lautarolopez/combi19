@@ -88,6 +88,11 @@
                             <li class="dropdown-item"><%= link_to  "Ir a mi perfil", edit_user_registration_path %></li>
                             <% if current_user.role == 'user' %>
                                 <li class="dropdown-item"><%= link_to  "Métodos de pago", payment_methods_path %></li>
+                                <% if current_user.subscribed %>
+                                    <li class="dropdown-item small"><%= link_to "Cancelar suscripción", cancel_subscription_path, :data => { :confirm => "Estás seguro? Vas a perder todos los beneficios que tenemos para vos!" }, :class => 'text-danger' %></li>
+                                <% else %>
+                                    <li class="dropdown-item font-weight-bold"><%= link_to  "Suscripción premium", new_subscription_path %></li>
+                                <% end %>
                             <% end %>
                         </div>
                     </div>

@@ -1,20 +1,10 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
-<%= form_for(@ticket, :html => {class: 'd-flex flex-column justify-content-center col-lg-6 mx-auto card p-5 my-5'}) do |f| %>
-	<%= f.number_field(:travel_id, :value => @travel.id, class: 'form-control', type: 'hidden') %>
-	<%= f.number_field(:user_id, :value => current_user.id, class: 'form-control', type: 'hidden') %>
-	<%= f.number_field(:price, :value => @ticket.price, class: 'form-control', type: 'hidden') %>
-	<%= f.collection_check_boxes :extra_ids, @travel.route.extras, :id, :name do |b| %>
-		<% if @ticket.extras.include?(b.object) %>
-	    	<%= b.check_box(checked: true, :style => 'display: none') %>
-	    <% else %>
-	    	<%= b.check_box(:style => 'display: none') %>
-	    <% end %>
-		</span>
-	<% end %>
+<div class="authform row">
 
-	<h3 class='ml-1'> El total a pagar es $<%= @ticket.price %> </h3> 
-	<h4 class='ml-1'> ¿Cómo desea realizar el pago? </h4>
+<%= form_tag(create_subscription_path, method: :post, :class => 'd-flex flex-column justify-content-center col-lg-6 mx-auto card p-5 my-5') do %>
+
+	<h4 class='ml-1'> ¿Qué método de pago desea utilizar? </h4>
 
 	<% noneMethod = true %>
 	<% if params[:method] %>
@@ -101,14 +91,6 @@
         <%= number_field_tag(:verification_code, nil, step: 1, class: 'form-control', id: "code", required: true) %>
 	</div>
 
-	<div class='mb-2 ml-1' id='saveNewMethod'>
-		<%= label_tag :save_new, "¿Desea guardar este método de pago para futuras compras en la plataforma?", class: "form-group-label mt-2 it" %>
-		<div class="form-check">
-		    <%= check_box_tag :save_new, "save_new", false, class: "form-check-input" %>
-		    <%= label_tag :save_new, "Sí", class: "form-check-label" %>
-		</div>
-	</div>
-
     <% if flash[:form_error] %>
 	    <div class="alert alert-danger" role="alert">
 	        <% flash[:form_error].each do |e| %>
@@ -119,38 +101,14 @@
 
     <span class='row mt-2'>
         <span class="col-6 text-center">
-        	<%= link_to "Cancelar", travel_path(@travel), class: 'btn-lg btn-block btn-secondary mr-1' %>
+        	<%= button_tag "Cancelar", :type => 'button', :class => "btn-lg btn-block btn-secondary", :onclick => "location.href = '#{root_path()}'" %>
         </span>
         <span class="col-6 text-center">
-        	<%= link_to 'Pagar', '#', "data-toggle"=>"modal", "data-target" => "#confirm-#{@travel.id}", class: "btn-lg btn-block btn-primary" %>
+        	<%= submit_tag "Contratar", :class => 'form_submit btn-lg btn-block btn-primary', data: { disable_with: "Procesando..." } %>
         </span>
-        <div class="modal fade" id="confirm-<%= @travel.id %>" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">Testeo de COVID</button>
-                    </div>
-                    <div class="modal-body">
-                    	<div class="form-group">
-                           	<%= label_tag :covid, "¿Confirma que no presenta síntomas de COVID ni estuvo en contacto con ninguna persona que diera positivo?", class: "form-group-label" %>
-                            <div class="form-check">
-							    <%= check_box_tag :not_covid, "confirm", false, class: "form-check-input" %>
-							    <%= label_tag :not_covid, "Confirmar", class: "form-check-label" %>
-							</div>
-						</div>
-						<small class='text-danger mt-5'>Este formulario tiene carácter de declaración jurada, si presenta síntomas no podrá reservar viajes con ocurrencia dentro de los próximos 15 días</small>
-                    </div>
-                    <div class="modal-footer">
-                        <div class="modal-footer">
-                        	<a href="#" data-dismiss="modal" class="btn btn-block btn-secondary">Cancelar</a>
-                        	<%= submit_tag "Pagar", :class => 'form_submit btn btn-block btn-primary mb-2', data: { disable_with: "Procesando..." } %>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </span>
 <% end %>
+</div>
 
 <script>
     $(document).ready(function() {	
@@ -164,17 +122,14 @@
 
     	if (existingMethod.checked) {
     		$('#existingMethod').show();
-    		$('#saveNewMethod').hide();
     		$('#newMethod').hide();
     		$('#code_field').show();
     	} else if (newMethod.checked) {
 			$('#existingMethod').hide();
-			$('#saveNewMethod').show();
 	    	$('#newMethod').show();
 	   		$('#code_field').show();
     	} else {
 	    	$('#existingMethod').hide();
-	    	$('#saveNewMethod').hide();
 	    	$('#newMethod').hide();
 	   		$('#code_field').hide();
 	    }
@@ -187,13 +142,11 @@
         		newName.value = null;
         		newCompany.value = null;
 	    		$('#existingMethod').show();
-	    		$('#saveNewMethod').hide();
 	    		$('#newMethod').hide();
 	    		$('#code_field').show();
 	    	} else if (newMethod.checked) {
 				existing.value = 0;
 				$('#existingMethod').hide();
-				$('#saveNewMethod').show();
 		    	$('#newMethod').show();
 		   		$('#code_field').show();
 	    	} else {
@@ -202,7 +155,6 @@
         		newCompany.value = null;
 				existing.value = 0;
 		    	$('#existingMethod').hide();
-		    	$('#saveNewMethod').hide();
 		    	$('#newMethod').hide();
 		    }	
 		});

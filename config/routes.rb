@@ -54,6 +54,13 @@ Rails.application.routes.draw do
   #end
   # si le pongo metodos de pago medio que me generaba errores con las otras vistas, y personalizar todas las vistas me parece al pedo
   resources :payment_methods#, except: [:index, :create]
+
+  as :payment_method do
+    get 'solicitarsuscripción', to: 'payment_methods#new_subscription', as: :new_subscription
+    post 'solicitarsuscripción', to: 'payment_methods#create_subscription', as: :create_subscription
+    get 'payment_method/:id/cambiarsuscripción', to: 'payment_methods#change_subscription', as: :change_subscription
+    get 'eliminarsuscripción', to: 'payment_methods#cancel_subscription', as: :cancel_subscription
+  end
   
   resources :tickets, only: [:create, :destroy]
   as :ticket do

@@ -5,7 +5,13 @@
             <p class="info-paragraphs">¿Te encanta viajar? ¿No te podés quedar quieto? ¿Estás siempre planeando tu próximo viaje?</p>
             <p class="info-paragraphs">Tenemos una membresía con descuentos exclusivos para vos.</p>
             <% if current_user != nil %>
+            <% if current_user.subscribed %>
+            <button type="button" class="btn btn-primary btn-lg text-center mt-4"" data-container=" body" data-toggle="popover" data-placement="bottom" data-content="Ya tenés activa una suscripción, ¡ahora empezá a aprovechar los descuentos!" id="subscription-button">
+                ¡Contratala!
+            </button>
+            <% else %>
             <a href="<%= new_subscription_path %>" class="btn btn-primary btn-lg text-center mt-4">¡Contratala!</a>
+            <% end %>
             <% else %>
             <a href="<%= new_user_session_path %>" class="btn btn-primary btn-lg text-center mt-4">¡Contratala!</a>
             <% end %>
@@ -13,3 +19,7 @@
         <%= image_tag  "travel_plans.svg", size: '400', class: "ml-5" %>
     </article>
 </section>
+
+<script>
+    $('#subscription-button').popover()
+</script>

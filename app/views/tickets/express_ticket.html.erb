@@ -50,7 +50,7 @@
             <div class="row w-100 d-flex justify-content-between pl-5">
                 <span>
                     <b>Destino: </b>
-                    <p><%= @travel.route.origin.name.titleize %></p>
+                    <p><%= @travel.route.destination.name.titleize %></p>
                 </span>
                 <span class="w-50">
                     <b>Fecha de llegada: </b>
@@ -60,7 +60,7 @@
             <div class="row w-100 pl-5">
                 <span>
                     <b>Total: </b>
-                    <p><%= @travel.price %></p>
+                    <p>$<%= @travel.price %></p>
                 </span>
             </div>
         </div>

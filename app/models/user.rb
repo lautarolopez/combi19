@@ -46,6 +46,16 @@ class User < ApplicationRecord
     return confirmed
   end
 
+  def finished_travels
+    confirmed = []
+    tickets.each do |ticket|
+      if ticket.confirmed? && ticket.travel.finished
+        confirmed.push(ticket.travel)
+      end
+    end
+    return confirmed
+  end
+
   def rejected_travels
     rejected = []
     tickets.each do |ticket|

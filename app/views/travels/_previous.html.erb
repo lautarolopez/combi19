@@ -46,9 +46,20 @@
                 <p class="mb-4 mt-1 price-text h2">$<%= sprintf('%.0f', travel.price)%><small class="small-text">.<%=sprintf('%.2f', travel.price).split(".").last%> </small>
                 </p>
             <% end %>
-            <% if (current_user != nil) && (current_user.travels.include?travel) && (travel.tickets.where(user: current_user).first.confirmed?) %>
-                <%= link_to 'Comentar', new_comment_path(:id => travel.id), class: "btn btn-block btn-primary" %>
-            <% end %>            
+            <% if (current_user != nil) && (current_user.travels.include?travel) %>
+                <% case travel.tickets.where(user: current_user).first.status %>
+                <% when "confirmed" %>
+                    <%= link_to 'Comentar', new_comment_path(:id => travel.id), class: "btn btn-block btn-primary" %>
+                <% when "rejected" %>
+                    <div class="tooltip-wrapper btn-block" data-title="Fuiste rechazado de este viaje por presentar síntomas de covid">
+                        <button type="button" class="btn btn-block btn-danger" disabled>Rechazado</button>
+                    </div>
+                <% when "absent" %>
+                    <div class="tooltip-wrapper btn-block" data-title="Perdiste este viaje porque no te presentaste a tiempo">
+                        <button type="button" class="btn btn-block btn-light" disabled>Perdido</button>
+                    </div>
+                <% end %>
+            <% end %>
             <%= link_to "Detalles", travel_path(travel), class: 'btn btn-block btn-light' %>
         </span>
     </div>

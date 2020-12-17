@@ -69,24 +69,26 @@
 
     <ul class="list-group">
         <% @travel.tickets.each do |ticket| %>
-        <li class="list-group-item card mb-2">
-            <div class="d-flex flex-row justify-content-between align-items-center">
-                <span class="row w-75">
-                    <span class="col-5">
-                        <strong class="m-0 text-primary text-uppercase"> Nombre </strong>
-                        <h4><%= ticket.user.name %> </h4>
-                    </span>
-                    <span class="col-5">
-                        <strong class="m-0 text-primary text-uppercase"> Apellido </strong>
-                        <h4><%= ticket.user.last_name %> </h4>
-                    </span>
-                    <span class="col-2">
-                        <strong class="m-0 text-primary text-uppercase"> DNI </strong>
-                        <h5 class='mt-1'><%= ticket.user.dni %> </h5>
-                    </span>
-                </span>
-            </div>
-        </li>
+            <% if ticket.confirmed? %>
+                <li class="list-group-item card mb-2">
+                    <div class="d-flex flex-row justify-content-between align-items-center">
+                        <span class="row w-75">
+                            <span class="col-5">
+                                <strong class="m-0 text-primary text-uppercase"> Nombre </strong>
+                                <h4><%= ticket.user.name %> </h4>
+                            </span>
+                            <span class="col-5">
+                                <strong class="m-0 text-primary text-uppercase"> Apellido </strong>
+                                <h4><%= ticket.user.last_name %> </h4>
+                            </span>
+                            <span class="col-2">
+                                <strong class="m-0 text-primary text-uppercase"> DNI </strong>
+                                <h5 class='mt-1'><%= ticket.user.dni %> </h5>
+                            </span>
+                        </span>
+                    </div>
+                </li>
+            <% end %>
         <% end %>
     </ul>
     <% end %>

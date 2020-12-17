@@ -175,7 +175,7 @@ class TicketsController < ApplicationController
         @user = User.create(email: params[:user][:email], password: "combi19", name: params[:user][:name], last_name: params[:user][:last_name], dni: params[:user][:dni], birth_date: params[:user][:birth_date], role: "driver", subscribed: false)
         if @user.save
             flash[:success] = "El pasajero " + @user.name + " " + @user.last_name + " ha sido creado con éxito!"
-            @travel = Travel.current.where("driver_id = ?", current_user.id).first
+            @travel = Travel.pending.where("driver_id = ?", current_user.id).first
             render 'express_ticket'
         else
             flash[:form_new_error] = @user.errors.full_messages
@@ -186,7 +186,7 @@ class TicketsController < ApplicationController
     def find_passenger
         @user = User.find_by_email(params[:user][:email])
         if @user != nil
-        	@travel = Travel.current.where("driver_id = ?", current_user.id).first
+        	@travel = Travel.pending.where("driver_id = ?", current_user.id).first
         	if validate_confirmed_travels(@user)
 	            render 'express_ticket'
 	        else
@@ -208,6 +208,7 @@ class TicketsController < ApplicationController
             flash[:success] = "Pasaje vendido correctamente."
         else
             @user.update(not_covid: false, discharge_date: Date.today + 15.days)
+            flash[:error] = "El pasaje no se vendió debido a que el pasajero presenta síntomas de covid."
             @travelsT = []
             @travelsH = []
             @amountT = 0
@@ -227,7 +228,6 @@ class TicketsController < ApplicationController
                     end
                     TravelMailer.refund_mail(@user, @travelsH, 50, @amountH).deliver_later
                 end
-                flash[:error] = "El pasaje no se vendió debido a que el pasajero presenta síntomas de covid."
                 if (@travelsT.size + @travelsH.size) != 0    
                     flash[:warning] = (@travelsT.size+@travelsH.size).to_s + " viaje" + s + " con fechas dentro de los próximos 15 días fueron cancelados. Se envió por correo el resumen detallado de los reintegros correspondientes."
                 end

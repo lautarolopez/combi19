@@ -12,3 +12,11 @@
         <%= render :partial => 'previous', :locals => { :travels => @travels, :title => title } %>
     <% end %>
 </ul>
+
+<script>
+    $(document).ready(function() {
+        $('.tooltip-wrapper').tooltip({position: "top"});
+    })
+
+    $('button').attr("data-dismiss","modal");  
+</script>

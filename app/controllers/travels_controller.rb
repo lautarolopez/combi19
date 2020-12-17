@@ -1,5 +1,6 @@
 class TravelsController < ApplicationController
 	def index
+        @discarded = false
         @ticket = Ticket.new
 		if current_user != nil && current_user.role == "admin"
             @travels = Travel.pending
@@ -55,12 +56,14 @@ class TravelsController < ApplicationController
             if current_user.role == 'driver'
                 @travels = current_user.driving_travels.previous
             else
-                @travels = current_user.confirmed_travels
+                @travels = current_user.finished_travels
             end
         end
     end
 
     def discarded
+        @ticket = Ticket.new
+        @discarded = true
         if current_user == nil
             redirect_to root_path
         else
@@ -69,6 +72,8 @@ class TravelsController < ApplicationController
     end
 
     def booked
+        @ticket = Ticket.new
+        @discarded = false
         if current_user == nil
             redirect_to root_path
         else
@@ -96,8 +101,15 @@ class TravelsController < ApplicationController
     def current
         @ticket = Ticket.new
         @travel = current_user.driving_travels.current.first
-        if @travel && !@travel.started
-            render 'next'
+        if @travel
+            if !@travel.started
+                render 'next'
+            end
+        else
+            t = current_user.driving_travels.future.first
+            if t && t.now
+                @travel = current_user.driving_travels.future.first
+            end
         end
     end
 
@@ -112,8 +124,6 @@ class TravelsController < ApplicationController
             if @travel && @travel.started
                 render 'current'
             end
-            p @travel
-            p @current
         end
     end
 

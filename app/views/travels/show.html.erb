@@ -79,12 +79,16 @@
                     <% end %>
                     <% if (current_user != nil) && (current_user.role == 'user') %>
                         <% if current_user.travels.include?@travel %>
-                            <% if current_user.tickets.pending.where(travel_id: @travel.id).first %>
-                                <% ticket = @tickets.where(travel: travel).first %>
+                            <% case @ticket.status %>
+                            <% when "pending" %>
                                 <%= link_to 'Anular reserva', '#', "data-toggle"=>"modal", "data-target" => "#cancel-#{@travel.id}", class: "btn btn-lg btn-danger" %>
-                            <% else %>
-                                <div class="tooltip-wrapper btn-block" data-title="No podes reservar un pasaje para este viaje porque ya tenes otra reserva en las mismas fechas">
-                                    <button type="button" class="btn btn-lg btn-primary" disabled>Comprar</button>
+                            <% when "rejected" %>
+                                <div class="tooltip-wrapper btn-block" data-title="Fuiste rechazado de este viaje por presentar síntomas de covid">
+                                    <button type="button" class="btn btn-lg btn-danger" disabled>Rechazado</button>
+                                </div>
+                            <% when "absent" %>
+                                <div class="tooltip-wrapper btn-block" data-title="Perdiste este viaje porque no te presentaste a tiempo">
+                                    <button type="button" class="btn btn-lg btn-light" disabled>Perdido</button>
                                 </div>
                             <% end %>
                         <% else %>

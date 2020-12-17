@@ -3,7 +3,7 @@ class Travel < ApplicationRecord
 	default_scope -> { order(date_departure: :asc, date_arrival: :asc)}
 	scope :future, -> { where("date_departure >= ?", DateTime.now).reorder(date_departure: :asc, date_arrival: :asc) }
 	scope :previous, -> { where("date_arrival <= ?", DateTime.now).reorder(date_departure: :desc, date_arrival: :desc) }
-	scope :current, -> { where("date_departure <= ? and date_arrival > ?", DateTime.now + 30.minutes, DateTime.now).reorder(date_arrival: :asc, date_departure: :asc)}
+	scope :current, -> { where("date_departure <= ? and date_arrival > ?", DateTime.now, DateTime.now).reorder(date_arrival: :asc, date_departure: :asc)}
 	scope :pending, -> { where("date_arrival > ?", DateTime.now).reorder(date_departure: :asc, date_arrival: :asc) }
 	scope :last_month, -> {where("date_arrival < ? and date_arrival > ?", DateTime.current.last_month.at_end_of_month, DateTime.current.last_month.at_beginning_of_month)}
 
@@ -83,7 +83,7 @@ class Travel < ApplicationRecord
 
 	def started
 		if self.tickets.size == 0 
-			if date_departure > DateTime.now
+			if date_departure < DateTime.now
 				return true
 			end
 		else
@@ -91,5 +91,9 @@ class Travel < ApplicationRecord
 				return true
 			end
 		end
+	end
+
+	def finished
+		return (date_arrival < DateTime.now)
 	end
 end

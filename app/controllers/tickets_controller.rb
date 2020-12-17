@@ -347,8 +347,8 @@ class TicketsController < ApplicationController
     end
 
     def validate_travels(user)
-    	user.tickets.pending.travels.each do |t|
-        	if !(t.date_arrival < @travel.date_departure && t.date_departure > @travel.date_arrival)
+    	user.tickets.pending.each do |t|
+        	if !(t.travel.date_arrival < @travel.date_departure && t.travel.date_departure > @travel.date_arrival)
         		return false
         	end
     	end
@@ -356,11 +356,11 @@ class TicketsController < ApplicationController
     end
 
     def validate_confirmed_travels(user)
-    	user.tickets.confirmed.travels.each do |t|
-    		if t.id == @travel.id
+    	user.tickets.confirmed.each do |t|
+    		if t.travel_id == @travel.id
     			return false
     		end
-        	if !(t.date_arrival < @travel.date_departure && t.date_departure > @travel.date_arrival)
+        	if !(t.travel.date_arrival < @travel.date_departure && t.travel.date_departure > @travel.date_arrival)
         		return false
         	end
     	end

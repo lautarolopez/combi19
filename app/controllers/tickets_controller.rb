@@ -44,10 +44,10 @@ class TicketsController < ApplicationController
                 	@ticket.attributes = {payment_method: @paymentMethod.card}
                 	if @ticket.save
 	                    if params[:not_covid]
-	                        current_user.update(discharge_date: nil)
+	                        current_user.update(not_covid: true)
 	                    else
-	                        current_user.discharge_date = Date.today + 15.days
-	                        current_user.save
+	                    	current_user.update(not_covid: false)
+	                        current_user.update(discharge_date: Date.today + 15.days)
 	                        @travelsT = []
 	                        @travelsH = []
 	                        @amountT = 0
@@ -136,9 +136,8 @@ class TicketsController < ApplicationController
     		flash[:success] = "Se registró el pasajero en el viaje"
     	else
     		@ticket.update(status: :rejected)
-    		@passenger = @ticket.user
-    		@passenger.discharge_date = Date.today + 15.days
-	        @passenger.save
+        	@passenger.update(not_covid: false)
+            @passenger.update(discharge_date: Date.today + 15.days)
             flash[:error] = "El pasajero no puede viajar porque presenta síntomas compatibles de covid"
             @travelsT = []
             @travelsH = []
@@ -210,7 +209,7 @@ class TicketsController < ApplicationController
             flash[:success] = "Pasaje vendido correctamente."
         else
             @user.update(not_covid: false)
-            @user.discharge_date = Date.today + 15.days
+            @user.update(discharge_date: Date.today + 15.days)
             @user.save
             flash[:error] = "El pasaje no se vendió debido a que el pasajero presenta síntomas de covid."
             @travelsT = []

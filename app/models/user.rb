@@ -80,7 +80,7 @@ class User < ApplicationRecord
     if not_covid
       self.discharge_date = nil
     else
-      if discharge_date == nil || discharge_date < DateTime.now
+      if discharge_date != nil && discharge_date < DateTime.now
         self.not_covid = true
       end
     end

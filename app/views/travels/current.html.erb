@@ -91,5 +91,13 @@
             <% end %>
         <% end %>
     </ul>
+
+    <% if @travel.tickets.size == 0 %>
+    <div class="d-flex flex-column align-items-center w-100">
+        <h2> No hay pasajeros en este viaje </h2>
+        <%= image_tag  "Travels_history_empty.svg", size: '500' %>
+    </div>
+    <% end %>
+
     <% end %>
 </ul>

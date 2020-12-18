@@ -322,7 +322,7 @@ class TravelsController < ApplicationController
     def valid_driver(driver)
         driver.driving_travels.each do |t|
             if (t.id != @travel.id)
-                if !(t.date_arrival < @travel.date_departure && t.date_departure > @travel.date_arrival)
+                if !(t.date_arrival < @travel.date_departure || t.date_departure > @travel.date_arrival)
                     return false
                 end
             end
@@ -341,7 +341,7 @@ class TravelsController < ApplicationController
     def valid_combi(combi)
         combi.travels.each do |t|
             if (t.id != @travel.id)
-                if !(t.date_arrival < @travel.date_departure && t.date_departure > @travel.date_arrival)
+                if !(t.date_arrival < @travel.date_departure || t.date_departure > @travel.date_arrival)
                     return false
                 end
             end
@@ -384,7 +384,7 @@ class TravelsController < ApplicationController
         while departure < end_date
             t = Travel.create(route: @travel.route, price: @travel.price, discount: @travel.discount, date_departure: departure, date_arrival: arrival, combi: @travel.combi, driver: @travel.driver, recurrence: @travel.recurrence, recurrence_name: @travel.recurrence_name)
             driving_travels.each do |dt|
-                if !(dt.date_arrival < t.date_departure && dt.date_departure > t.date_arrival)
+                if !(dt.date_arrival < t.date_departure || dt.date_departure > t.date_arrival)
                     return false
                 end
             end

@@ -46,7 +46,9 @@ class TicketsController < ApplicationController
 	                    if params[:not_covid]
 	                        current_user.update(discharge_date: nil)
 	                    else
-	                        current_user.update(discharge_date: Date.today + 15.days)
+	                        current_user.discharge_date = Date.today + 15.days
+	                        current_user.save
+	                    	flash[:error] = "not covid = nil; current_user discharge_date = " + current_user.discharge_date
 	                        @travelsT = []
 	                        @travelsH = []
 	                        @amountT = 0
@@ -136,7 +138,8 @@ class TicketsController < ApplicationController
     	else
     		@ticket.update(status: :rejected)
     		@passenger = @ticket.user
-    		@passenger.update(discharge_date: DateTime.now + 15.days)
+    		@passenger.discharge_date = Date.today + 15.days
+	        @passenger.save
             flash[:error] = "El pasajero no puede viajar porque presenta síntomas compatibles de covid"
             @travelsT = []
             @travelsH = []
@@ -207,7 +210,9 @@ class TicketsController < ApplicationController
             @ticket = Ticket.create(user_id: params[:user_id], travel_id: params[:travel_id], price: params[:price], status: :confirmed)
             flash[:success] = "Pasaje vendido correctamente."
         else
-            @user.update(not_covid: false, discharge_date: Date.today + 15.days)
+            @user.update(not_covid: false)
+            @user.discharge_date = Date.today + 15.days
+            @user.save
             flash[:error] = "El pasaje no se vendió debido a que el pasajero presenta síntomas de covid."
             @travelsT = []
             @travelsH = []
@@ -348,7 +353,7 @@ class TicketsController < ApplicationController
 
     def validate_travels(user)
     	user.tickets.pending.each do |t|
-        	if !(t.travel.date_arrival < @travel.date_departure && t.travel.date_departure > @travel.date_arrival)
+        	if !(t.travel.date_arrival < @travel.date_departure || t.travel.date_departure > @travel.date_arrival)
         		return false
         	end
     	end
@@ -360,7 +365,7 @@ class TicketsController < ApplicationController
     		if t.travel_id == @travel.id
     			return false
     		end
-        	if !(t.travel.date_arrival < @travel.date_departure && t.travel.date_departure > @travel.date_arrival)
+        	if !(t.travel.date_arrival < @travel.date_departure || t.travel.date_departure > @travel.date_arrival)
         		return false
         	end
     	end

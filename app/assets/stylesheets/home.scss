@@ -53,3 +53,33 @@
 .btn-faq:focus {
   outline: none;
 }
+
+.visibleLeft {
+  animation: appearLeft 1.5s ease;
+}
+
+.visibleRight {
+  animation: appearRight 1.5s ease;
+}
+
+@keyframes appearRight {
+  from {
+    opacity: 0;
+    transform: translateX(200px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes appearLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-200px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

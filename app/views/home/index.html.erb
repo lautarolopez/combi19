@@ -3,3 +3,50 @@
 <%= render :partial => 'home/partials/covid_information' %>
 <%= render :partial => 'home/partials/faq' %>
 <%= render :partial => 'home/partials/contact' %>
+
+<script>
+    const rightFadeElements = document.querySelectorAll(".invisibleRight");
+    const leftFadeElements = document.querySelectorAll(".invisibleLeft");
+    const sectionElements = document.querySelectorAll(".invisibleSection")
+
+    function isInViewport(el) {
+        const rect = el.getBoundingClientRect();
+        const visible = rect.bottom > 0 &&
+            rect.top < (window.innerHeight || document.documentElement.clientHeight)
+        return visible;
+    }
+
+    document.addEventListener("scroll", () => {
+        for (let i = 0; i < sectionElements.length; i++) {
+            const childrens = sectionElements[i].childNodes
+            if (isInViewport(sectionElements[i])) {
+                for (let x = 0; x < childrens.length; x++) {
+                    if (childrens[x].classList != undefined) {
+                        console.log(childrens[x]);
+                        if (childrens[x].classList.contains("invisibleRight")) {
+                            childrens[x].classList.add("visibleRight");
+                            childrens[x].classList.remove("invisibleRight");
+                        } else if (childrens[x].classList.contains("invisibleLeft")) {
+                            childrens[x].classList.add("visibleLeft");
+                            childrens[x].classList.remove("invisibleLeft");
+                        }
+                    }
+                }
+            } else {
+                for (let x = 0; x < childrens.length; x++) {
+                    if (childrens[x].classList != undefined) {
+                        if (childrens[x].classList.contains("visibleRight")) {
+                            childrens[x].classList.add("invisibleRight");
+                            childrens[x].classList.remove("visibleRight");
+                        } else if (childrens[x].classList.contains("visibleLeft")) {
+                            childrens[x].classList.add("invisibleLeft");
+                            childrens[x].classList.remove("visibleLeft");
+                        }
+                    }
+                }
+            }
+        }
+    }, {
+        passive: true
+    })
+</script>

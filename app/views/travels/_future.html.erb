@@ -122,9 +122,5 @@
                 </span>
             </div>
         </li>
-    <% else %>
-        <p> discarded = <%= @discarded %> </p>
-        <p> not include:  <%= !current_user.travels.include?travel %> </p>
-        <p> pending: <%= current_user.tickets.pending.where(travel_id: travel.id).first %> </p>
     <% end %>
 <% end %>

@@ -64,13 +64,16 @@ class ExtrasController < ApplicationController
 
     def destroy
         @extra = Extra.find(params[:id])
-        if @extra.destroy
-               flash[:success] = "El insumo " + @extra.name + " ha sido borrado con éxito"
-            redirect_to extras_url
+        if @extra.tickets.count > 0
+            flash[:index_error] = "El insumo " + @extra.name + " no se puede borrar porque se encuentra vendido en al menos un ticket"
         else
+            if @extra.destroy
+                flash[:success] = "El insumo " + @extra.name + " ha sido borrado con éxito"
+            else
                 flash[:index_error] = "Algo salió mal"
-            redirect_to extras_url
+            end
         end
+        redirect_to extras_url
     end
     
     

@@ -136,6 +136,7 @@ class TicketsController < ApplicationController
     		flash[:success] = "Se registró el pasajero en el viaje"
     	else
     		@ticket.update(status: :rejected)
+    		@passenger = @ticket.user
         	@passenger.update(not_covid: false)
             @passenger.update(discharge_date: Date.today + 15.days)
             flash[:error] = "El pasajero no puede viajar porque presenta síntomas compatibles de covid"

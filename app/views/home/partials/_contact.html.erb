@@ -2,9 +2,9 @@
     <path fill="#115571" fill-opacity="1" d="M0,192L48,176C96,160,192,128,288,122.7C384,117,480,139,576,138.7C672,139,768,117,864,112C960,107,1056,117,1152,117.3C1248,117,1344,107,1392,101.3L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
 </svg>
 <section class="contact-section" id="contactanos">
-    <article class="d-flex flex-row align-items-center justify-content-center">
-        <%= image_tag  "contact.svg", size: '400', class: "mr-5" %>
-        <form action="/" method="post" class="d-flex flex-column justify-content-center card p-5 w-50">
+    <article class="d-flex flex-row align-items-center justify-content-center invisibleSection">
+        <%= image_tag  "contact.svg", size: '400', class: "mr-5 invisibleLeft" %>
+        <form action="/" method="post" class="d-flex flex-column justify-content-center card p-5 w-50 invisibleRight">
             <h2 class="welcome-text">Contactanos</h2>
             <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
             <div class="form-group">

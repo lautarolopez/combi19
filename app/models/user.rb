@@ -79,14 +79,10 @@ class User < ApplicationRecord
   def update_covid
     if not_covid
       self.discharge_date = nil
-    else
-      if discharge_date != nil && discharge_date < DateTime.now
-        self.not_covid = true
-      end
     end
   end
 
   def covid
-    return (!self.not_covid && discharge_date != nil && discharge_date > DateTime.now)
+    return (!not_covid && discharge_date != nil && discharge_date > Date.today)
   end
 end

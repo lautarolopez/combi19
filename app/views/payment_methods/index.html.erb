@@ -4,6 +4,11 @@
         <p class="my-0"><%= flash[:success] %></p>
     </div>
     <% end %>
+    <% if flash[:info] %>
+    <div class="alert alert-info" role="alert">
+        <small class="my-0"><%= flash[:info] %></small>
+    </div>
+    <% end %>
     <% if flash[:index_error] %>
         <div class="alert alert-danger text-center mt-5" role="alert">
             <% flash[:index_error].each do |e| %>

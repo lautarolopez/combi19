@@ -48,7 +48,6 @@ class TicketsController < ApplicationController
 	                    else
 	                        current_user.discharge_date = Date.today + 15.days
 	                        current_user.save
-	                    	flash[:error] = "not covid = nil; current_user discharge_date = " + current_user.discharge_date
 	                        @travelsT = []
 	                        @travelsH = []
 	                        @amountT = 0

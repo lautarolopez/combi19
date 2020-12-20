@@ -174,7 +174,7 @@ class TicketsController < ApplicationController
     end
 
     def create_passenger
-        @user = User.create(email: params[:user][:email], password: "combi19", name: params[:user][:name], last_name: params[:user][:last_name], dni: params[:user][:dni], birth_date: params[:user][:birth_date], role: "driver", subscribed: false)
+        @user = User.create(email: params[:user][:email], password: "combi19", name: params[:user][:name], last_name: params[:user][:last_name], dni: params[:user][:dni], birth_date: params[:user][:birth_date], role: "user", subscribed: false)
         if @user.save
             flash[:success] = "El pasajero " + @user.name + " " + @user.last_name + " ha sido creado con éxito!"
             @travel = Travel.pending.where("driver_id = ?", current_user.id).first

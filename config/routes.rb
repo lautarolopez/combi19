@@ -13,7 +13,7 @@ Rails.application.routes.draw do
     get 'registrarse', to: 'devise/registrations#new', as: :new_user_registration
     get 'perfil', to: 'devise/registrations#edit', as: :edit_user_registration
     patch 'registrarse', to: 'devise/registrations#update', as: :user_registration
-    put 'registrarse', to: 'devise/registrations#update'
+    put 'registrarse', to: 'users/registrations#update'
     delete 'registrarse', to: 'devise/registrations#destroy'
     post 'registrarse', to: 'devise/registrations#create'
     get 'contraseña/nueva', to: 'devise/passwords#new', as: :new_user_password

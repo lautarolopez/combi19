@@ -97,6 +97,9 @@ es:
       updated_not_active: Tu contraseña fue cambiada.
     registrations:
       destroyed: "¡Adiós! Tu cuenta ha sido cancelada correctamente. Esperamos verte pronto."
+      user:
+        successful_update: "Se actualizaron correctamente los datos de tu perfil."
+        covid: "Se registró correctamente el hisopado negativo y se anuló el bloqueo de tu cuenta."
       edit:
         are_you_sure: "¿Está usted seguro?"
         cancel_my_account: Anular mi cuenta

@@ -15,7 +15,7 @@ class Travel < ApplicationRecord
 	validates :date_arrival, presence: :true
 	validates :price, presence: :true, numericality: { greater_than_or_equal_to: 0 }
 	validates :discount, :inclusion => 0..100
-	#validate :validate_dates --> esta validación se hace en el controlador, tuve que borrarla del modelo para poder cargar seeds con fechas pasadas
+	validate :validate_dates
 
 	# Relations
 	belongs_to :driver, class_name: 'User', foreign_key: "driver_id"
@@ -30,9 +30,9 @@ class Travel < ApplicationRecord
 
 	# Methods
 	def validate_dates
-		if date_departure > date_arrival || date_departure < DateTime.now || date_arrival < DateTime.now
-	#		errors.add(:date_departure, "Las fechas ingresadas son incorrectas.")
-	#		errors.add(:date_arrival, "Las fechas ingresadas son incorrectas.")
+		if date_departure > date_arrival #|| date_departure < DateTime.now || date_arrival < DateTime.now --> esta validación se hace en el controlador
+			errors.add(:date_departure, "Las fechas ingresadas son incorrectas.")
+			errors.add(:date_arrival, "Las fechas ingresadas son incorrectas.")
 			return false
 		end
 		return true

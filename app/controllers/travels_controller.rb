@@ -161,8 +161,8 @@ class TravelsController < ApplicationController
         if @travel.save
             if @travel.recurrent
                 @end_date = params[:end_date]
-                if @end_date > DateTime.now + 1.years
-                    @end_date = DateTime.now + 1.years
+                if @end_date > @travel.date_departure + 1.years
+                    @end_date = @travel.date_departure + 1.years
                 end
                 result = create_recurrent_travels(@travel.driver, @travel.combi)
                 p result
@@ -311,8 +311,8 @@ class TravelsController < ApplicationController
                     errors << "El nombre de la recurrencia debe ser único para este grupo de viajes"
                 end
             end
-            if end_date == nil || end_date < DateTime.current.beginning_of_day
-                errors << "La fecha de finalización de recurrencia es inválida, debe ser posterior a la actual"
+            if end_date == nil || end_date < date_departure
+                errors << "La fecha de finalización de recurrencia es inválida, debe ser posterior a la salida del primer viaje"
             end
         end
         if errors != []
@@ -389,11 +389,11 @@ class TravelsController < ApplicationController
         when :half_year
             time = 6.months
         end
+        if @end_date > departure + 1.years
+            @end_date = departure + 1.years
+        end
         departure = departure + time
         arrival = arrival + time
-        if @end_date > DateTime.now + 1.years
-            @end_date = DateTime.now + 1.years
-        end
         while departure < @end_date
             chofer = true
             t = Travel.create(route: @travel.route, price: @travel.price, discount: @travel.discount, date_departure: departure, date_arrival: arrival, combi: @travel.combi, driver: @travel.driver, recurrence: @travel.recurrence, recurrence_name: @travel.recurrence_name)

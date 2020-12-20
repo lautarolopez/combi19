@@ -99,6 +99,12 @@
 	    </div>
     <% end %>
 
+    <% if flash[:info] %>
+	    <div class="alert alert-info" role="alert">
+	       	<p class="my-0"><%= flash[:info] %></p>
+	    </div>
+    <% end %>
+
     <span class='row mt-2'>
         <span class="col-6 text-center">
         	<%= button_tag "Cancelar", :type => 'button', :class => "btn-lg btn-block btn-secondary", :onclick => "location.href = '#{root_path()}'" %>

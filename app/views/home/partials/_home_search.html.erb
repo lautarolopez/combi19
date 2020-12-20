@@ -4,6 +4,11 @@
         <p class="my-0"><%= flash[:success] %></p>
     </div>
     <% end %>
+    <% if flash[:info] %>
+    <div class="alert alert-info" role="alert">
+        <p class="my-0"><%= flash[:info] %></p>
+    </div>
+    <% end %>
     <form action="/travels" method="get" class="d-flex flex-row justify-content-between card col-8 p-4 my-3 search-form">
         <% if params[:search] %>
         <% selected_route = params[:search][:route_id] %>

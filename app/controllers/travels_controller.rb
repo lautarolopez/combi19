@@ -107,7 +107,7 @@ class TravelsController < ApplicationController
             end
         else
             t = current_user.driving_travels.future.first
-            if t && t.now
+            if t && t.started
                 @travel = current_user.driving_travels.future.first
             end
         end
@@ -160,12 +160,26 @@ class TravelsController < ApplicationController
         flash[:form_error] = []
         if @travel.save
             if @travel.recurrent
-                if create_recurrent_travels(params[:end_date], @travel.driver)
+                @end_date = params[:end_date]
+                if @end_date > DateTime.now + 1.years
+                    @end_date = DateTime.now + 1.years
+                end
+                result = create_recurrent_travels(@travel.driver, @travel.combi)
+                p result
+                if result == 0
                     flash[:success] = "El viaje " + @travel.name + " y los asociados con la recurrencia: '" + @travel.recurrence_type + "' han sido creados con éxito!"
+                    flash[:info] = "Los viajes recurrentes se crearon hasta la fecha #{I18n.l(@end_date.to_date, format: "%d de %B de %Y")}"
                     redirect_to travels_path
                 else
-                    if flash[:form_error] == []
-                        flash[:form_error] << "No se pudieron crear los viajes porque el chofer o la combi estan ocupados en alguna de las fechas recurrentes"
+                    case result
+                    when 1  # driver occupied
+                        flash[:form_error] << "No se pudieron crear los viajes porque el chofer está ocupado en alguna de las fechas recurrentes"
+                    when 2  # combi occupied
+                        flash[:form_error] << "No se pudieron crear los viajes porque la combi está ocupada en alguna de las fechas recurrentes"
+                    when 3  # driver and combi occupied
+                        flash[:form_error] << "No se pudieron crear los viajes porque el chofer y la combi están ocupados en alguna de las fechas recurrentes"
+                    when 4  # something wrong
+                        flash[:form_error] << "Algo salió mal"
                     end
                     Travel.where(recurrence_name: @travel.recurrence_name).each do |t|
                         if t.id != @travel.id
@@ -244,11 +258,10 @@ class TravelsController < ApplicationController
             else
                 deleted = "cancelado"
             end
-            flash[:successes] = []
-            flash[:successes] << "El viaje " + @travel.name + " ha sido " + deleted + " con éxito"
+            flash[:success] = "El viaje " + @travel.name + " ha sido " + deleted + " con éxito"
             if tickets > 0
                 refund = '100%'
-                flash[:successes] << "Se reintegró el " + refund + " del pago a todos los pasajeros del viaje"
+                flash[:info] = "Se reintegró el " + refund + " del pago a todos los pasajeros del viaje"
             end
         else
             flash[:index_error] = 'Algo salió mal'
@@ -263,10 +276,9 @@ class TravelsController < ApplicationController
         if @travel.destroy
             if recurrent
                 if destroy_recurrent_travels
-                    flash[:successes] = []
-                    flash[:successes] << "El viaje " + @travel.name + " y los asociados con la recurrencia: '" + @travel.recurrence_type + "' han sido borrados con éxito!"
+                    flash[:success] = "El viaje " + @travel.name + " y los asociados con la recurrencia: '" + @travel.recurrence_type + "' han sido borrados con éxito!"
                     refund = '100%'
-                    flash[:successes] << "Se reintegró el " + refund + " del pago a todos los pasajeros del viaje"
+                    flash[:info] = "Se reintegró el " + refund + " del pago a todos los pasajeros del viaje"
                 else
                     flash[:index_error] = 'Algo salió mal'
                 end
@@ -356,10 +368,11 @@ class TravelsController < ApplicationController
         return duration
     end
 
-    def create_recurrent_travels(end_date, driver)
+    def create_recurrent_travels(driver, combi)
         departure = @travel.date_departure
         arrival = @travel.date_arrival
         driving_travels = driver.driving_travels.pending
+        combi_travels = combi.travels.pending
         case @travel.recurrence.to_sym
         when :half_day
             time = 12.hours
@@ -377,26 +390,47 @@ class TravelsController < ApplicationController
             time = 6.months
         end
         departure = departure + time
-        arival = arrival + time
-        if end_date > DateTime.now + 1.years
-            end_date = DateTime.now + 1.years
+        arrival = arrival + time
+        if @end_date > DateTime.now + 1.years
+            @end_date = DateTime.now + 1.years
         end
-        while departure < end_date
+        while departure < @end_date
+            chofer = true
             t = Travel.create(route: @travel.route, price: @travel.price, discount: @travel.discount, date_departure: departure, date_arrival: arrival, combi: @travel.combi, driver: @travel.driver, recurrence: @travel.recurrence, recurrence_name: @travel.recurrence_name)
             driving_travels.each do |dt|
-                if !(dt.date_arrival < t.date_departure || dt.date_departure > t.date_arrival)
-                    return false
+                if (dt.id != t.id)
+                    if !(dt.date_arrival < t.date_departure || dt.date_departure > t.date_arrival)
+                        chofer = false
+                    end
                 end
             end
-            if !t.save
-                flash[:form_error] = []
-                flash[:form_error] << "Algo salió mal"
-                return false
+            combi = true
+            combi_travels.each do |ct|
+                if (ct.id != t.id)
+                    if !(ct.date_arrival < t.date_departure || ct.date_departure > t.date_arrival)
+                        combi = false
+                    end
+                end
+            end
+            if chofer
+                if combi
+                    if !t.save
+                        return 4    # algo salió mal
+                    end
+                else
+                    return 2    # el chofer está disponible pero la combi no
+                end
+            else
+                if combi
+                    return 1    # la combi está disponible pero el chofer no
+                else
+                    return 3    # ambos están ocupados
+                end
             end
             departure = departure + time
             arrival = arrival + time
         end
-        return true
+        return 0
     end
 
     def destroy_recurrent_travels

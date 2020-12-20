@@ -1,4 +1,9 @@
 <div class="container pt-5">
+    <% if flash[:error] %>
+        <div class="alert alert-danger" role="alert">
+            <p class="my-0"><%= flash[:error] %></p>
+        </div>
+    <% end %>
     <div class="row">
         <div class="col-4">
             <div class="list-group" id="list-tab" role="tablist">

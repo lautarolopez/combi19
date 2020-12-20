@@ -1,4 +1,9 @@
 <ul class="list-group pt-5">
+    <% if flash[:index_error] %>
+        <div class="alert alert-danger" role="alert">
+            <p class="my-0"><%= flash[:index_error] %></p>
+        </div>
+    <% end %>
     <% if flash[:success] %>
         <div class="alert alert-success" role="alert">
             <p class="my-0"><%= flash[:success] %></p>
@@ -11,9 +16,9 @@
             <% end %>
         </div>
     <% end %>
-    <% if flash[:index_error] %>
-        <div class="alert alert-danger" role="alert">
-            <p class="my-0"><%= flash[:index_error] %></p>
+    <% if flash[:info] %>
+        <div class="alert alert-info" role="alert">
+            <p class="my-0"><%= flash[:info] %></p>
         </div>
     <% end %>
     <div class="d-flex justify-content-between w-100">

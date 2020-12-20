@@ -39,7 +39,7 @@
         <%= f.password_field :password_confirmation, class: 'form-control' %>
     </div>
 
-    <% if resource.covid %>
+    <% if resource.covid || flash[:covid] == "covid" %>
         <div class="form-group mt-2">
             <p>Puede anular el bloqueo de su cuenta para reservar viajes dentro de los próximos 15 días si declara haberse hecho un hisopado y presenta el resultado negativo del mismo </p>
             <small class='text-danger'>Esta respuesta tiene carácter de declaración jurada</small>

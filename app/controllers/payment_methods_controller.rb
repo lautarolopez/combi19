@@ -124,6 +124,7 @@ class PaymentMethodsController < ApplicationController
   end
 
   def new_subscription
+    flash[:info] = 'Podes anular tu suscripción en cualquier momento'
     render 'subscription'
   end
 
@@ -146,10 +147,11 @@ class PaymentMethodsController < ApplicationController
       if @method == 'existing' || (@method == 'new' && @paymentMethod.save)
         @errors = []
         if validate_card(@paymentMethod, @method, params[:verification_code])
-          flash[:form_error] = @errors
           current_user.update(subscribed: true, subscription_payment_method: @paymentMethod)
+          flash[:success] = 'Contrataste el servicio de suscripción premium, ahora vas a poder disfrutar de todos los beneficios!!'
           redirect_to payment_methods_path
         else
+          flash[:form_error] = @errors
           render 'subscription'
         end
       else
@@ -169,6 +171,7 @@ class PaymentMethodsController < ApplicationController
     @errors = []
     if validate_card(@paymentMethod, 'existing', params[:verification_code])
       current_user.update(subscription_payment_method: @paymentMethod)
+      flash[:success] = "Cambiaste exitosamente el método de pago asociado a tu suscripción premium"
     else
       flash[:index_error] = @errors
     end
@@ -177,7 +180,8 @@ class PaymentMethodsController < ApplicationController
 
   def cancel_subscription
     current_user.update(subscribed: false, subscription_payment_method_id: nil)
-    redirect_to root_path
+    flash[:success] = 'Cancelaste tu suscripción premium, lo lamentamos y esperamos que vuelvas pronto a disfrutar de los beneficios!'
+    redirect_to payment_methods_path
   end
 
 
@@ -189,17 +193,16 @@ class PaymentMethodsController < ApplicationController
       if card.expire_year < Date.today.year || (card.expire_year == Date.today.year && card.expire_month < Date.today.month)
         @errors << 'La fecha de expiración es inválida, por favor eliminá el método de pago'
         valid = false
-      end
-      if card.verification_code != code.to_i
-        @errors << 'El código de verificación es incorrecto'
-        valid = false
+      else
+        if card.verification_code != code.to_i
+          @errors << 'El código de verificación es incorrecto'
+          valid = false
+        end
       end
     end
-    if flash[:form_error] == []
-      if number[number.length-1] == '9'
-        @errors << 'El método de pago no tiene fondos suficientes'
-        valid = false
-      end
+    if valid && number[number.length-1] == '9'
+      @errors << 'El método de pago no tiene fondos suficientes'
+      valid = false
     end
     if valid
       return true

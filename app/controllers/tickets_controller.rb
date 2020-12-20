@@ -9,7 +9,7 @@ class TicketsController < ApplicationController
                 flash[:error] = 'No puede reservar este viaje porque presenta síntomas de covid'
                 redirect_to travel_path(@travel)
             else
-            	if validate_travels(current_user)
+            	if validate_travels
 	            	@ticket = Ticket.new(params.require(:ticket).permit(extra_ids: []))
 	            	@ticket.attributes = {user: current_user, travel: @travel}
 	            	@ticket.price = sum_price(current_user, @travel)
@@ -53,7 +53,7 @@ class TicketsController < ApplicationController
 	                        @amountT = 0
 	                       	@amountH = 0
 	                        @passenger = current_user
-	                        if cancel_bookings
+	                        if cancel_bookings_covid
 	                        	s = ""
 	                        	if @travelsT.size > 0
 		                        	if @travelsT.size > 1
@@ -144,7 +144,7 @@ class TicketsController < ApplicationController
             @travelsH = []
             @amountT = 0
            	@amountH = 0
-            if cancel_bookings
+            if cancel_bookings_covid
             	s = ""
             	if @travelsT.size > 0
                 	if @travelsT.size > 1
@@ -192,8 +192,9 @@ class TicketsController < ApplicationController
         	if validate_confirmed_travels(@user)
 	            render 'express_ticket'
 	        else
-	       		flash[:error] = 'Este usuario no puede reservar este viaje porque ya tiene una reserva confirmada para este o algún otro viaje en este momento' #bilocacion
-	       		redirect_to current_travel_path
+	       		flash[:form_existing_error] = 'Este usuario no puede reservar este viaje porque ya tiene una reserva confirmada para este o algún otro viaje en este momento' #bilocacion
+	       		@user = User.new
+	       		render 'express_sell'
 	       	end
         else
             flash[:form_existing_error] = "No existe un usuario con este correo electrónico."
@@ -203,34 +204,56 @@ class TicketsController < ApplicationController
     end
 
     def finish_ticket
-        @user = User.find(params[:user_id])
+        @passenger = User.find(params[:user_id])
+        @travel = Travel.find(params[:travel_id])
         if params[:not_covid]
-            @user.update(not_covid: params[:not_covid])
+            @passenger.update(not_covid: params[:not_covid])
             @ticket = Ticket.create(user_id: params[:user_id], travel_id: params[:travel_id], price: params[:price], status: :confirmed)
             flash[:success] = "Pasaje vendido correctamente."
-        else
-            @user.update(not_covid: false)
-            @user.update(discharge_date: Date.today + 15.days)
-            @user.save
-            flash[:error] = "El pasaje no se vendió debido a que el pasajero presenta síntomas de covid."
             @travelsT = []
             @travelsH = []
             @amountT = 0
             @amountH = 0
-            @passenger = @user
             s = ""
-            if cancel_bookings
-                if @travelsT.size > 0
+            if cancel_overhead_bookings
+            	if @travelsT.size > 0
                     if @travelsT.size > 1
                         s = "s"
                     end
-                    TravelMailer.refund_mail(@user, @travelsT, 100, @amountT).deliver_later
+                    TravelMailer.refund_mail(@passenger, @travelsT, 100, @amountT).deliver_later
                 end
                 if @travelsH.size > 0
                     if @travelsH.size > 1
                         s = "s"
                     end
-                    TravelMailer.refund_mail(@user, @travelsH, 50, @amountH).deliver_later
+                    TravelMailer.refund_mail(@passenger, @travelsH, 50, @amountH).deliver_later
+                end
+                if (@travelsT.size + @travelsH.size) != 0    
+                    flash[:warning] = (@travelsT.size+@travelsH.size).to_s + " viaje" + s + " con fechas superpuestas con el viaje actual fueron cancelados. Se envió por correo el resumen detallado de los reintegros correspondientes."
+                end
+            end
+        else
+            @passenger.update(not_covid: false)
+            @passenger.update(discharge_date: Date.today + 15.days)
+            @passenger.save
+            flash[:error] = "El pasaje no se vendió debido a que el pasajero presenta síntomas de covid."
+            @travelsT = []
+            @travelsH = []
+            @amountT = 0
+            @amountH = 0
+            s = ""
+            if cancel_bookings_covid
+                if @travelsT.size > 0
+                    if @travelsT.size > 1
+                        s = "s"
+                    end
+                    TravelMailer.refund_mail(@passenger, @travelsT, 100, @amountT).deliver_later
+                end
+                if @travelsH.size > 0
+                    if @travelsH.size > 1
+                        s = "s"
+                    end
+                    TravelMailer.refund_mail(@passenger, @travelsH, 50, @amountH).deliver_later
                 end
                 if (@travelsT.size + @travelsH.size) != 0    
                     flash[:warning] = (@travelsT.size+@travelsH.size).to_s + " viaje" + s + " con fechas dentro de los próximos 15 días fueron cancelados. Se envió por correo el resumen detallado de los reintegros correspondientes."
@@ -328,7 +351,7 @@ class TicketsController < ApplicationController
     	return true
     end
 
-    def cancel_bookings
+    def cancel_bookings_covid
     	tick = nil
         @passenger.travels.future.where("date_departure < ?", @passenger.discharge_date).each do |t|
             tick = Ticket.find_by(travel: t, user: @passenger)
@@ -350,8 +373,37 @@ class TicketsController < ApplicationController
         end
     end
 
-    def validate_travels(user)
-    	user.tickets.pending.each do |t|
+    def cancel_overhead_bookings
+    	tick = nil
+        @passenger.travels.future.each do |t|
+            tick = Ticket.find_by(travel: t, user: @passenger)
+            if t.date_departure < @travel.date_arrival
+	            if tick != nil && tick != @ticket
+	            	if t.date_departure > (DateTime.now + 48.hours)
+		                @amountT = @amountT + tick.price
+		                @travelsT.push(t)
+		            else
+		            	@amountH = @amountH + tick.price*0.5
+		                @travelsH.push(t)
+		            end
+	                tick.destroy
+	            end
+            end
+        end
+		if @travelsT.size > 0 || @travelsH.size > 0
+            return true
+        else
+        	return false
+        end
+    end
+
+    def validate_travels
+    	current_user.tickets.confirmed.each do |t|
+    		if !(t.travel.date_arrival < @travel.date_departure || t.travel.date_departure > @travel.date_arrival)
+        		return false
+        	end
+    	end
+    	current_user.tickets.pending.each do |t|
         	if !(t.travel.date_arrival < @travel.date_departure || t.travel.date_departure > @travel.date_arrival)
         		return false
         	end

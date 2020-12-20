@@ -4,25 +4,24 @@
         <p class="my-0"><%= flash[:error] %></p>
     </div>
     <% end %>
-    <% if flash[:sell_error] %>
+    <% if flash[:sell_error] %> <!-- existe?? -->
     <div class="alert alert-danger" role="alert">
         <p class="my-0"><%= flash[:error] %></p>
-    </div>
-    <% end %>
-    <% if flash[:warning] %>
-    <div class="alert alert-warning" role="alert">
-        <p class="my-0"><%= flash[:warning] %></p>
-    </div>
-    <% end %>
-
-    <% if flash[:success] %>
-    <div class="alert alert-success" role="alert">
-        <p class="my-0"><%= flash[:success] %></p>
     </div>
     <% end %>
     <% if flash[:index_error] %>
     <div class="alert alert-danger" role="alert">
         <p class="my-0"><%= flash[:index_error] %></p>
+    </div>
+    <% end %>
+    <% if flash[:success] %>
+    <div class="alert alert-success" role="alert">
+        <p class="my-0"><%= flash[:success] %></p>
+    </div>
+    <% end %>
+    <% if flash[:warning] %>
+    <div class="alert alert-warning" role="alert">
+        <p class="my-0"><%= flash[:warning] %></p>
     </div>
     <% end %>
 
@@ -94,8 +93,8 @@
 
     <% if @travel.tickets.size == 0 %>
     <div class="d-flex flex-column align-items-center w-100">
-        <h2> No hay pasajeros en este viaje </h2>
         <%= image_tag  "Tickets_empty.svg", size: '450' %>
+        <h2> No hay pasajeros en este viaje </h2>
     </div>
     <% end %>
 

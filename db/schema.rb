@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_16_082617) do
+ActiveRecord::Schema.define(version: 2020_12_20_210859) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -105,6 +105,7 @@ ActiveRecord::Schema.define(version: 2020_12_16_082617) do
     t.integer "discount", default: 0
     t.integer "recurrence", default: 0
     t.string "recurrence_name"
+    t.integer "status", default: 0
   end
 
   create_table "users", force: :cascade do |t|

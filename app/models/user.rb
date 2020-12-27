@@ -36,24 +36,14 @@ class User < ApplicationRecord
         "#{name.capitalize} #{last_name.capitalize}"
   end   
 
-  def confirmed_travels
-    confirmed = []
-    tickets.each do |ticket|
-      if ticket.confirmed?
-        confirmed.push(ticket.travel)
-      end
-    end
-    return confirmed
-  end
-
   def finished_travels
-    confirmed = []
+    past = []
     tickets.each do |ticket|
-      if ticket.confirmed? && ticket.travel.finished
-        confirmed.push(ticket.travel)
+      if ticket.past?
+        past.push(ticket.travel)
       end
     end
-    return confirmed
+    return past
   end
 
   def rejected_travels
@@ -74,6 +64,27 @@ class User < ApplicationRecord
       end
     end
     return absent
+  end
+
+  def current_travel
+    if role == "user"
+      t = tickets.confirmed.first
+      if t
+        return t.travel
+      else
+        return nil
+      end
+    elsif role == "driver"
+      return driving_travels.current.first
+    end
+  end
+
+  def next_travel
+    if role == "user"
+      return travels.future.first
+    elsif role == "driver"
+      return driving_travels.future.first
+    end
   end
 
   def update_covid

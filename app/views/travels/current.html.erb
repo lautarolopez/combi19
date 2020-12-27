@@ -1,107 +1,108 @@
 <ul class="list-group pt-5">
-    <% if flash[:error] %>
-    <div class="alert alert-danger" role="alert">
-        <p class="my-0"><%= flash[:error] %></p>
-    </div>
-    <% end %>
-    <% if flash[:sell_error] %> <!-- existe?? -->
-    <div class="alert alert-danger" role="alert">
-        <p class="my-0"><%= flash[:error] %></p>
-    </div>
-    <% end %>
-    <% if flash[:index_error] %>
-    <div class="alert alert-danger" role="alert">
-        <p class="my-0"><%= flash[:index_error] %></p>
-    </div>
-    <% end %>
-    <% if flash[:warning] %>
-    <div class="alert alert-warning" role="alert">
-        <p class="my-0"><%= flash[:warning] %></p>
-    </div>
-    <% end %>
-    <% if flash[:success] %>
-    <div class="alert alert-success" role="alert">
-        <p class="my-0"><%= flash[:success] %></p>
-    </div>
-    <% end %>
-    <% if flash[:info] %>
-    <div class="alert alert-info" role="alert">
-        <p class="my-0"><%= flash[:info] %></p>
-    </div>
-    <% end %>
-
-    <% if @travel == nil %>
-    <div class="d-flex flex-column align-items-center w-100">
-        <h2> No tenes un viaje actual </h2>
-        <%= image_tag  "Travels_history_empty.svg", size: '500' %>
-    </div>
+    <% title = 'Viaje actual' %>
+    <% if current_user.role == 'user' %>
+        <%= render :partial => 'current', :locals => { :travel => @travel, :title => title } %>
     <% else %>
-    <div class="d-flex justify-content-between w-100 mb-2">
-        <h1> Viaje actual </h1>
-    </div>
-
-    <div class="list-group-item card mb-2">
-        <div class="d-flex flex-row justify-content-between align-items-center">
-            <%= render :partial => 'travels/row', :locals => { :travel => @travel } %>
-            <span class="col-3 align-items-center mb-5">
-                <span class="row mb-1">
-                    <span class="col-12 text-center">
-                        <strong class="m-0 text-primary text-uppercase mt-4"> Combi </strong>
-                    </span>
-                </span>
-                <span class="row mt-1">
-                    <span class="col-6 text-right">
-                        <strong class="m-0"> <%=@travel.combi.licence_plate %></strong>
-                    </span>
-                    <span class="col-6 text-left">
-                        <span class="badge badge-pill badge-primary m-0"><%= @travel.combi.category.titleize %></span>
-                    </span>
-                </span>
-            </span>
-            <span class="col-2 d-flex flex-column align-items-center">
-                <%= link_to "Vender pasaje", express_sell_path, class: 'btn btn-primary btn-md h-75 mt-2' %>
-            </span>
+        <% if flash[:error] %>
+        <div class="alert alert-danger" role="alert">
+            <p class="my-0"><%= flash[:error] %></p>
         </div>
-    </div>
+        <% end %>
+        <% if flash[:sell_error] %> <!-- existe?? -->
+        <div class="alert alert-danger" role="alert">
+            <p class="my-0"><%= flash[:error] %></p>
+        </div>
+        <% end %>
+        <% if flash[:index_error] %>
+        <div class="alert alert-danger" role="alert">
+            <p class="my-0"><%= flash[:index_error] %></p>
+        </div>
+        <% end %>
+        <% if flash[:success] %>
+        <div class="alert alert-success" role="alert">
+            <p class="my-0"><%= flash[:success] %></p>
+        </div>
+        <% end %>
+        <% if flash[:warning] %>
+        <div class="alert alert-warning" role="alert">
+            <p class="my-0"><%= flash[:warning] %></p>
+        </div>
+        <% end %>
 
+        <% if @travel == nil %>
+            <div class="d-flex flex-column align-items-center w-100">
+                <h2> No tenes un viaje actual </h2>
+                <%= image_tag  "Travels_history_empty.svg", size: '500' %>
+            </div>
+        <% else %>
+            <div class="d-flex justify-content-between w-100 mb-2">
+                <h1> <%= title %> </h1>
+            </div>
 
-
-
-    <div class="d-flex justify-content-between w-100 mt-2">
-        <h2> Pasajeros </h2>
-    </div>
-
-    <ul class="list-group">
-        <% @travel.tickets.each do |ticket| %>
-            <% if ticket.confirmed? %>
-                <li class="list-group-item card mb-2">
-                    <div class="d-flex flex-row justify-content-between align-items-center">
-                        <span class="row w-75">
-                            <span class="col-5">
-                                <strong class="m-0 text-primary text-uppercase"> Nombre </strong>
-                                <h4><%= ticket.user.name %> </h4>
-                            </span>
-                            <span class="col-5">
-                                <strong class="m-0 text-primary text-uppercase"> Apellido </strong>
-                                <h4><%= ticket.user.last_name %> </h4>
-                            </span>
-                            <span class="col-2">
-                                <strong class="m-0 text-primary text-uppercase"> DNI </strong>
-                                <h5 class='mt-1'><%= ticket.user.dni %> </h5>
+            <div class="list-group-item card mb-2">
+                <div class="d-flex flex-row justify-content-between align-items-center">
+                    <%= render :partial => 'travels/row', :locals => { :travel => @travel } %>
+                    <span class="col-3 align-items-center mb-5">
+                        <span class="row mb-1">
+                            <span class="col-12 text-center">
+                                <strong class="m-0 text-primary text-uppercase mt-4"> Combi </strong>
                             </span>
                         </span>
-                    </div>
-                </li>
+                        <span class="row mt-1">
+                            <span class="col-6 text-right">
+                                <strong class="m-0"> <%=@travel.combi.licence_plate %></strong>
+                            </span>
+                            <span class="col-6 text-left">
+                                <span class="badge badge-pill badge-primary m-0"><%= @travel.combi.category.titleize %></span>
+                            </span>
+                        </span>
+                    </span>
+                    <span class="col-2 d-flex flex-column align-items-center">
+                        <%= link_to "Vender pasaje", express_sell_path, class: 'btn btn-primary btn-block h-75 mt-2' %>
+                        <%= link_to "Finalizar", travel_status_path(@travel), class: 'btn btn-danger btn-block h-75 mt-2' %>
+                    </span>
+                </div>
+            </div>
+
+
+
+
+            <div class="d-flex justify-content-between w-100 mt-2">
+                <h2> Pasajeros </h2>
+            </div>
+
+            <ul class="list-group">
+                <% @travel.tickets.each do |ticket| %>
+                    <% if ticket.confirmed? %>
+                        <li class="list-group-item card mb-2">
+                            <div class="d-flex flex-row justify-content-between align-items-center">
+                                <span class="row w-75">
+                                    <span class="col-5">
+                                        <strong class="m-0 text-primary text-uppercase"> Nombre </strong>
+                                        <h4><%= ticket.user.name %> </h4>
+                                    </span>
+                                    <span class="col-5">
+                                        <strong class="m-0 text-primary text-uppercase"> Apellido </strong>
+                                        <h4><%= ticket.user.last_name %> </h4>
+                                    </span>
+                                    <span class="col-2">
+                                        <strong class="m-0 text-primary text-uppercase"> DNI </strong>
+                                        <h5 class='mt-1'><%= ticket.user.dni %> </h5>
+                                    </span>
+                                </span>
+                            </div>
+                        </li>
+                    <% end %>
+                <% end %>
+            </ul>
+
+            <% if @travel.tickets.size == 0 %>
+            <div class="d-flex flex-column align-items-center w-100">
+                <%= image_tag  "Tickets_empty.svg", size: '450' %>
+                <h2> No hay pasajeros en este viaje </h2>
+            </div>
             <% end %>
+
         <% end %>
-    </ul>
-
-    <% if @travel.tickets.size == 0 %>
-    <div class="d-flex flex-column align-items-center w-100">
-        <%= image_tag  "Tickets_empty.svg", size: '450' %>
-        <h2> No hay pasajeros en este viaje </h2>
-    </div>
-    <% end %>
-
     <% end %>
 </ul>

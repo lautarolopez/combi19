@@ -27,7 +27,7 @@ class TicketsController < ApplicationController
         @method = params[:method]
         @paymentMethod = nil
         if @method == 'existing'
-            if params[:payment_method][:id] != ''
+            if params[:payment_method] != nil && params[:payment_method][:id] != ''
                 @paymentMethod = PaymentMethod.find_by(id: params[:payment_method][:id])
             else
                 flash[:form_error] = []

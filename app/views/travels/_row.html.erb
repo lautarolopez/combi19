@@ -2,7 +2,7 @@
     <span class="col-6">
         <strong class="m-0 text-primary text-uppercase"> Salida </strong>
         <p class="m-0 font-weight-bold"><%= travel.route.origin.name.titleize %>, <%= travel.route.origin.state.titleize %> </p>
-        <p class="m-0"><%= I18n.l(travel.date_departure, format: "%A, %d de %b de %Y").capitalize %> </p>
+        <p class="m-0"><%= I18n.l(travel.date_departure, format: "%A, %d de %B de %Y").capitalize %> </p>
         <p class="m-0 hour-text"><%= I18n.l(travel.date_departure, format: "%H:%M") %> </p>
     </span>
     <span class="col-6">

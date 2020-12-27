@@ -109,6 +109,18 @@
 		</div>
 	</div>
 
+	<div id="covid_field">
+		<h4> Declaración jurada COVID </h4>
+		<div class="form-group mt-2">
+	       	<%= label_tag :covid, "¿Confirma que no presenta síntomas de COVID ni estuvo en contacto con ninguna persona que diera positivo?", class: "form-group-label" %>
+	        <div class="form-check">
+			    <%= check_box_tag :not_covid, "confirm", false, class: "form-check-input" %>
+			    <%= label_tag :not_covid, "Confirmar", class: "form-check-label" %>
+			</div>
+			<small class='text-danger mt-5'>Este formulario tiene carácter de declaración jurada, si presenta síntomas no podrá reservar viajes con ocurrencia dentro de los próximos 15 días</small>
+		</div>
+	</div>
+
     <% if flash[:form_error] %>
 	    <div class="alert alert-danger" role="alert">
 	        <% flash[:form_error].each do |e| %>
@@ -122,7 +134,7 @@
         	<%= link_to "Cancelar", travel_path(@travel), class: 'btn-lg btn-block btn-secondary mr-1' %>
         </span>
         <span class="col-6 text-center">
-        	<%= link_to 'Pagar', '#', "data-toggle"=>"modal", "data-target" => "#confirm-#{@travel.id}", class: "btn-lg btn-block btn-primary" %>
+        	<%= submit_tag "Pagar", :class => 'form_submit btn-lg btn-block btn-primary', data: { disable_with: "Procesando..." } %>
         </span>
         <div class="modal fade" id="confirm-<%= @travel.id %>" role="dialog">
             <div class="modal-dialog">
@@ -131,14 +143,7 @@
                         <button type="button" class="close" data-dismiss="modal">Testeo de COVID</button>
                     </div>
                     <div class="modal-body">
-                    	<div class="form-group">
-                           	<%= label_tag :covid, "¿Confirma que no presenta síntomas de COVID ni estuvo en contacto con ninguna persona que diera positivo?", class: "form-group-label" %>
-                            <div class="form-check">
-							    <%= check_box_tag :not_covid, "confirm", false, class: "form-check-input" %>
-							    <%= label_tag :not_covid, "Confirmar", class: "form-check-label" %>
-							</div>
-						</div>
-						<small class='text-danger mt-5'>Este formulario tiene carácter de declaración jurada, si presenta síntomas no podrá reservar viajes con ocurrencia dentro de los próximos 15 días</small>
+
                     </div>
                     <div class="modal-footer">
                         <div class="modal-footer">
@@ -167,16 +172,19 @@
     		$('#saveNewMethod').hide();
     		$('#newMethod').hide();
     		$('#code_field').show();
+    		$('#covid_field').show();
     	} else if (newMethod.checked) {
 			$('#existingMethod').hide();
 			$('#saveNewMethod').show();
 	    	$('#newMethod').show();
 	   		$('#code_field').show();
+	   		$('#covid_field').show();
     	} else {
 	    	$('#existingMethod').hide();
 	    	$('#saveNewMethod').hide();
 	    	$('#newMethod').hide();
 	   		$('#code_field').hide();
+	   		$('#covid_field').hide();
 	    }
 
 		$("input").change(function(e){
@@ -190,12 +198,14 @@
 	    		$('#saveNewMethod').hide();
 	    		$('#newMethod').hide();
 	    		$('#code_field').show();
+	    		$('#covid_field').show();
 	    	} else if (newMethod.checked) {
 				existing.value = 0;
 				$('#existingMethod').hide();
 				$('#saveNewMethod').show();
 		    	$('#newMethod').show();
 		   		$('#code_field').show();
+	    		$('#covid_field').show();
 	    	} else {
 	    		newNumber.value = null;
         		newName.value = null;

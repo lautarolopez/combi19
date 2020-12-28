@@ -14,14 +14,19 @@
         <p class="my-0"><%= flash[:index_error] %></p>
     </div>
     <% end %>
+    <% if flash[:warning] %>
+    <div class="alert alert-warning" role="alert">
+        <p class="my-0"><%= flash[:warning] %></p>
+    </div>
+    <% end %>
     <% if flash[:success] %>
     <div class="alert alert-success" role="alert">
         <p class="my-0"><%= flash[:success] %></p>
     </div>
     <% end %>
-    <% if flash[:warning] %>
-    <div class="alert alert-warning" role="alert">
-        <p class="my-0"><%= flash[:warning] %></p>
+    <% if flash[:info] %>
+    <div class="alert alert-info" role="alert">
+        <p class="my-0"><%= flash[:info] %></p>
     </div>
     <% end %>
 

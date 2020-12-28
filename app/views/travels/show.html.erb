@@ -10,6 +10,13 @@
     <% end %>
 </div>
 <% end %>
+<% if flash[:successes] %>
+<div class="alert alert-success text-center mt-5" role="alert">
+    <% flash[:successes].each do |e| %>
+    <p class="my-0"><%= e %></p>
+    <% end %>
+</div>
+<% end %>
 <% if flash[:warning] %>
 <div class="alert alert-warning" role="alert">
     <p class="my-0"><%= flash[:warning] %></p>
@@ -163,15 +170,31 @@
             </div>
     </div>
 </div>
+
+
+
+
 <div class="card my-5">
     <div class="card-body">
 
         <div class="d-flex justify-content-between w-100">
-        <h1> Comentarios </h1>
+            <h1> Comentarios </h1>
+        </div>
+
         <% if (current_user != nil) && (current_user.confirmed_travels.include?@travel) %>
-            <%= link_to "Agregar comentario", new_comment_path(:id => @travel.id), class: 'btn btn-primary btn-md h-75' %>
+            <%= form_for(@comment) do |f| %>
+                <%= f.hidden_field :travel_id, :value => @travel.id %>    
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="form-group row w-75 ml-2 mt-3">
+                        <%= f.text_area :text, :autofocus => true, class: 'form-control', required: true %>
+                    </span>
+
+                    <span class="text-center mr-5">
+                        <%= f.submit 'Comentar', :class => 'btn-lg btn-block btn-primary' %> 
+                    </span>
+                </div>
+            <% end %>
         <% end %>
-    </div>
         
         <% @comments.each do |comment| %>
         <li class="list-group-item d-flex justify-content-between align-items-center">

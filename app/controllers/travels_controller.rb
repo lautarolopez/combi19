@@ -3,7 +3,7 @@ class TravelsController < ApplicationController
         @discarded = false
         @ticket = Ticket.new
 		if current_user != nil && current_user.role == "admin"
-            @travels = Travel.pending
+            @travels = Travel.unfinished
         else
             @travels = Travel.future
         end
@@ -80,7 +80,6 @@ class TravelsController < ApplicationController
             if current_user.role == 'driver'
                 @travels = current_user.driving_travels.future
                 @tickets = []
-                @ticket = Ticket.new
             else
                 @travels = current_user.travels.future
                 @tickets = Ticket.where(user: current_user)
@@ -96,33 +95,46 @@ class TravelsController < ApplicationController
         if @ticket == nil
             @ticket = Ticket.new
         end
+        @comment = Comment.new
 	end
 
     def current
         @ticket = Ticket.new
-        @travel = current_user.driving_travels.current.first
-        if @travel
-            if !@travel.started
-                render 'next'
+        if current_user != nil && current_user.role != "admin"
+            @travel = current_user.current_travel
+            if current_user.role == "driver"
+                if !@travel
+                    t = current_user.next_travel
+                    if t.now
+                        @travel = t
+                        render 'next'
+                    end
+                end
             end
         else
-            t = current_user.driving_travels.future.first
-            if t && t.started
-                @travel = current_user.driving_travels.future.first
-            end
+            redirect_to root_path
         end
     end
 
     def next
-        @ticket = Ticket.new
-        @current = current_user.driving_travels.current.first
-        if @current && !@current.started
-            @travel = @current
-            @current = nil
+        if current_user != nil && current_user.role != "admin"
+            @ticket = Ticket.new
+            @travel = current_user.next_travel
+            @current = current_user.current_travel
         else
-            @travel = current_user.driving_travels.future.first
-            if @travel && @travel.started
-                render 'current'
+            redirect_to root_path
+        end
+    end
+
+    def change_status
+        @travel = Travel.find(params[:id])
+        if current_user != nil && current_user.role == "driver"
+            @travel.update(status: @travel.status_before_type_cast+1)
+            redirect_to current_travel_path
+        end
+        if @travel.finished?
+            @travel.tickets.confirmed.each do |ticket|
+                ticket.update(status: :past)
             end
         end
     end
@@ -371,8 +383,8 @@ class TravelsController < ApplicationController
     def create_recurrent_travels(driver, combi)
         departure = @travel.date_departure
         arrival = @travel.date_arrival
-        driving_travels = driver.driving_travels.pending
-        combi_travels = combi.travels.pending
+        driving_travels = driver.driving_travels.unfinished
+        combi_travels = combi.travels.unfinished
         case @travel.recurrence.to_sym
         when :half_day
             time = 12.hours
@@ -434,7 +446,7 @@ class TravelsController < ApplicationController
     end
 
     def destroy_recurrent_travels
-        travels = Travel.future.where(recurrence_name: @recurrence_name.downcase)
+        travels = Travel.future.where(recurrence_name: @recurrence_name)
         travels.each do |t|
             if !t.destroy
                 return false

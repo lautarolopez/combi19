@@ -10,6 +10,13 @@
     <% end %>
 </div>
 <% end %>
+<% if flash[:successes] %>
+<div class="alert alert-success text-center mt-5" role="alert">
+    <% flash[:successes].each do |e| %>
+    <p class="my-0"><%= e %></p>
+    <% end %>
+</div>
+<% end %>
 <% if flash[:warning] %>
 <div class="alert alert-warning" role="alert">
     <p class="my-0"><%= flash[:warning] %></p>
@@ -37,7 +44,7 @@
                 <p class="m-0 hour-text"><%= I18n.l(@travel.date_arrival, format: "%H:%M") %> </p>
             </span>
         </div>
-        <% if @travel.date_departure > DateTime.now %>
+        <% if @travel.pending? %>
         <div class="d-flex justify-content-between align-items-end mt-3">
             <ul class="list-group w-50">
                 <% if (current_user == nil) || (current_user.role == 'user') %>
@@ -139,22 +146,28 @@
                 </div>
             </div>
         </div>  
-        <% else %> <!-- viajes antiguos -->
+        <% else %> <!-- viajes antiguos o en curso -->
             <div class="d-flex justify-content-between align-items-end mt-3">
                 <div class="w-100 text-right d-flex flex-column align-items-end h-100">
                     <p class="m-0 price-text-large">$<%= sprintf('%.0f', @travel.price)%><small class="small-text">.<%=sprintf('%.2f', @travel.price).split(".").last%> </small>
                     </p>
                     <span class="d-flex align-items-end">
-                        <% if (current_user != nil) && ((current_user.travels.include?@travel) || (current_user.travels.include?@travel)) %>
-                            <% if @travel.date_departure > DateTime.now %>
-                                <%= link_to "Volver", booked_travels_path, class: 'btn btn-md btn-secondary' %>
-                            <% else %>
-                                <%= link_to "Volver", travels_history_path, class: 'btn btn-md btn-secondary' %>
+                        <% if current_user != nil %>
+                            <% if (current_user.role == "user") && (current_user.travels.include?@travel) %>
+                                <% case @travel.status %>
+                                <% when "pending" %>
+                                    <%= link_to "Volver", booked_travels_path, class: 'btn btn-md btn-secondary' %>
+                                <% when "started" %>
+                                    <%= link_to "Volver", current_travel_path, class: 'btn btn-md btn-secondary' %>
+                                <% when "finished" %>
+                                    <%= link_to "Volver", travels_history_path, class: 'btn btn-md btn-secondary' %>
+                                <% end %>
                             <% end %>
                         <% else %>
-                            <% if @travel.date_departure > DateTime.now %>
+                            <% case @travel.status %>
+                            <% when "pending" %>
                                 <%= link_to "Volver", travels_path, class: 'btn btn-md btn-secondary' %>
-                            <% else %>
+                            <% when "finished" %>
                                 <%= link_to "Volver", previous_travels_path, class: 'btn btn-md btn-secondary' %>
                             <% end %>
                         <% end %>
@@ -163,65 +176,73 @@
             </div>
     </div>
 </div>
-<div class="card my-5">
-    <div class="card-body">
+            <% if @travel.finished? %>
+    <div class="card my-5">
+        <div class="card-body">
+            <div class="d-flex justify-content-between w-100">
+            <h1> Comentarios </h1>
+            <% if (current_user != nil) && (current_user.finished_travels.include?@travel) %>
+                <%= form_for(@comment) do |f| %>
+                    <%= f.hidden_field :travel_id, :value => @travel.id %>    
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="form-group row w-75 ml-2 mt-3">
+                            <%= f.text_area :text, :autofocus => true, class: 'form-control', required: true %>
+                        </span>
+                        <span class="text-center mr-5">
+                            <%= f.submit 'Comentar', :class => 'btn-lg btn-block btn-primary' %> 
+                        </span>
+                    </div>
+                <% end %>
+            <% end %>
+        </div>
+            
+            <% @comments.each do |comment| %>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span class="row w-75">
+                        <span class="col-9">
+                            <h5 class="m-0"> <%= comment.text %> </h5>
+                        </span>
+                        <span class="col-3">
+                            <strong class="m-0 text-primary text-titleize"> Autor </strong>
+                            <p class="m-0 font-weight-bold"><%= comment.author %> </p>
+                        </span>        
+                    </span>
+                    <span>
+                        <% if current_user != nil and ((comment.user != nil and comment.user == current_user)  or current_user.role == "admin") %>
+                            <%= link_to 'Eliminar', '#', "data-toggle"=>"modal", "data-target" => "#delete-#{comment.id}", class: "btn btn-danger" %>
+                        <% end %> 
 
-        <div class="d-flex justify-content-between w-100">
-        <h1> Comentarios </h1>
-        <% if (current_user != nil) && (current_user.confirmed_travels.include?@travel) %>
-            <%= link_to "Agregar comentario", new_comment_path(:id => @travel.id), class: 'btn btn-primary btn-md h-75' %>
-        <% end %>
-    </div>
-        
-        <% @comments.each do |comment| %>
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-            <span class="row w-75">
-                <span class="col-9">
-
-                    <h5 class="m-0"> <%= comment.text %> </h5>
-                </span>
-
-                <span class="col-3">
-                    <strong class="m-0 text-primary text-titleize"> Autor </strong>
-                    <p class="m-0 font-weight-bold"><%= comment.author %> </p>
-                </span>        
-            </span>
-            <span>
-                <% if current_user != nil and ((comment.user != nil and comment.user == current_user)  or current_user.role == "admin") %>
-                    <%= link_to 'Eliminar', '#', "data-toggle"=>"modal", "data-target" => "#delete-#{comment.id}", class: "btn btn-danger" %>
-                <% end %> 
-
-                <div class="modal fade" id="delete-<%= comment.id %>" role="dialog">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal">Eliminación de comentario</button>
-                            </div>
-                            <div class="modal-body">
-                                <p> ¿Confirma que desea eliminar el comentario? </p>
-                            </div>
-                            <div class="modal-footer">
-                                <div class="modal-footer">
-                                    <%= link_to 'Eliminar', comment, method: :delete, class: "btn btn-danger" %>                                    
-                                    <a href="#" data-dismiss="modal" class="btn btn-secondary">Cancelar</a>
+                        <div class="modal fade" id="delete-<%= comment.id %>" role="dialog">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">Eliminación de comentario</button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p> ¿Confirma que desea eliminar el comentario? </p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <div class="modal-footer">
+                                            <%= link_to 'Eliminar', comment, method: :delete, class: "btn btn-danger" %>                                    
+                                            <a href="#" data-dismiss="modal" class="btn btn-secondary">Cancelar</a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                    </span>
+                </li>
+            <% end %>  <!-- end for @comments.each do -->
+                <% if @comments.size == 0 %>
+                    <div class="d-flex flex-column align-items-center w-100">
+                        <%= image_tag  "Comments_empty.svg", size: '450' %>
+                        <h5 class='text-center'>No hay comentarios</h5>
                     </div>
-                </div>
-            </span>
-        </li>
-        <% end %>  <!-- end for @comments.each do -->
-        <% if @comments.size == 0 %>
-        <div class="d-flex flex-column align-items-center w-100">
-            <%= image_tag  "Comments_empty.svg", size: '450' %>
-            <h5 class='text-center'>No hay comentarios</h5>
+                <% end %>
+            <% end %> <!-- end for finished travels  -->
         </div>
-        <% end %>
-        <% end %>   <!-- end for line "40" -->
     </div>
-</div>
-
+<% end %> <!-- end for pending travels / else -->
 <script>
     $(function () {
         $('.tooltip-wrapper').tooltip({position: "top"});

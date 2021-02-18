@@ -1,10 +1,10 @@
 class Travel < ApplicationRecord
 	# Scopes
 	default_scope -> { order(date_departure: :asc, date_arrival: :asc)}
-	scope :future, -> { where("date_departure >= ?", DateTime.now).reorder(date_departure: :asc, date_arrival: :asc) }
-	scope :previous, -> { where("date_arrival <= ?", DateTime.now).reorder(date_departure: :desc, date_arrival: :desc) }
-	scope :current, -> { where("date_departure <= ? and date_arrival > ?", DateTime.now, DateTime.now).reorder(date_arrival: :asc, date_departure: :asc)}
-	scope :pending, -> { where("date_arrival > ?", DateTime.now).reorder(date_departure: :asc, date_arrival: :asc) }
+	scope :future, -> { where(status: :pending).reorder(date_departure: :asc, date_arrival: :asc) }
+	scope :previous, -> { where(status: :finished).reorder(date_departure: :desc, date_arrival: :desc) }
+	scope :current, -> { where(status: :started).reorder(date_arrival: :asc, date_departure: :asc)}
+	scope :unfinished, -> { where.not(status: :finished).reorder(date_departure: :asc, date_arrival: :asc) }
 	scope :last_month, -> {where("date_arrival < ? and date_arrival > ?", DateTime.current.last_month.at_end_of_month, DateTime.current.last_month.at_beginning_of_month)}
 
 
@@ -16,6 +16,8 @@ class Travel < ApplicationRecord
 	validates :price, presence: :true, numericality: { greater_than_or_equal_to: 0 }
 	validates :discount, :inclusion => 0..100
 	validate :validate_dates
+
+	before_save :downcase
 
 	# Relations
 	belongs_to :driver, class_name: 'User', foreign_key: "driver_id"
@@ -29,6 +31,12 @@ class Travel < ApplicationRecord
 
 
 	# Methods
+	def downcase
+		if recurrence_name
+			recurrence_name.downcase!
+		end
+	end
+
 	def validate_dates
 		if date_departure > date_arrival #|| date_departure < DateTime.now || date_arrival < DateTime.now --> esta validación se hace en el controlador
 			errors.add(:date_departure, "Las fechas ingresadas son incorrectas.")
@@ -39,6 +47,8 @@ class Travel < ApplicationRecord
 	end
 
 	enum recurrence: [:none_, :half_day, :day, :week, :half_month, :month, :twice_month, :half_year]
+
+	enum status: [:pending, :started, :finished]
 
 	def recurrence_type
     	I18n.t("activerecord.attributes.travel.recurrences.#{recurrence}")
@@ -56,44 +66,11 @@ class Travel < ApplicationRecord
 		return (occupied == self.combi.capacity)
 	end
 
-	def current
-		return ((date_departure <= DateTime.now) && (date_arrival > DateTime.now))
-	end
-
-	def future
-		return (date_departure >= DateTime.now)
-	end
-
 	def recurrent
 		return (recurrence != "none_")
 	end
 
 	def now
-		if date_departure < (DateTime.now + 30.minutes)
-			if date_departure > DateTime.now
-				return true
-			else
-				if date_arrival > DateTime.now
-					return true
-				end
-			end
-		end
-		return false
-	end
-
-	def started
-		if self.tickets.size == 0 
-			if date_departure < DateTime.now
-				return true
-			end
-		else
-			if self.tickets.pending.size == 0
-				return true
-			end
-		end
-	end
-
-	def finished
-		return (date_arrival < DateTime.now)
+		return (date_departure < (DateTime.now + 30.minutes) && status == "pending")
 	end
 end

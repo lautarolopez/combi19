@@ -31,14 +31,12 @@
                 </div>
                 <% end %>
                 <% if current_user != nil && current_user.role == "driver" %>
-                <li class="nav-item">
-                    <%= link_to 'Actual', current_travel_path, class: "nav-link" %>
-                </li>
-                <% end %>
-                <% if current_user != nil && current_user.role == "driver" %>
-                <li class="nav-item">
-                    <%= link_to 'Próximo', next_travel_path, class: "nav-link" %>
-                </li>
+                    <li class="nav-item">
+                        <%= link_to 'Actual', current_travel_path, class: "nav-link" %>
+                    </li>
+                    <li class="nav-item">
+                        <%= link_to 'Próximo', next_travel_path, class: "nav-link" %>
+                    </li>
                 <% end %>
                 <% if current_user == nil || current_user.role != 'driver' %>
                 <div class="btn-group nav-item">
@@ -62,6 +60,11 @@
                 <div class="btn-group nav-item">
                     <button type="button" class="btn btn-light" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Mis viajes</button>
                     <div class="dropdown-menu">
+                        <% if current_user.role == "user" %>
+                            <li class="dropdown-item">
+                                <%= link_to 'Viaje actual', current_travel_path %>
+                            </li>
+                        <% end %>
                         <li class="dropdown-item">
                             <%= link_to 'Viajes realizados', travels_history_path %>
                         </li>

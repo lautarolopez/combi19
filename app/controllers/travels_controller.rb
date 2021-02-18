@@ -95,6 +95,7 @@ class TravelsController < ApplicationController
         if @ticket == nil
             @ticket = Ticket.new
         end
+        @comment = Comment.new
 	end
 
     def current

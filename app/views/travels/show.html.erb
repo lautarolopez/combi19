@@ -10,6 +10,13 @@
     <% end %>
 </div>
 <% end %>
+<% if flash[:successes] %>
+<div class="alert alert-success text-center mt-5" role="alert">
+    <% flash[:successes].each do |e| %>
+    <p class="my-0"><%= e %></p>
+    <% end %>
+</div>
+<% end %>
 <% if flash[:warning] %>
 <div class="alert alert-warning" role="alert">
     <p class="my-0"><%= flash[:warning] %></p>
@@ -169,14 +176,23 @@
             </div>
     </div>
 </div>
-<% if @travel.finished? %>
+            <% if @travel.finished? %>
     <div class="card my-5">
         <div class="card-body">
-
             <div class="d-flex justify-content-between w-100">
             <h1> Comentarios </h1>
             <% if (current_user != nil) && (current_user.finished_travels.include?@travel) %>
-                <%= link_to "Agregar comentario", new_comment_path(:id => @travel.id), class: 'btn btn-primary btn-md h-75' %>
+                <%= form_for(@comment) do |f| %>
+                    <%= f.hidden_field :travel_id, :value => @travel.id %>    
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="form-group row w-75 ml-2 mt-3">
+                            <%= f.text_area :text, :autofocus => true, class: 'form-control', required: true %>
+                        </span>
+                        <span class="text-center mr-5">
+                            <%= f.submit 'Comentar', :class => 'btn-lg btn-block btn-primary' %> 
+                        </span>
+                    </div>
+                <% end %>
             <% end %>
         </div>
             
@@ -184,10 +200,8 @@
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <span class="row w-75">
                         <span class="col-9">
-
                             <h5 class="m-0"> <%= comment.text %> </h5>
                         </span>
-
                         <span class="col-3">
                             <strong class="m-0 text-primary text-titleize"> Autor </strong>
                             <p class="m-0 font-weight-bold"><%= comment.author %> </p>
@@ -225,11 +239,10 @@
                         <h5 class='text-center'>No hay comentarios</h5>
                     </div>
                 <% end %>
-            <% end %>   
+            <% end %> <!-- end for finished travels  -->
         </div>
     </div>
-<% end %> <!-- end for line "40" -->
-
+<% end %> <!-- end for pending travels / else -->
 <script>
     $(function () {
         $('.tooltip-wrapper').tooltip({position: "top"});

@@ -17,9 +17,9 @@ class DriversController < ApplicationController
             else
                 @date_end = @date.at_end_of_month
             end
-            @travels=@driver.driving_travels.where("date_arrival > ? and date_arrival < ?", @date, @date_end)
+            @travels = @driver.driving_travels.finished.where("date_arrival > ? and date_arrival < ?", @date, @date_end)
         else
-            @travels = @driver.driving_travels.last_month
+            @travels = @driver.driving_travels.finished.last_month
         end      
 
 

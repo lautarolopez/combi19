@@ -126,6 +126,7 @@ class TicketsController < ApplicationController
 
     def resolve
     	@ticket = Ticket.find(params[:id])
+    	@travel = @ticket.travel
     	@temp = params[:temp]
     	@strong = params[:strong_synthoms]
     	@medium = params[:medium_synthoms]
@@ -162,6 +163,9 @@ class TicketsController < ApplicationController
             	flash[:warning] = "Se canceló la reserva que tenía de " + (@travelsT.size+@travelsH.size).to_s + " viaje" + s + " con fechas dentro de los próximos 15 días. Se le envió por correo el resumen detallado del reintegro"
             end
     	end
+    	if @travel.tickets.pending.size == 0
+    		@travel.update(status: :started)
+    	end
     	redirect_to root_path
     	#render 'prueba'
     end
@@ -177,7 +181,7 @@ class TicketsController < ApplicationController
         @user = User.create(email: params[:user][:email], password: "combi19", name: params[:user][:name], last_name: params[:user][:last_name], dni: params[:user][:dni], birth_date: params[:user][:birth_date], role: "user", subscribed: false)
         if @user.save
             flash[:success] = "El pasajero " + @user.name + " " + @user.last_name + " ha sido creado con éxito!"
-            @travel = Travel.pending.where("driver_id = ?", current_user.id).first
+            @travel = Travel.unfinished.where("driver_id = ?", current_user.id).first
             render 'express_ticket'
         else
             flash[:form_new_error] = @user.errors.full_messages
@@ -188,8 +192,8 @@ class TicketsController < ApplicationController
     def find_passenger
         @user = User.find_by_email(params[:user][:email])
         if @user != nil
-        	@travel = Travel.pending.where("driver_id = ?", current_user.id).first
-        	if validate_confirmed_travels(@user)
+        	@travel = Travel.unfinished.where("driver_id = ?", current_user.id).first
+        	if validate_current_travel(@user)
 	            render 'express_ticket'
 	        else
 	       		flash[:form_existing_error] = 'Este usuario no puede reservar este viaje porque ya tiene una reserva confirmada para este o algún otro viaje en este momento' #bilocacion
@@ -398,27 +402,25 @@ class TicketsController < ApplicationController
     end
 
     def validate_travels
-    	current_user.tickets.confirmed.each do |t|
-    		if !(t.travel.date_arrival < @travel.date_departure || t.travel.date_departure > @travel.date_arrival)
-        		return false
-        	end
+    	t = current_user.current_travel
+		if !(t.date_arrival < @travel.date_departure || t.date_departure > @travel.date_arrival)
+    		return false
     	end
     	current_user.tickets.pending.each do |t|
-        	if !(t.travel.date_arrival < @travel.date_departure || t.travel.date_departure > @travel.date_arrival)
+        	if !(t.date_arrival < @travel.date_departure || t.date_departure > @travel.date_arrival)
         		return false
         	end
     	end
     	return true
     end
 
-    def validate_confirmed_travels(user)
-    	user.tickets.confirmed.each do |t|
-    		if t.travel_id == @travel.id
-    			return false
-    		end
-        	if !(t.travel.date_arrival < @travel.date_departure || t.travel.date_departure > @travel.date_arrival)
-        		return false
-        	end
+    def validate_current_travel(user)
+    	t = user.current_travel
+		if t.id == @travel.id
+			return false
+		end
+    	if !(t.date_arrival < @travel.date_departure || t.date_departure > @travel.date_arrival)
+    		return false
     	end
     	return true
     end
